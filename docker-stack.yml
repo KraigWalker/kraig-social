@@ -1,0 +1,8 @@
+services:
+  web:
+    image: ghcr.io/KraigWalker/kraig-social:latest
+    ports:
+      - "3000:3000"
+    deploy:
+      replicas: 1
+    restart: always
