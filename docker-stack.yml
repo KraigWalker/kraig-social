@@ -1,6 +1,6 @@
 services:
   web:
-    image: ghcr.io/KraigWalker/kraig-social:latest
+    image: ghcr.io/kraigwalker/kraig-social:latest
     ports:
       - "3000:3000"
     deploy:

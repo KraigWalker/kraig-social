@@ -42,10 +42,10 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ghcr.io/${{ github.repository_owner }}/kraig-social:latest \
-                       -t ghcr.io/${{ github.repository_owner }}/kraig-social:${{ env.version }} .
+          docker build -t ghcr.io/kraigwalker/kraig-social:latest \
+                       -t ghcr.io/kraigwalker/kraig-social:${{ env.version }} .
 
       - name: Push Docker image
         run: |
-          docker push ghcr.io/${{ github.repository_owner }}/kraig-social:latest
-          docker push ghcr.io/${{ github.repository_owner }}/kraig-social:${{ env.version }}
+          docker push ghcr.io/kraigwalker/kraig-social:latest
+          docker push ghcr.io/kraigwalker/kraig-social:${{ env.version }}
