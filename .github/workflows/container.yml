@@ -1,4 +1,4 @@
-name: Deploy to Raspberry Pi
+name: Build and Push Image to GitHub Container Registry
 
 on:
   push:
