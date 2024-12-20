@@ -40,14 +40,10 @@ jobs:
       - name: Log in to GHCR
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Build Docker image
+      - name: Build and Push Docker image
         run: |
           docker buildx build \
           --platform linux/arm64 \
           -t ghcr.io/kraigwalker/kraig-social:latest \
-          -t ghcr.io/kraigwalker/kraig-social:${{ env.version }} .
-
-      - name: Push Docker image
-        run: |
-          docker push ghcr.io/kraigwalker/kraig-social:latest
-          docker push ghcr.io/kraigwalker/kraig-social:${{ env.version }}
+          -t ghcr.io/kraigwalker/kraig-social:${{ env.version }} \
+          --push .
