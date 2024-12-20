@@ -42,8 +42,10 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ghcr.io/kraigwalker/kraig-social:latest \
-                       -t ghcr.io/kraigwalker/kraig-social:${{ env.version }} .
+          docker buildx build \
+          --platform linux/arm64 \
+          -t ghcr.io/kraigwalker/kraig-social:latest \
+          -t ghcr.io/kraigwalker/kraig-social:${{ env.version }} .
 
       - name: Push Docker image
         run: |
