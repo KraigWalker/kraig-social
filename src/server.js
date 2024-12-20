@@ -2,8 +2,15 @@ const express = require("express");
 const path = require("path");
 const fs = require("fs");
 const crypto = require("crypto");
+const helmet = require("helmet");
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+/**
+ * Security hardening
+ */
+app.disable("x-powered-by");
+app.use(helmet({ contentSecurityPolicy: false }));
 
 // Serve static files
 app.use(express.static(path.join(__dirname, "public"), { index: false }));
@@ -40,6 +47,17 @@ app.get("/", (req, res) => {
 
 app.get("/main.js", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "main.js"));
+});
+
+// custom 404
+app.use((req, res, next) => {
+  res.status(404).send("Sorry can't find that!");
+});
+
+// custom error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send("Something broke!");
 });
 
 app.listen(PORT, "0.0.0.0", () => {

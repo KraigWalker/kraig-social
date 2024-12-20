@@ -1,6 +1,6 @@
 {
   "name": "kraig-social",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "",
   "homepage": "https://github.com/KraigWalker/kraig-social#readme",
   "bugs": {
@@ -18,6 +18,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "express": "^4.21.2"
+    "express": "4.21.2",
+    "helmet": "8.0.0"
   }
 }
