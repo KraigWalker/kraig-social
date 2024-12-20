@@ -6,6 +6,18 @@ const helmet = require("helmet");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+let cachedIndex;
+
+// Load and cache index.html at startup
+const indexPath = path.join(__dirname, "public", "index.html");
+fs.readFile(indexPath, "utf8", (err, data) => {
+  if (err) {
+    console.error("Error loading index.html:", err);
+    process.exit(1); // Exit if the file can't be loaded
+  }
+  cachedIndex = data;
+});
+
 /**
  * Security hardening
  */
@@ -17,10 +29,10 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(helmet({ contentSecurityPolicy: false }));
-
 // Serve static files
 app.use(express.static(path.join(__dirname, "public"), { index: false }));
+
+app.use(helmet({ contentSecurityPolicy: false }));
 
 // Simple route
 app.get("/", (req, res) => {
@@ -36,20 +48,18 @@ app.get("/", (req, res) => {
   // Read the index.html file
   const indexPath = path.join(__dirname, "public", "index.html");
 
-  fs.readFile(indexPath, "utf8", (err, data) => {
-    if (err) {
-      res.status(500).send("Error loading index.html");
-      return;
-    }
+  if (!cachedIndex) {
+    res.status(500).send("Error loading index.html");
+    return;
+  }
 
-    // Inject the nonce into the script tag
-    const modifiedData = data.replace(
-      '<script async defer src="/main.js"></script>',
-      `<script async defer src="/main.js" nonce="${nonce}"></script>`
-    );
+  // Inject the nonce into the script tag
+  const modifiedData = cachedIndex.replace(
+    '<script async defer src="/main.js"></script>',
+    `<script async defer src="/main.js" nonce="${nonce}"></script>`
+  );
 
-    res.send(modifiedData);
-  });
+  res.send(modifiedData);
 });
 
 app.get("/main.js", (req, res) => {
