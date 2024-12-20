@@ -10,6 +10,13 @@ const PORT = process.env.PORT || 3000;
  * Security hardening
  */
 app.disable("x-powered-by");
+app.set("etag", false);
+
+app.use((req, res, next) => {
+  res.set("Cache-Control", "no-store");
+  next();
+});
+
 app.use(helmet({ contentSecurityPolicy: false }));
 
 // Serve static files
@@ -37,8 +44,8 @@ app.get("/", (req, res) => {
 
     // Inject the nonce into the script tag
     const modifiedData = data.replace(
-      '<script src="main.js" />',
-      `<script src="main.js" nonce="${nonce}" />`
+      '<script async defer src="/main.js" />',
+      `<script async defer src="/main.js" nonce="${nonce}" />`
     );
 
     res.send(modifiedData);
