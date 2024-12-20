@@ -44,8 +44,8 @@ app.get("/", (req, res) => {
 
     // Inject the nonce into the script tag
     const modifiedData = data.replace(
-      '<script async defer src="/main.js" />',
-      `<script async defer src="/main.js" nonce="${nonce}" />`
+      '<script async defer src="/main.js"></script>',
+      `<script async defer src="/main.js" nonce="${nonce}"></script>`
     );
 
     res.send(modifiedData);
