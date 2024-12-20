@@ -13,26 +13,10 @@ app.get("/", (req, res) => {
   // Generate a secure randome nonce (base64 encoded)
   const nonce = crypto.randomBytes(16).toString("base64");
 
-  // Define CSP header with the generated nonce
-  const csp = `
-    Content-Security-Policy: 
-      default-src 'self'; 
-      script-src 'self' 'nonce-${nonce}';
-      style-src 'self';
-      object-src 'none';
-  `
-    .replace(/\s{2,}/g, " ")
-    .trim();
-
   // Set CSP header
   res.setHeader(
     "Content-Security-Policy",
-    `
-    default-src 'self'; 
-    script-src 'self' 'nonce-${nonce}'; 
-    style-src 'self'; 
-    object-src 'none';
-  `
+    `default-src 'self'; script-src 'self' 'nonce-${nonce}'; object-src 'none';`
   );
 
   // Read the index.html file
