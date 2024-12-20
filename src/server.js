@@ -16,7 +16,7 @@ app.get("/", (req, res) => {
   // Set CSP header
   res.setHeader(
     "Content-Security-Policy",
-    `default-src 'self'; script-src 'self' 'nonce-${nonce}'; object-src 'none';`
+    `base-uri 'none';default-src 'self';script-src 'unsafe-inline' 'nonce-${nonce}';object-src 'none';require-trusted-types-for 'script';`
   );
 
   // Read the index.html file
