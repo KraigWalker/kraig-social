@@ -8,6 +8,18 @@ const PORT = process.env.PORT || 3000;
 
 let cachedIndex;
 
+function setCustomCacheControl(res, file) {
+  if (path.extname(file) === ".html") {
+    // Custom Cache-Control for HTML files
+    res.setHeader("Cache-Control", "public, no-transform, no-max-age=0");
+  } else {
+    res.setHeader(
+      "Cache-Control",
+      "public, no-transform, max-age=31536000, immutable"
+    );
+  }
+}
+
 // Load and cache index.html at startup
 const indexPath = path.join(__dirname, "public", "index.html");
 fs.readFile(indexPath, "utf8", (err, data) => {
@@ -24,13 +36,15 @@ fs.readFile(indexPath, "utf8", (err, data) => {
 app.disable("x-powered-by");
 app.set("etag", false);
 
-app.use((req, res, next) => {
-  res.set("Cache-Control", "no-store");
-  next();
-});
-
 // Serve static files
-app.use(express.static(path.join(__dirname, "public"), { index: false }));
+app.use(
+  express.static(path.join(__dirname, "public"), {
+    index: false,
+    etag: false,
+    lastModified: false,
+    setHeaders: setCustomCacheControl,
+  })
+);
 
 app.use(helmet({ contentSecurityPolicy: false }));
 
@@ -38,6 +52,11 @@ app.use(helmet({ contentSecurityPolicy: false }));
 app.get("/", (req, res) => {
   // Generate a secure randome nonce (base64 encoded)
   const nonce = crypto.randomBytes(16).toString("base64");
+
+  res.setHeader(
+    "Cache-Control",
+    "max-age:0, private, must-revalidate, no-cache, no-transform, no-store"
+  );
 
   // Set CSP header
   res.setHeader(
@@ -55,15 +74,15 @@ app.get("/", (req, res) => {
 
   // Inject the nonce into the script tag
   const modifiedData = cachedIndex.replace(
-    '<script async defer src="/main.js"></script>',
-    `<script async defer src="/main.js" nonce="${nonce}"></script>`
+    '<script async defer src="/main.1.js"></script>',
+    `<script async defer src="/main.1.js" nonce="${nonce}"></script>`
   );
 
   res.send(modifiedData);
 });
 
-app.get("/main.js", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "main.js"));
+app.get("/main.1.js", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "main.1.js"));
 });
 
 // custom 404
