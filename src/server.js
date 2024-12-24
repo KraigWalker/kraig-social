@@ -103,7 +103,7 @@ app.get("/", (req, res) => {
 
   res.setHeader(
     "Cache-Control",
-    "max-age:0, private, must-revalidate, no-cache, no-store"
+    "max-age:0, private, must-revalidate, no-cache"
   );
 
   // Set CSP header
