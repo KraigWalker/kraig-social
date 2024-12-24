@@ -52,7 +52,7 @@ const swScriptHash = `sha512-${crypto
 function setCustomCacheControl(res, file) {
   if (path.extname(file) === ".html") {
     // Custom Cache-Control for HTML files
-    res.setHeader("Cache-Control", "private, no-cache, no-store, max-age=0");
+    res.setHeader("Cache-Control", "private, no-cache, max-age=0");
     res.setHeader("Expires", "-1");
   } else {
     res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
