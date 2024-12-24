@@ -1,3 +1,10 @@
+const serviceWorkerURLPolicy = trustedTypes.createPolicy(
+  "serviceWorkerURLPolicy",
+  {
+    createScriptURL: (url) => url,
+  }
+);
+
 /**
  * The main goal file is as follows:
  * 1. Register a serviceworker if suppoterd
@@ -9,15 +16,14 @@ async function registerServiceWorker() {
     // be extra-cautious about registering the service worker
     // If the page is already controlled by a SW, `navigator.serviceWorker.controller` is non-null
     if (!navigator.serviceWorker.controller) {
-      navigator.serviceWorker.getRegistration("/sw.1.js").then(async () => {
-        if (!registration) {
+      navigator.serviceWorker.getRegistration("/sw.1.js").then(async (reg) => {
+        if (!reg) {
           try {
-            const registration = await navigator.serviceWorker.register(
-              "/sw.1.js",
-              {
-                scope: "/",
-              }
-            );
+            const swUrl = serviceWorkerURLPolicy.createScriptURL("/sw.1.js");
+
+            const registration = await navigator.serviceWorker.register(swUrl, {
+              scope: "/",
+            });
 
             if (registration.installing) {
               console.log("Service Worker installing");
@@ -38,3 +44,12 @@ async function registerServiceWorker() {
 }
 
 registerServiceWorker();
+
+// listen for messages from the service worker
+navigator.serviceWorker.addEventListener("message", (event) => {
+  if (event.data?.type === "SERVICE_WORKER_ACTIVE") {
+    // update p tag with active class
+    const p = document.querySelector("p");
+    p.classList.add("active");
+  }
+});

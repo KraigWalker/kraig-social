@@ -1,3 +1,5 @@
+// foo
+
 self.addEventListener("install", (event) => {
   // Let this worker become active immediately (no waiting).
   event.waitUntil(self.skipWaiting());
@@ -9,13 +11,19 @@ self.addEventListener("activate", (event) => {
     (async () => {
       if (self.clients && self.clients.claim) {
         await self.clients.claim();
+        console.log("Service Worker activated");
 
         // Now we can reach out to all controlled clients (pages)
         const allClients = await self.clients.matchAll();
 
+        /** @todo cleanup old caches */
+
         // For each controlled page, send a message requesting data
+        //allClients.forEach((client) => {
+        //  client.postMessage({ type: "SEND_SHELL_CONTENT" });
+        // });
         allClients.forEach((client) => {
-          client.postMessage({ type: "SEND_SHELL_CONTENT" });
+          client.postMessage({ type: "SERVICE_WORKER_ACTIVE" });
         });
       }
     })()

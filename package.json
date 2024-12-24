@@ -1,6 +1,6 @@
 {
   "name": "kraig-social",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "",
   "homepage": "https://github.com/KraigWalker/kraig-social#readme",
   "bugs": {
@@ -15,6 +15,7 @@
   "type": "commonjs",
   "main": "src/server.js",
   "scripts": {
+    "start": "node src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {

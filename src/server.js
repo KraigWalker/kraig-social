@@ -6,7 +6,35 @@ const helmet = require("helmet");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+process.env.NODE_ENV = "production";
+
 let cachedIndex;
+
+const critFilePath = path.join(__dirname, "public", "critical.1.css");
+const critContents = fs.readFileSync(critFilePath, "utf-8");
+
+/**
+ * Create a SHA-512 hash for the critical CSS and Base64-encode it.
+ * Format for CSP: "sha512-<Base64Hash>"
+ * @todo Probably need a more robust way to create hashes for all executable files.
+ */
+const critHash = `sha512-${crypto
+  .createHash("sha512")
+  .update(critContents, "utf8")
+  .digest("base64")}`;
+
+const mainFilePath = path.join(__dirname, "public", "main.2.js");
+const mainContents = fs.readFileSync(mainFilePath, "utf-8");
+
+/**
+ * Create a SHA-512 hash for the ServiceWorker and Base64-encode it.
+ * Format for CSP: "sha512-<Base64Hash>"
+ * @todo Probably need a more robust way to create hashes for all executable files.
+ */
+const mainScriptHash = `sha512-${crypto
+  .createHash("sha512")
+  .update(mainContents, "utf8")
+  .digest("base64")}`;
 
 const swFilePath = path.join(__dirname, "public", "sw.1.js");
 const swContents = fs.readFileSync(swFilePath, "utf-8");
@@ -18,7 +46,7 @@ const swContents = fs.readFileSync(swFilePath, "utf-8");
  */
 const swScriptHash = `sha512-${crypto
   .createHash("sha512")
-  .update(swContents, "utf8")
+  .update(swContents)
   .digest("base64")}`;
 
 function setCustomCacheControl(res, file) {
@@ -81,16 +109,19 @@ app.get("/", (req, res) => {
   // Set CSP header
   res.setHeader(
     "Content-Security-Policy",
-    `base-uri 'none';default-src 'self';script-src 'unsafe-inline' 'nonce-${nonce}';worker-src 'self' '${swScriptHash}';object-src 'none';require-trusted-types-for 'script';`
+    `base-uri 'none'; default-src 'self'; style-src-elem 'nonce-${nonce}' '${critHash}'; script-src-elem 'nonce-${nonce}' '${mainScriptHash}'; script-src 'unsafe-inline'; worker-src 'self' '${swScriptHash}'; object-src 'none'; require-trusted-types-for 'script';`
   );
-
-  // Read the index.html file
-  const indexPath = path.join(__dirname, "public", "index.html");
 
   if (!cachedIndex) {
     res.status(500).send("Error loading index.html");
     return;
   }
+
+  // preload headers for critical css and main script (with nonce)
+  res.setHeader(
+    "Link",
+    `</critical.1.css>; rel="stylesheet"; as="style"; crossorigin="anonymous"; media="all"; nonce="${nonce}", </main.2.js>; rel="modulepreload"; as="script"; crossorigin="anonymous"; nonce="${nonce}"`
+  );
 
   // Inject the nonce into the script tag
   const modifiedData = cachedIndex
@@ -100,7 +131,15 @@ app.get("/", (req, res) => {
     )
     .replace(
       '<link rel="modulepreload" crossorigin="anonymous" href="/main.2.js" as="script"/>',
-      `<link rel="modulepreload" crossorigin="anonymous" href="/main.2.js" as="script" nonce=${nonce}/>`
+      `<link rel="modulepreload" crossorigin="anonymous" href="/main.2.js" as="script" nonce="${nonce}" />`
+    )
+    .replace(
+      '<link rel="stylesheet" href="/critical.1.css" crossorigin="anonymous"/>',
+      `<link rel="stylesheet" media="all" href="/critical.1.css" crossorigin="anonymous" nonce="${nonce}"/>`
+    )
+    .replace(
+      '<link rel="preload" href="/critical.1.css" as="style" crossorigin="anonymous"/>',
+      `<link rel="preload" media="all" href="/critical.1.css" as="style" crossorigin="anonymous" nonce="${nonce}"/>`
     );
 
   res.send(modifiedData);
@@ -109,8 +148,15 @@ app.get("/", (req, res) => {
 /**
  * This masks the "/public" directory from the URL
  */
+app.get("/critical.1.css", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "critical.1.css"));
+});
+
+/**
+ * This masks the "/public" directory from the URL
+ */
 app.get("/main.2.js", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "main.1.js"));
+  res.sendFile(path.join(__dirname, "public", "main.2.js"));
 });
 
 /**
