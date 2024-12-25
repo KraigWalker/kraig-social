@@ -1,3 +1,8 @@
+/* https://github.com/w3c/trusted-types?tab=readme-ov-file#tinyfill */
+if (typeof trustedTypes == "undefined") {
+  trustedTypes = { createPolicy: (n, rules) => rules };
+}
+
 const serviceWorkerURLPolicy = trustedTypes.createPolicy(
   "serviceWorkerURLPolicy",
   {
