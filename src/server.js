@@ -109,7 +109,7 @@ app.get("/", (req, res) => {
   // Set CSP header
   res.setHeader(
     "Content-Security-Policy",
-    `base-uri 'none'; default-src 'self'; style-src-elem 'nonce-${nonce}' '${critHash}'; script-src-elem 'nonce-${nonce}' '${mainScriptHash}'; script-src 'unsafe-inline'; worker-src 'self' '${swScriptHash}'; object-src 'none'; require-trusted-types-for 'script';`
+    `default-src 'none'; base-uri 'none'; style-src-elem 'nonce-${nonce}' '${critHash}'; script-src-elem 'nonce-${nonce}' '${mainScriptHash}'; worker-src 'self' '${swScriptHash}'; form-action 'none'; object-src 'none'; frame-ancestors 'none'; require-trusted-types-for 'script'; upgrade-insecure-requests`
   );
 
   if (!cachedIndex) {
@@ -127,19 +127,19 @@ app.get("/", (req, res) => {
   const modifiedData = cachedIndex
     .replace(
       '<script type="module" async defer crossorigin="anonymous" src="/main.2.js"></script>',
-      `<script type="module" async defer crossorigin="anonymous" src="/main.2.js" nonce="${nonce}"></script>`
+      `<script type="module" async defer crossorigin="anonymous" src="/main.2.js" nonce="${nonce}" integrity="${mainScriptHash}"></script>`
     )
     .replace(
       '<link rel="modulepreload" crossorigin="anonymous" href="/main.2.js" as="script"/>',
-      `<link rel="modulepreload" crossorigin="anonymous" href="/main.2.js" as="script" nonce="${nonce}" />`
+      `<link rel="modulepreload" crossorigin="anonymous" href="/main.2.js" as="script" nonce="${nonce}" integrity="${mainScriptHash}" />`
     )
     .replace(
       '<link rel="stylesheet" href="/critical.1.css" crossorigin="anonymous"/>',
-      `<link rel="stylesheet" media="all" href="/critical.1.css" crossorigin="anonymous" nonce="${nonce}"/>`
+      `<link rel="stylesheet" media="all" href="/critical.1.css" crossorigin="anonymous" nonce="${nonce}" integrity="${critHash}"/>`
     )
     .replace(
       '<link rel="preload" href="/critical.1.css" as="style" crossorigin="anonymous"/>',
-      `<link rel="preload" media="all" href="/critical.1.css" as="style" crossorigin="anonymous" nonce="${nonce}"/>`
+      `<link rel="preload" media="all" href="/critical.1.css" as="style" crossorigin="anonymous" nonce="${nonce}" integrity="${critHash}"/>`
     );
 
   res.send(modifiedData);
