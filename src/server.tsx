@@ -284,6 +284,13 @@ app.get("/Robots.txt", (req: any, res: any) => {
 //  res.status(404).send("Sorry can't find that!");
 //});
 
+// Serve atproto-did.txt when /.well-known/atproto-did is requested
+app.get("/.well-known/atproto-did", (req: any, res: any) => {
+  res.setHeader("Content-Type", "text/plain");
+  res.status(200);
+  res.sendFile(path.join(__dirname, "public", "atproto-did.txt"));
+});
+
 // custom error handler
 app.use((err: any, req: any, res: any, next: any) => {
   console.error(err.stack);
@@ -292,11 +299,4 @@ app.use((err: any, req: any, res: any, next: any) => {
 
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on port ${PORT}`);
-});
-
-// Serve atproto-did.txt when /.well-known/atproto-did is requested
-app.get("/.well-known/atproto-did", (req: any, res: any) => {
-  res.setHeader("Content-Type", "text/plain");
-  res.status(200);
-  res.sendFile(path.join(__dirname, "public", "atproto-did.txt"));
 });
