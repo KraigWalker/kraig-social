@@ -267,7 +267,9 @@ app.post("/back_office/redeploy", verifyGitHubSignature, (req, res) => {
 app.get("/.well-known/atproto-did", (req: any, res: any) => {
   res.setHeader("Content-Type", "text/plain");
   res.status(200);
-  res.sendFile(path.join(__dirname, "public", "atproto-did.txt"));
+  res.sendFile(
+    path.join(__dirname, "public", ".well-known", "atproto-did.txt")
+  );
 });
 
 app.get("*", (req: any, res: any) => {
