@@ -22,7 +22,7 @@ let GITHUB_WEBHOOK_SECRET = "";
 
 try {
   GITHUB_WEBHOOK_SECRET = fs
-    .readFileSync("/run/secrets/kraig_social_github_webhook_secret", "utf-8")
+    .readFileSync("/run/secrets/kraig_social_github_webhook_secret", "utf8")
     .trim();
   console.log(
     "Loaded GitHub webhook secret from /run/secrets/github_webhook_secret"
@@ -251,9 +251,12 @@ app.post("/back_office/redeploy", verifyGitHubSignature, (req, res) => {
   }
 
   try {
-    execSync(`docker stack deploy -c ${DOCKER_COMPOSE_FILE} ${STACK_NAME}`, {
-      stdio: "inherit",
-    });
+    execSync(
+      `docker stack deploy -c ${DOCKER_COMPOSE_FILE} ${STACK_NAME} --detach=false`,
+      {
+        stdio: "inherit",
+      }
+    );
     console.log("Successfully redeployed stack:", STACK_NAME);
 
     res.status(200).send("Redeployed successfully");
