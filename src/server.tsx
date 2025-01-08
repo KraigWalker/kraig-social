@@ -7,7 +7,7 @@ import express from "express";
 import helmet from "helmet";
 import cors from "cors";
 import hpp from "hpp";
-import { exec, execSync } from "node:child_process";
+import { execSync } from "node:child_process";
 import { renderToPipeableStream } from "react-dom/server";
 import { Shell } from "./components/Shell.js";
 
@@ -18,7 +18,19 @@ process.env.NODE_ENV = "production";
 
 const app = express();
 const PORT: number = 3000;
-const GITHUB_WEBHOOK_SECRET = process.env.GITHUB_WEBHOOK_SECRET || "";
+let GITHUB_WEBHOOK_SECRET = "";
+
+try {
+  GITHUB_WEBHOOK_SECRET = fs
+    .readFileSync("/run/secrets/kraig_social_github_webhook_secret", "utf-8")
+    .trim();
+  console.log(
+    "Loaded GitHub webhook secret from /run/secrets/github_webhook_secret"
+  );
+} catch (err) {
+  console.warn("Could not read secret file:", err);
+}
+
 const DOCKER_COMPOSE_FILE =
   process.env.DOCKER_COMPOSE_FILE || "docker-stack.yml";
 const STACK_NAME = process.env.STACK_NAME || "mystack";
@@ -118,59 +130,35 @@ app.use(
   })
 );
 
-app.get("*", (req: any, res: any) => {
-  try {
-    // 1. Check if the request is from a ServiceWorker
-    const fromServiceWorker = isServiceWorkerRequest(req);
+/**
+ * This masks the "/public" directory from the URL
+ */
+app.get("/critical.1.css", (req: any, res: any) => {
+  res.sendFile(path.join(__dirname, "public", "critical.1.css"));
+});
 
-    // 4. Prepare Streaming SSR
-    // The `renderToPipeableStream` function returns a Readable Stream with a `pipe` method
-    // We can use to stream the HTML response to the client as it's being rendered
-    let didError = false;
+/**
+ * This masks the "/public" directory from the URL
+ */
+app.get("/main.2.js", (req: any, res: any) => {
+  res.sendFile(path.join(__dirname, "public", "main.2.js"));
+});
 
-    // 5. Start rendering. Pass initial props or data as needed.
-    const { pipe } = renderToPipeableStream(
-      <Shell cspNonce={res.locals.cspNonce} />,
-      {
-        bootstrapModules: ["main.2.js"],
-        nonce: res.locals.cspNonce,
-        onShellReady() {
-          res.setHeader("Content-Type", "text/html; charset=utf-8");
-          res.setHeader(
-            "Cache-Control",
-            "max-age:0, private, must-revalidate, no-cache"
-          );
+/**
+ * ServiceWorker script - loaded if clients support ServiceWorkers
+ * This masks the "/public" directory from the URL
+ */
+app.get("/sw.1.js", (req: any, res: any) => {
+  res.sendFile(path.join(__dirname, "public", "sw.1.js"));
+});
 
-          // preload headers for critical css and main script (with nonce)
-          res.set(
-            "Link",
-            `</critical.1.css>; rel="preload"; as="style"; crossorigin="anonymous"; media="all"; nonce="${res.locals.cspNonce}"; integrity="${critHash}", </main.2.js>; rel="modulepreload"; as="script"; crossorigin="anonymous"; nonce="${res.locals.cspNonce}" integrity="${mainScriptHash}"`
-          );
-
-          res.set(
-            "Permissions-Policy",
-            "accelerometer=(),ambient-light-sensor=(),attribution-reporting=(),autoplay=(),bluetooth=(),browsing-topics=(),camera=(),compute-pressure=(),cross-origin-isolated=(),display-capture=(),document-domain=(),encrypted-media=(),fullscreen=(),gamepad=(),geolocation=(),gyroscope=(),hid=(),identity-credentials-get=(),idle-detection=(),local-fonts=(),magnetometer=(),microphone=(),midi=(),otp-credentials=(),payment=(),picture-in-picture=(),publickey-credentials-create=(),publickey-credentials-get=(),screen-wake-lock=(),serial=(),speaker-selection=(),storage-access=(),sync-xhr=(),usb=(),wake-lock=(),web-share=(),window-management=(),xr-spatial-tracking=()"
-          );
-
-          pipe(res);
-        },
-        onShellError(error: any) {
-          console.error(error);
-          res.end();
-        },
-        onAllReady() {
-          res.end();
-        },
-        onError(error: any) {
-          console.error(error);
-          res.status(500).end("Internal Server Error");
-        },
-      }
-    );
-  } catch (e) {
-    console.error(e);
-    res.status(500).send("Server error");
-  }
+/**
+ * Robots.txt
+ */
+app.get("/Robots.txt", (req: any, res: any) => {
+  res.setHeader("Cache-Control", "max-age:86400");
+  res.setHeader("Content-Type", "text/plain");
+  res.sendFile(path.join(__dirname, "public", "Robots.txt"));
 });
 
 app.use(
@@ -206,100 +194,10 @@ app.use(
 app.use(cors());
 app.use(hpp());
 
-/**
- * @todo
- * Save-Data – don't load any extra resources that aren't necessary for the page to work.
- * Start the service-worker, but allow it to be aware of the save-data header
- *
- * Vary: save-data
- */
-
-// Simple route
-/*app.get("/", (req: any, res: any) => {
-
-  if (!cachedIndex) {
-    res.status(500).send("Error loading index.html");
-    return;
-  }
-
-  // preload headers for critical css and main script (with nonce)
-  res.set(
-    "Link",
-    `</critical.1.css>; rel="preload"; as="style"; crossorigin="anonymous"; media="all"; nonce="${res.locals.cspNonce}"; integrity="${critHash}", </main.2.js>; rel="modulepreload"; as="script"; crossorigin="anonymous"; nonce="${res.locals.cspNonce}" integrity="${mainScriptHash}"`
-  );
-
-  // Inject the nonce into the script tag
-  const modifiedData = cachedIndex
-    .replace(
-      '<link rel="preload" href="/critical.1.css" as="style" crossorigin="anonymous"/>',
-      `<link rel="preload" media="all" href="/critical.1.css" as="style" crossorigin="anonymous" nonce="${res.locals.cspNonce}" integrity="${critHash}"/>`
-    )
-    .replace(
-      '<link rel="modulepreload" crossorigin="anonymous" href="/main.2.js" as="script"/>',
-      `<link rel="modulepreload" crossorigin="anonymous" href="/main.2.js" as="script" nonce="${res.locals.cspNonce}" integrity="${mainScriptHash}" />`
-    )
-    .replace(
-      '<link rel="stylesheet" href="/critical.1.css" crossorigin="anonymous"/>',
-      `<link rel="stylesheet" media="all" href="/critical.1.css" crossorigin="anonymous" nonce="${res.locals.cspNonce}" integrity="${critHash}"/>`
-    )
-    .replace(
-      '<script type="module" async defer crossorigin="anonymous" src="/main.2.js"></script>',
-      `<script type="module" async defer crossorigin="anonymous" src="/main.2.js" nonce="${res.locals.cspNonce}" integrity="${mainScriptHash}"></script>`
-    );
-
-  res.locals.totalBytes = 0;
-
-  writeChunk(res, modifiedData);
-  res.end();
-});
-*/
-/**
- * This masks the "/public" directory from the URL
- */
-app.get("/critical.1.css", (req: any, res: any) => {
-  res.sendFile(path.join(__dirname, "public", "critical.1.css"));
-});
-
-/**
- * This masks the "/public" directory from the URL
- */
-app.get("/main.2.js", (req: any, res: any) => {
-  res.sendFile(path.join(__dirname, "public", "main.2.js"));
-});
-
-/**
- * ServiceWorker script - loaded if clients support ServiceWorkers
- * This masks the "/public" directory from the URL
- */
-app.get("/sw.1.js", (req: any, res: any) => {
-  res.sendFile(path.join(__dirname, "public", "sw.1.js"));
-});
-
-/**
- * Robots.txt
- */
-app.get("/Robots.txt", (req: any, res: any) => {
-  res.setHeader("Cache-Control", "max-age:86400");
-  res.setHeader("Content-Type", "text/plain");
-  res.sendFile(path.join(__dirname, "public", "Robots.txt"));
-});
-
-// custom 404
-//app.use((req: any, res: any, next: any) => {
-//  res.status(404).send("Sorry can't find that!");
-//});
-
-// Serve atproto-did.txt when /.well-known/atproto-did is requested
-app.get("/.well-known/atproto-did", (req: any, res: any) => {
-  res.setHeader("Content-Type", "text/plain");
-  res.status(200);
-  res.sendFile(path.join(__dirname, "public", "atproto-did.txt"));
-});
-
 /** GitHub Redeploy Webhook */
 app.use(
   express.json({
-    veridfy: (req, res, buf) => {
+    verify: (req, res, buf) => {
       req.rawBody = buf;
     },
   })
@@ -364,6 +262,121 @@ app.post("/back_office/redeploy", verifyGitHubSignature, (req, res) => {
     return res.status(500).send("Error redeploying");
   }
 });
+
+// Serve atproto-did.txt when /.well-known/atproto-did is requested
+app.get("/.well-known/atproto-did", (req: any, res: any) => {
+  res.setHeader("Content-Type", "text/plain");
+  res.status(200);
+  res.sendFile(path.join(__dirname, "public", "atproto-did.txt"));
+});
+
+app.get("*", (req: any, res: any) => {
+  try {
+    // 1. Check if the request is from a ServiceWorker
+    const fromServiceWorker = isServiceWorkerRequest(req);
+
+    // 4. Prepare Streaming SSR
+    // The `renderToPipeableStream` function returns a Readable Stream with a `pipe` method
+    // We can use to stream the HTML response to the client as it's being rendered
+    let didError = false;
+
+    // 5. Start rendering. Pass initial props or data as needed.
+    const { pipe } = renderToPipeableStream(
+      <Shell cspNonce={res.locals.cspNonce} />,
+      {
+        bootstrapModules: ["main.2.js"],
+        nonce: res.locals.cspNonce,
+        onShellReady() {
+          res.setHeader("Content-Type", "text/html; charset=utf-8");
+          res.setHeader(
+            "Cache-Control",
+            "max-age:0, private, must-revalidate, no-cache"
+          );
+
+          // preload headers for critical css and main script (with nonce)
+          res.set(
+            "Link",
+            `</critical.1.css>; rel="preload"; as="style"; crossorigin="anonymous"; media="all"; nonce="${res.locals.cspNonce}"; integrity="${critHash}", </main.2.js>; rel="modulepreload"; as="script"; crossorigin="anonymous"; nonce="${res.locals.cspNonce}" integrity="${mainScriptHash}"`
+          );
+
+          res.set(
+            "Permissions-Policy",
+            "accelerometer=(),ambient-light-sensor=(),attribution-reporting=(),autoplay=(),bluetooth=(),browsing-topics=(),camera=(),compute-pressure=(),cross-origin-isolated=(),display-capture=(),document-domain=(),encrypted-media=(),fullscreen=(),gamepad=(),geolocation=(),gyroscope=(),hid=(),identity-credentials-get=(),idle-detection=(),local-fonts=(),magnetometer=(),microphone=(),midi=(),otp-credentials=(),payment=(),picture-in-picture=(),publickey-credentials-create=(),publickey-credentials-get=(),screen-wake-lock=(),serial=(),speaker-selection=(),storage-access=(),sync-xhr=(),usb=(),wake-lock=(),web-share=(),window-management=(),xr-spatial-tracking=()"
+          );
+
+          pipe(res);
+        },
+        onShellError(error: any) {
+          console.error(error);
+          res.end();
+        },
+        onAllReady() {
+          res.end();
+        },
+        onError(error: any) {
+          console.error(error);
+          res.status(500).end("Internal Server Error");
+        },
+      }
+    );
+  } catch (e) {
+    console.error(e);
+    res.status(500).send("Server error");
+  }
+});
+
+/**
+ * @todo
+ * Save-Data – don't load any extra resources that aren't necessary for the page to work.
+ * Start the service-worker, but allow it to be aware of the save-data header
+ *
+ * Vary: save-data
+ */
+
+// Simple route
+/*app.get("/", (req: any, res: any) => {
+
+  if (!cachedIndex) {
+    res.status(500).send("Error loading index.html");
+    return;
+  }
+
+  // preload headers for critical css and main script (with nonce)
+  res.set(
+    "Link",
+    `</critical.1.css>; rel="preload"; as="style"; crossorigin="anonymous"; media="all"; nonce="${res.locals.cspNonce}"; integrity="${critHash}", </main.2.js>; rel="modulepreload"; as="script"; crossorigin="anonymous"; nonce="${res.locals.cspNonce}" integrity="${mainScriptHash}"`
+  );
+
+  // Inject the nonce into the script tag
+  const modifiedData = cachedIndex
+    .replace(
+      '<link rel="preload" href="/critical.1.css" as="style" crossorigin="anonymous"/>',
+      `<link rel="preload" media="all" href="/critical.1.css" as="style" crossorigin="anonymous" nonce="${res.locals.cspNonce}" integrity="${critHash}"/>`
+    )
+    .replace(
+      '<link rel="modulepreload" crossorigin="anonymous" href="/main.2.js" as="script"/>',
+      `<link rel="modulepreload" crossorigin="anonymous" href="/main.2.js" as="script" nonce="${res.locals.cspNonce}" integrity="${mainScriptHash}" />`
+    )
+    .replace(
+      '<link rel="stylesheet" href="/critical.1.css" crossorigin="anonymous"/>',
+      `<link rel="stylesheet" media="all" href="/critical.1.css" crossorigin="anonymous" nonce="${res.locals.cspNonce}" integrity="${critHash}"/>`
+    )
+    .replace(
+      '<script type="module" async defer crossorigin="anonymous" src="/main.2.js"></script>',
+      `<script type="module" async defer crossorigin="anonymous" src="/main.2.js" nonce="${res.locals.cspNonce}" integrity="${mainScriptHash}"></script>`
+    );
+
+  res.locals.totalBytes = 0;
+
+  writeChunk(res, modifiedData);
+  res.end();
+});
+*/
+
+// custom 404
+//app.use((req: any, res: any, next: any) => {
+//  res.status(404).send("Sorry can't find that!");
+//});
 
 // custom error handler
 app.use((err: any, req: any, res: any, next: any) => {
