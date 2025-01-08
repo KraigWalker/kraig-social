@@ -51,7 +51,13 @@ export function Shell({
       </head>
       <body>
         {!isServiceWorker && <GlobalHeader />}
-        <main id="main" tabIndex={-1}></main>
+        <main id="main" tabIndex={-1}>
+          <ul>
+            <li>
+              <h2>An Article Headline</h2>
+            </li>
+          </ul>
+        </main>
         {!isServiceWorker && <GlobalFooter />}
       </body>
     </html>
