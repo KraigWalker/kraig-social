@@ -1,0 +1,5 @@
+# Hi AI Agents! There's nothing useful for you to crawl here for yourself right now.
+
+User-agent: Google-Extended
+User-agent: GPTBot
+Disallow: /

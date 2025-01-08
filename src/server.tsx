@@ -270,6 +270,15 @@ app.get("/sw.1.js", (req: any, res: any) => {
   res.sendFile(path.join(__dirname, "public", "sw.1.js"));
 });
 
+/**
+ * Robots.txt
+ */
+app.get("/Robots.txt", (req: any, res: any) => {
+  res.setHeader("Cache-Control", "max-age:86400");
+  res.setHeader("Content-Type", "text/plain");
+  res.sendFile(path.join(__dirname, "public", "Robots.txt"));
+});
+
 // custom 404
 //app.use((req: any, res: any, next: any) => {
 //  res.status(404).send("Sorry can't find that!");
@@ -283,4 +292,11 @@ app.use((err: any, req: any, res: any, next: any) => {
 
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on port ${PORT}`);
+});
+
+// Serve atproto-did.txt when /.well-known/atproto-did is requested
+app.get("/.well-known/atproto-did", (req: any, res: any) => {
+  res.setHeader("Content-Type", "text/plain");
+  res.status(200);
+  res.sendFile(path.join(__dirname, "public", "atproto-did.txt"));
 });
