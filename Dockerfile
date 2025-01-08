@@ -1,4 +1,7 @@
-FROM node:22-alpine
+#
+# Stage 1: Builder
+# 
+FROM node:22-alpine as builder
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -11,10 +14,22 @@ RUN npm ci
 COPY . ./
 RUN npm run build
 
-# Remove dev dependencies to keep image smaller
+#
+# Stage 2: Runner
+#
+FROM node:22-alpine
+
+WORKDIR /app
+
+# Copy package files again, but now install only production deps
+COPY package*.json ./
 RUN npm ci --omit=dev
 
+# Copy compiled output from builder
+COPY --from=builder /app/dist /app/dist
+
 # Set the Node.js environment variables (if needed)
+ENV NODE_ENV=production
 ENV PORT=3000
 EXPOSE 3000
 
