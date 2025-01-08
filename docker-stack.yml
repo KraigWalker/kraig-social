@@ -1,5 +1,11 @@
 version: "3.9"
+secrets:
+  kraig_social_github_webhook_secret:
+    external: true
 services:
+  secrets:
+    kraig_social_github_webhook_secret:
+      external: true
   web:
     image: ghcr.io/kraigwalker/kraig-social:latest
     secrets:
@@ -10,7 +16,3 @@ services:
       replicas: 1
       restart_policy:
         condition: any
-
-secrets:
-  kraig_social_github_webhook_secret:
-    external: true
