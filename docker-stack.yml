@@ -2,6 +2,8 @@ version: "3.9"
 services:
   web:
     image: ghcr.io/kraigwalker/kraig-social:latest
+    secrets:
+      - kraig_social_github_webhook_secret
     ports:
       - "3000:3000"
     deploy:
