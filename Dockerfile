@@ -15,4 +15,4 @@ ENV PORT=3000
 EXPOSE 3000
 
 # Specify the command to run when starting the container
-CMD ["node", "src/server.js"]
+CMD ["node", "dist/server.js"]

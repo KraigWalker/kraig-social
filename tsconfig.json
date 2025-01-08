@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "outDir": "dist",
+    "rootDir": "src",
+    "jsx": "react-jsx",
+    "moduleResolution": "nodenext",
+    "strict": false,
+    // Production-specific options:
+    "removeComments": true,
+    //"noUnusedLocals": true,
+    // "noUnusedParameters": true,
+    "sourceMap": false
+  },
+  "include": ["src/server.tsx"]
+}

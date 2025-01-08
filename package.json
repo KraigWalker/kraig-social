@@ -1,6 +1,6 @@
 {
   "name": "kraig-social",
-  "version": "0.0.20",
+  "version": "0.0.21",
   "description": "",
   "homepage": "https://github.com/KraigWalker/kraig-social#readme",
   "bugs": {
@@ -11,15 +11,28 @@
     "url": "git+https://github.com/KraigWalker/kraig-social.git"
   },
   "license": "MIT",
-  "author": "",
-  "type": "commonjs",
-  "main": "src/server.js",
+  "author": "Kraig Walker",
+  "type": "module",
+  "main": "dist/server.js",
   "scripts": {
-    "start": "node src/server.js",
+    "build": "tsc && cp -R src/public dist/public",
+    "minify": "npx terser dist/*.js --compress --mangle --output dist/*.js",
+    "start": "node dist/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "@ladjs/consolidate": "1.0.4",
+    "cors": "2.8.5",
     "express": "4.21.2",
-    "helmet": "8.0.0"
+    "helmet": "8.0.0",
+    "hpp": "0.2.3",
+    "react": "19.0.0",
+    "react-dom": "19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "22.10.5",
+    "@types/react": "19.0.3",
+    "@types/react-dom": "19.0.2",
+    "typescript": "5.7.2"
   }
 }
