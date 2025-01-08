@@ -7,6 +7,7 @@ import express from "express";
 import helmet from "helmet";
 import cors from "cors";
 import hpp from "hpp";
+import { exec, execSync } from "node:child_process";
 import { renderToPipeableStream } from "react-dom/server";
 import { Shell } from "./components/Shell.js";
 
@@ -17,6 +18,10 @@ process.env.NODE_ENV = "production";
 
 const app = express();
 const PORT: number = 3000;
+const GITHUB_WEBHOOK_SECRET = process.env.GITHUB_WEBHOOK_SECRET || "";
+const DOCKER_COMPOSE_FILE =
+  process.env.DOCKER_COMPOSE_FILE || "docker-stack.yml";
+const STACK_NAME = process.env.STACK_NAME || "mystack";
 
 const critFilePath = path.join(__dirname, "public", "critical.1.css");
 const critContents = fs.readFileSync(critFilePath, "utf-8");
@@ -289,6 +294,75 @@ app.get("/.well-known/atproto-did", (req: any, res: any) => {
   res.setHeader("Content-Type", "text/plain");
   res.status(200);
   res.sendFile(path.join(__dirname, "public", "atproto-did.txt"));
+});
+
+/** GitHub Redeploy Webhook */
+app.use(
+  express.json({
+    veridfy: (req, res, buf) => {
+      req.rawBody = buf;
+    },
+  })
+);
+
+/**
+ * Middleware to verify the GitHub Webhook Secret
+ */
+function verifyGitHubSignature(req, res, next) {
+  if (!GITHUB_WEBHOOK_SECRET) {
+    return res.status(400).send("GitHub Webhook secret not set");
+  }
+
+  const signature = req.header("X-Hub-Signature-256");
+  if (!signature) {
+    return res.status(400).send("Midding X-Hub-Signature-256 header");
+  }
+
+  const [algo, expectedSig] = signature.split("=");
+  if (algo !== "sha256") {
+    return res.status(400).send("Only sha256 is supported");
+  }
+
+  // Compute the expected signature
+  const hmac = crypto.createHmac("sha256", GITHUB_WEBHOOK_SECRET);
+  hmac.update(req.rawBody);
+
+  const calculatedSig = hmac.digest("hex");
+
+  // Compare signatures in constant time
+  if (
+    !crypto.timingSafeEqual(
+      Buffer.from(calculatedSig, "hex"),
+      Buffer.from(expectedSig, "hex")
+    )
+  ) {
+    return res.status(400).send("Invalid signature");
+  }
+
+  next();
+}
+
+app.post("/back_office/redeploy", verifyGitHubSignature, (req, res) => {
+  // 1. Optionally check the event type
+  const eventType = req.header("X-GitHub-Event") || "unknown";
+  console.log(`Received GitHub event: ${eventType}`);
+
+  // 2. (Optional) If you only want to respond to GHCR "package" events:
+  if (eventType !== "package") {
+    return res.status(200).send("Ignoring event");
+  }
+
+  try {
+    execSync(`docker stack deploy -c ${DOCKER_COMPOSE_FILE} ${STACK_NAME}`, {
+      stdio: "inherit",
+    });
+    console.log("Successfully redeployed stack:", STACK_NAME);
+
+    res.status(200).send("Redeployed successfully");
+  } catch (err) {
+    console.error("Error during redeploy:", err);
+    return res.status(500).send("Error redeploying");
+  }
 });
 
 // custom error handler
