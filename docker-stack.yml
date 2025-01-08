@@ -3,11 +3,12 @@ secrets:
   kraig_social_github_webhook_secret:
     external: true
 services:
-  secrets:
-    kraig_social_github_webhook_secret:
-      external: true
   web:
     image: ghcr.io/kraigwalker/kraig-social:latest
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - GITHUB_WEBHOOK_SECRET_FILE=/run/secrets/kraig_social_github_webhook_secret
     secrets:
       - kraig_social_github_webhook_secret
     ports:

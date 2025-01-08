@@ -22,7 +22,7 @@ let GITHUB_WEBHOOK_SECRET = "";
 
 try {
   GITHUB_WEBHOOK_SECRET = fs
-    .readFileSync("/run/secrets/kraig_social_github_webhook_secret", "utf8")
+    .readFileSync(process.env.GITHUB_WEBHOOK_SECRET_FILE, "utf8")
     .trim();
   console.log(
     "Loaded GitHub webhook secret from /run/secrets/github_webhook_secret"
