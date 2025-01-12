@@ -55,6 +55,7 @@ export function Shell({
           nonce={cspNonce}
           integrity={critHash}
         />
+        <link rel="canonical" href="https://kraig.social" />
       </head>
       <body>
         {!isServiceWorker && <GlobalHeader />}
