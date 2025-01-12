@@ -1,6 +1,6 @@
 {
   "name": "kraig-social",
-  "version": "0.0.36",
+  "version": "0.0.37",
   "description": "",
   "homepage": "https://github.com/KraigWalker/kraig-social#readme",
   "bugs": {
@@ -21,7 +21,6 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@ladjs/consolidate": "1.0.4",
     "cors": "2.8.5",
     "express": "4.21.2",
     "helmet": "8.0.0",
@@ -31,8 +30,8 @@
   },
   "devDependencies": {
     "@types/node": "22.10.5",
-    "@types/react": "19.0.3",
-    "@types/react-dom": "19.0.2",
-    "typescript": "5.7.2"
+    "@types/react": "19.0.5",
+    "@types/react-dom": "19.0.3",
+    "typescript": "5.7.3"
   }
 }
