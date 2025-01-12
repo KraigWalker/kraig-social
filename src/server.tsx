@@ -67,7 +67,7 @@ const corsOptions = {
 
 let cachedIndex: any;
 
-const mainFilePath = path.join(__dirname, "public", "main.2.js");
+const mainFilePath = path.join(__dirname, "public", "main.3.js");
 const mainContents = fs.readFileSync(mainFilePath, "utf-8");
 
 /**
@@ -140,8 +140,8 @@ app.get("/critical.1.css", (req: any, res: any) => {
 /**
  * This masks the "/public" directory from the URL
  */
-app.get("/main.2.js", (req: any, res: any) => {
-  res.sendFile(path.join(__dirname, "public", "main.2.js"));
+app.get("/main.3.js", (req: any, res: any) => {
+  res.sendFile(path.join(__dirname, "public", "main.3.js"));
 });
 
 /**
@@ -289,7 +289,7 @@ app.get("*", (req: any, res: any) => {
     const { pipe } = renderToPipeableStream(
       <Shell cspNonce={res.locals.cspNonce} />,
       {
-        bootstrapModules: ["main.2.js"],
+        bootstrapModules: ["main.3.js"],
         nonce: res.locals.cspNonce,
         onShellReady() {
           res.setHeader("Content-Type", "text/html; charset=utf-8");
@@ -301,7 +301,7 @@ app.get("*", (req: any, res: any) => {
           // preload headers for critical css and main script (with nonce)
           res.set(
             "Link",
-            `</critical.1.css>; rel="preload"; as="style"; crossorigin="anonymous"; media="all"; nonce="${res.locals.cspNonce}"; integrity="${critHash}", </main.2.js>; rel="modulepreload"; as="script"; crossorigin="anonymous"; nonce="${res.locals.cspNonce}" integrity="${mainScriptHash}"`
+            `</critical.1.css>; rel="preload"; as="style"; crossorigin="anonymous"; media="all"; nonce="${res.locals.cspNonce}"; integrity="${critHash}", </main.3.js>; rel="modulepreload"; as="script"; crossorigin="anonymous"; nonce="${res.locals.cspNonce}" integrity="${mainScriptHash}"`
           );
 
           res.set(
@@ -329,54 +329,6 @@ app.get("*", (req: any, res: any) => {
     res.status(500).send("Server error");
   }
 });
-
-/**
- * @todo
- * Save-Data – don't load any extra resources that aren't necessary for the page to work.
- * Start the service-worker, but allow it to be aware of the save-data header
- *
- * Vary: save-data
- */
-
-// Simple route
-/*app.get("/", (req: any, res: any) => {
-
-  if (!cachedIndex) {
-    res.status(500).send("Error loading index.html");
-    return;
-  }
-
-  // preload headers for critical css and main script (with nonce)
-  res.set(
-    "Link",
-    `</critical.1.css>; rel="preload"; as="style"; crossorigin="anonymous"; media="all"; nonce="${res.locals.cspNonce}"; integrity="${critHash}", </main.2.js>; rel="modulepreload"; as="script"; crossorigin="anonymous"; nonce="${res.locals.cspNonce}" integrity="${mainScriptHash}"`
-  );
-
-  // Inject the nonce into the script tag
-  const modifiedData = cachedIndex
-    .replace(
-      '<link rel="preload" href="/critical.1.css" as="style" crossorigin="anonymous"/>',
-      `<link rel="preload" media="all" href="/critical.1.css" as="style" crossorigin="anonymous" nonce="${res.locals.cspNonce}" integrity="${critHash}"/>`
-    )
-    .replace(
-      '<link rel="modulepreload" crossorigin="anonymous" href="/main.2.js" as="script"/>',
-      `<link rel="modulepreload" crossorigin="anonymous" href="/main.2.js" as="script" nonce="${res.locals.cspNonce}" integrity="${mainScriptHash}" />`
-    )
-    .replace(
-      '<link rel="stylesheet" href="/critical.1.css" crossorigin="anonymous"/>',
-      `<link rel="stylesheet" media="all" href="/critical.1.css" crossorigin="anonymous" nonce="${res.locals.cspNonce}" integrity="${critHash}"/>`
-    )
-    .replace(
-      '<script type="module" async defer crossorigin="anonymous" src="/main.2.js"></script>',
-      `<script type="module" async defer crossorigin="anonymous" src="/main.2.js" nonce="${res.locals.cspNonce}" integrity="${mainScriptHash}"></script>`
-    );
-
-  res.locals.totalBytes = 0;
-
-  writeChunk(res, modifiedData);
-  res.end();
-});
-*/
 
 // custom 404
 //app.use((req: any, res: any, next: any) => {
