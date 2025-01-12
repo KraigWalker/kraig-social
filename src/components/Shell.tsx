@@ -31,6 +31,13 @@ export function Shell({
   return (
     <html>
       <head>
+        <meta charSet="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Kraig Walker | Web Practicioner</title>
+        <meta
+          name="description"
+          content="– The personal website of Kraig Walker, inclusive web engineer"
+        />
         <link
           rel="preload"
           media="all"
