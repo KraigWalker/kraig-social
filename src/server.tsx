@@ -177,6 +177,12 @@ app.use(
         "script-src-elem": [getResCSPNonce, `'${mainScriptHash}'`],
         "script-src-attr": ["'none'"],
         "style-src-elem": [getResCSPNonce, `'${critHash}'`],
+        "style-src-attr": ["'none'"],
+        "style-src": [
+          "https://kraig.social/critical.1.css",
+          getResCSPNonce,
+          `'${critHash}'`,
+        ],
         /** @note This doesn't seem to be working without adding self */
         "worker-src": ["'self'", `'${swScriptHash}'`],
         "require-trusted-types-for": ["'script'"],
