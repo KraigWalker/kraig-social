@@ -2,7 +2,7 @@ import * as React from "react";
 
 export function GlobalHeader() {
   return (
-    <header className="site-header" id="banner">
+    <header className="site-header" id="banner" data-c="site-header" data-v="1">
       <div className="content-container grid">
         <div className="logo"></div>
         <nav className="site-nav" aria-label="Site" id="site-nav">
