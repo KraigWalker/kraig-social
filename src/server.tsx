@@ -93,16 +93,6 @@ const swScriptHash = `sha512-${crypto
   .update(swContents)
   .digest("base64")}`;
 
-// Load and cache index.html at startup
-const indexPath = path.join(__dirname, "public", "index.html");
-
-fs.readFile(indexPath, "utf8", (err, data) => {
-  if (err) {
-    console.error("Error loading index.html:", err);
-  }
-  cachedIndex = data;
-});
-
 /**
  * Security hardening
  */

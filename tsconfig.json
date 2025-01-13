@@ -11,7 +11,8 @@
     "removeComments": true,
     //"noUnusedLocals": true,
     // "noUnusedParameters": true,
-    "sourceMap": false
+    "sourceMap": false,
+    "typeRoots": ["./node_modules/@types", "./src/types"]
   },
-  "include": ["src/server.tsx"]
+  "include": ["src/server.tsx", "src/types/**/*.d.ts"]
 }

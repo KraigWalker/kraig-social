@@ -4,7 +4,7 @@ import * as fs from "node:fs";
 import * as crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
 
-import { GlobalHeader } from "./GlobalHeader.js";
+import { ShadowedHeaderHTML } from "./GlobalHeader.js";
 import { GlobalFooter } from "./GlobalFooter.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -29,7 +29,7 @@ export function Shell({
   cspNonce,
 }) {
   return (
-    <html>
+    <html lang="en">
       <head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -58,7 +58,9 @@ export function Shell({
         <link rel="canonical" href="https://kraig.social" />
       </head>
       <body>
-        {!isServiceWorker && <GlobalHeader />}
+        {!isServiceWorker && (
+          <kw-global-header>{ShadowedHeaderHTML}</kw-global-header>
+        )}
         <main id="main" tabIndex={-1}>
           <ul>
             <li>

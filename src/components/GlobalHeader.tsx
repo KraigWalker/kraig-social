@@ -1,4 +1,19 @@
 import * as React from "react";
+import { renderDeclerativeShadowDOM } from "../shadowTemplate.js";
+
+declare module "react/jsx-runtime" {
+  namespace JSX {
+    interface IntrinsicElements {
+      "kw-global-header": JSX.IntrinsicElements["header"];
+      template: React.DetailedHTMLProps<
+        React.HTMLAttributes<HTMLTemplateElement> & {
+          shadowrootmode?: "open" | "closed";
+        },
+        HTMLTemplateElement
+      >;
+    }
+  }
+}
 
 export function GlobalHeader() {
   return (
@@ -35,3 +50,5 @@ export function GlobalHeader() {
     </header>
   );
 }
+
+export const ShadowedHeaderHTML = renderDeclerativeShadowDOM(<GlobalHeader />);
