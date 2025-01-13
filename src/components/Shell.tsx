@@ -4,7 +4,7 @@ import * as fs from "node:fs";
 import * as crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
 
-import { ShadowedHeaderHTML } from "./GlobalHeader.js";
+import { GlobalHeader } from "./GlobalHeader.js";
 import { GlobalFooter } from "./GlobalFooter.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -58,9 +58,7 @@ export function Shell({
         <link rel="canonical" href="https://kraig.social" />
       </head>
       <body>
-        {!isServiceWorker && (
-          <kw-global-header>{ShadowedHeaderHTML}</kw-global-header>
-        )}
+        {!isServiceWorker && <GlobalHeader />}
         <main id="main" tabIndex={-1}>
           <ul>
             <li>
