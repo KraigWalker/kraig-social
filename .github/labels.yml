@@ -1,0 +1,27 @@
+- name: tooling
+  color: "5F6CAF"
+  description: Build tooling, compiler, linter, or developer-experience related work and constraints.
+
+- name: future-work
+  color: "A6A6A6"
+  description: Intentional work deferred due to timing, ecosystem readiness, or external dependencies.
+
+- name: architecture
+  color: "2F80ED"
+  description: Structural decisions, system design, or changes affecting how the codebase is organised.
+
+- name: infrastructure
+  color: "6B4EFF"
+  description: CI/CD, hosting, deployment, and runtime environment concerns.
+
+- name: experiment
+  color: "F2994A"
+  description: Exploratory work, prototypes, or ideas being tried without long-term commitment yet.
+
+- name: blocked-upstream
+  color: "D73A4A"
+  description: Blocked or constrained by external tools, libraries, or platforms outside this repository.
+
+- name: tech-debt
+  color: "B08800"
+  description: Known compromises or clean-ups accepted for now, with intent to revisit later.
