@@ -8,22 +8,28 @@ on:
 
 jobs:
   sync:
+    name: Sync GitHub labels from labels.yml
     runs-on: ubuntu-latest
+
     permissions:
       issues: write
-    steps:
-      - uses: actions/checkout@v4
 
-      - uses: actions/github-script@v7
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Sync labels
+        uses: actions/github-script@v7
         with:
           script: |
             const fs = require("fs");
 
-            const raw = fs.readFileSync(".github/labels.yml", "utf8");
+            const LABELS_PATH = ".github/labels.yml";
+            const raw = fs.readFileSync(LABELS_PATH, "utf8");
 
-            // Parse a very small subset of YAML:
-            // - a list of items starting with "- "
-            // - each item has "name:", "color:", "description:" (order doesn't matter)
+            // Parse a small YAML subset:
+            // - list items starting with "- "
+            // - keys: name, color, description
             // - values may be quoted or unquoted
             function parseLabels(yaml) {
               const items = [];
@@ -31,15 +37,19 @@ jobs:
 
               const lines = yaml.split(/\r?\n/);
               for (const line of lines) {
-                if (!line.trim() || line.trim().startsWith("#")) continue;
+                const trimmed = line.trim();
+                if (!trimmed || trimmed.startsWith("#")) continue;
 
                 if (line.startsWith("- ")) {
                   if (current) items.push(current);
                   current = {};
                   const rest = line.slice(2).trim();
-                  // support inline "- name: xxx"
+
+                  // support inline "- name: docs"
                   const m = rest.match(/^(\w+):\s*(.*)$/);
-                  if (m) current[m[1]] = m[2].replace(/^"|"$/g, "");
+                  if (m) {
+                    current[m[1]] = m[2].trim().replace(/^"(.*)"$/s, "$1");
+                  }
                   continue;
                 }
 
@@ -62,11 +72,17 @@ jobs:
 
             const desired = parseLabels(raw);
 
-            // Validate
+            // Validate items so failures are obvious
             for (const l of desired) {
-              if (!l.name) throw new Error(`labels.yml: missing "name" in item: ${JSON.stringify(l)}`);
-              if (!l.color) throw new Error(`labels.yml: missing "color" for "${l.name}"`);
-              if (!l.description) throw new Error(`labels.yml: missing "description" for "${l.name}"`);
+              if (!l.name) {
+                throw new Error(`labels.yml: missing "name" in item: ${JSON.stringify(l)}`);
+              }
+              if (!l.color) {
+                throw new Error(`labels.yml: missing "color" for "${l.name}"`);
+              }
+              if (!l.description) {
+                throw new Error(`labels.yml: missing "description" for "${l.name}"`);
+              }
             }
 
             const { owner, repo } = context.repo;
@@ -107,3 +123,5 @@ jobs:
                 }
               }
             }
+
+            core.info(`Done. Synced ${desired.length} labels.`);
