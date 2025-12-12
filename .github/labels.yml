@@ -37,7 +37,3 @@
 - name: security
   color: "B60205"
   description: Security-related fixes, policies, or hardening.
-
-- name: breaking-change
-  color: "D93F0B"
-  description: Changes that intentionally break existing contracts or assumptions.
