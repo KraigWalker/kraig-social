@@ -25,3 +25,19 @@
 - name: tech-debt
   color: "B08800"
   description: Known compromises or clean-ups accepted for now, with intent to revisit later.
+
+- name: docs
+  color: "0E8A16"
+  description: Documentation, README updates, or explanatory material.
+
+- name: refactor
+  color: "1D76DB"
+  description: Internal code improvements that do not change external behaviour.
+
+- name: security
+  color: "B60205"
+  description: Security-related fixes, policies, or hardening.
+
+- name: breaking-change
+  color: "D93F0B"
+  description: Changes that intentionally break existing contracts or assumptions.
