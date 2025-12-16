@@ -12,6 +12,7 @@ COPY . .
 
 # Install + build with Rush (uses repo-pinned Rush + pnpm)
 RUN node common/scripts/install-run-rush.js install
+# Build (same as `rush build`).
 RUN node common/scripts/install-run-rush.js build -t @kraigwalker/kraig-social
 
 # ---- runtime stage ----
