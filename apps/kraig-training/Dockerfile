@@ -17,24 +17,15 @@ RUN node common/scripts/install-run-rush.js build -t @kraigwalker/kraig-training
 
 # ---- runtime stage (SSR) ----
 FROM node:24.11.1-bookworm-slim AS runtime
-WORKDIR /app
+WORKDIR /repo
 ENV NODE_ENV=production
-
-# Copy only what the React Router App Server needs at runtime
-COPY --from=build /repo/apps/kraig-training/package.json ./package.json
-COPY --from=build /repo/apps/kraig-training/build ./build
-COPY --from=build /repo/apps/kraig-training/public ./public
-
-# React Router's docs recommend deploying only build artifacts; we still need deps for the server.
-# Reuse Rush's pnpm store-less install by copying the monorepo node_modules from the build stage.
-# This is the simplest correct approach inside a Rush monorepo.
-COPY --from=build /repo/common/temp/node_modules /app/node_modules
-
-# If your server build path differs, update this to match the `serverBuildPath` in react-router.config.ts
-# Example values commonly used are: build/server/index.js or build/index.js
 ENV HOST=0.0.0.0
 ENV PORT=3000
 
+# Copy Rush's shared install + the project (including its node_modules shims/.bin)
+COPY --from=build /repo/common/temp /repo/common/temp
+COPY --from=build /repo/apps/kraig-training /repo/apps/kraig-training
+
 EXPOSE 3000
 
-CMD ["node", "./node_modules/.bin/react-router-serve", "build/server/index.js"]
+CMD ["node", "/repo/apps/kraig-training/node_modules/.bin/react-router-serve", "/repo/apps/kraig-training/build/server/index.js"]
