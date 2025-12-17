@@ -17,7 +17,7 @@ RUN node common/scripts/install-run-rush.js build -t @kraigwalker/kraig-training
 
 # ---- runtime stage (SSR) ----
 FROM node:24.11.1-bookworm-slim AS runtime
-WORKDIR /repo
+WORKDIR /repo/apps/kraig-training
 ENV NODE_ENV=production
 ENV HOST=0.0.0.0
 ENV PORT=3000
@@ -28,4 +28,4 @@ COPY --from=build /repo/apps/kraig-training /repo/apps/kraig-training
 
 EXPOSE 3000
 
-CMD ["/repo/apps/kraig-training/node_modules/.bin/react-router-serve", "/repo/apps/kraig-training/build/server/index.js"]
+CMD ["./node_modules/.bin/react-router-serve", "build/server/index.js"]
