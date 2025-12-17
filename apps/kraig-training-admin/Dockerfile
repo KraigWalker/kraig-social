@@ -24,7 +24,7 @@ ENV PORT=3000
 
 # Copy Rush's shared install + the project (including its node_modules shims/.bin)
 COPY --from=build /repo/common/temp /repo/common/temp
-COPY --from=build /repo/apps/kraig-training /repo/apps/kraig-training-admin
+COPY --from=build /repo/apps/kraig-training-admin /repo/apps/kraig-training-admin
 
 EXPOSE 3000
 
