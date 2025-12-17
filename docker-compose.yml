@@ -1,16 +1,16 @@
 services:
-  kraig-social:
-    build:
-      context: .
-      dockerfile: apps/kraig-social/Dockerfile
-    networks:
-      - dokploy-network
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.kraig-social.rule=Host(`kraig.social`)
-      - traefik.http.routers.kraig-social.priority=1
-      - traefik.http.services.kraig-social.loadbalancer.server.port=80
-      - traefik.docker.network=dokploy-network
+  #kraig-social:
+   # build:
+    #  context: .
+     # dockerfile: apps/kraig-social/Dockerfile
+    #networks:
+    #  - dokploy-network
+    #labels:
+#      - traefik.enable=true
+ #     - traefik.http.routers.kraig-social.rule=Host(`kraig.social`)
+  #    - traefik.http.routers.kraig-social.priority=1
+   #   - traefik.http.services.kraig-social.loadbalancer.server.port=80
+    #  - traefik.docker.network=dokploy-network
 
   kraig-training:
     build:
