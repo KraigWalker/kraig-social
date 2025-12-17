@@ -1,7 +1,7 @@
 services:
   kraig-training:
     build:
-      context: .
+      context: ../..
       dockerfile: apps/kraig-training/Dockerfile
     networks: [dokploy-network]
     environment:

@@ -1,7 +1,7 @@
 services:
   kraig-social:
     build:
-      context: .
+      context: ../..
       dockerfile: apps/kraig-social/Dockerfile
     networks:
       - dokploy-network
