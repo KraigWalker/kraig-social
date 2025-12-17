@@ -28,4 +28,4 @@ COPY --from=build /repo/apps/kraig-training /repo/apps/kraig-training
 
 EXPOSE 3000
 
-CMD ["node", "/repo/apps/kraig-training/node_modules/.bin/react-router-serve", "/repo/apps/kraig-training/build/server/index.js"]
+CMD ["/repo/apps/kraig-training/node_modules/.bin/react-router-serve", "/repo/apps/kraig-training/build/server/index.js"]
