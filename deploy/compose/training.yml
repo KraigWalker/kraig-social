@@ -3,7 +3,8 @@ services:
     build:
       context: ../..
       dockerfile: apps/kraig-training/Dockerfile
-    networks: [dokploy-network]
+    networks:
+      - dokploy-network
     environment:
       - TRAINING_API_BASE_URL=/training/api
     labels:
@@ -14,21 +15,22 @@ services:
       - traefik.http.services.kraig-training.loadbalancer.server.port=3000
 
   kraig-training-admin:
-  build:
-    context: ../..
-    dockerfile: apps/kraig-training-admin/Dockerfile
-  ports:
-    - "127.0.0.1:4010:3000"
-  networks:
-    - dokploy-network
-  environment:
-    - TRAINING_API_ORIGIN=https://kraig.social
+    build:
+      context: ../..
+      dockerfile: apps/kraig-training-admin/Dockerfile
+    ports:
+      - "127.0.0.1:4010:3000"
+    networks:
+      - dokploy-network
+    environment:
+      - TRAINING_API_ORIGIN=https://kraig.social
 
   kraig-training-api:
     build:
       context: ../..
       dockerfile: services/kraig-training-api/Dockerfile
-    networks: [dokploy-network]
+    networks:
+      - dokploy-network
     environment:
       - NODE_ENV=production
       - PORT=8787
