@@ -26,7 +26,7 @@
    * Specify one of: "pnpmVersion", "npmVersion", or "yarnVersion".  See the Rush documentation
    * for details about these alternatives.
    */
-  "pnpmVersion": "10.25.0",
+  "pnpmVersion": "10.26.0",
 
   // "npmVersion": "6.14.15",
   // "yarnVersion": "1.9.4",
@@ -441,10 +441,28 @@
     //   "tags": [ "tools" ]
     // }
     {
-       "packageName": "@kraigwalker/kraig-social",
-       "projectFolder": "apps/kraig-social",
-       "reviewCategory": "production",
-      "tags": [ "frontend-team" ]
+      "packageName": "@kraigwalker/kraig-social",
+      "projectFolder": "apps/kraig-social",
+      "reviewCategory": "production",
+      "tags": ["frontend-team"]
+    },
+    {
+      "packageName": "@kraigwalker/kraig-training",
+      "projectFolder": "apps/kraig-training",
+      "reviewCategory": "production",
+      "tags": ["frontend-team", "fitness"]
+    },
+    {
+      "packageName": "@kraigwalker/kraig-training-admin",
+      "projectFolder": "apps/kraig-training-admin",
+      "reviewCategory": "production",
+      "tags": ["frontend-team", "fitness"]
+    },
+    {
+      "packageName": "@kraigwalker/kraig-training-api",
+      "projectFolder": "services/kraig-training-api",
+      "reviewCategory": "production",
+      "tags": ["backend", "fitness"]
     }
   ]
 }
