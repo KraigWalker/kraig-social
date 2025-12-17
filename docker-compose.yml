@@ -12,6 +12,9 @@ services:
       - traefik.http.services.kraig-social.loadbalancer.server.port=80
       - traefik.docker.network=dokploy-network
 
+# NOTE:
+# - kraig-training is mounted at /training
+# - Do NOT use StripPrefix here; app basename is /training
   kraig-training:
     build:
       context: .
