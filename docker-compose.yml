@@ -22,8 +22,8 @@ services:
       - traefik.enable=true
       - traefik.http.routers.kraig-training.rule=Host(`kraig.social`) && PathPrefix(`/training`)
       - traefik.http.routers.kraig-training.priority=100
-      #- traefik.http.routers.kraig-training.middlewares=kraig-training-strip
-      #- traefik.http.middlewares.kraig-training-strip.stripprefix.prefixes=/training
+      - traefik.http.routers.kraig-training.middlewares=kraig-training-strip
+      - traefik.http.middlewares.kraig-training-strip.stripprefix.prefixes=/training
       - traefik.http.services.kraig-training.loadbalancer.server.port=3000
       - traefik.docker.network=dokploy-network
 
