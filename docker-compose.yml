@@ -3,16 +3,21 @@ services:
     build:
       context: .
       dockerfile: apps/kraig-social/Dockerfile
+    networks:
+      - dokploy-network
     labels:
       - traefik.enable=true
       - traefik.http.routers.kraig-social.rule=Host(`kraig.social`)
       - traefik.http.routers.kraig-social.priority=1
       - traefik.http.services.kraig-social.loadbalancer.server.port=80
+      - traefik.docker.network=dokploy-network
 
   kraig-training:
     build:
       context: .
       dockerfile: apps/kraig-training/Dockerfile
+    networks:
+      - dokploy-network
     labels:
       - traefik.enable=true
       - traefik.http.routers.kraig-training.rule=Host(`kraig.social`) && PathPrefix(`/training`)
@@ -20,3 +25,8 @@ services:
       - traefik.http.routers.kraig-training.middlewares=kraig-training-strip
       - traefik.http.middlewares.kraig-training-strip.stripprefix.prefixes=/training
       - traefik.http.services.kraig-training.loadbalancer.server.port=3000
+      - traefik.docker.network=dokploy-network
+
+networks:
+  dokploy-network:
+    external: true
