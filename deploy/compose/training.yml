@@ -14,18 +14,15 @@ services:
       - traefik.http.services.kraig-training.loadbalancer.server.port=3000
 
   kraig-training-admin:
-    build:
-      context: .
-      dockerfile: apps/kraig-training-admin/Dockerfile
-    networks: [dokploy-network]
-    environment:
-      - TRAINING_API_BASE_URL=/training/api
-    labels:
-      - traefik.enable=true
-      - traefik.docker.network=dokploy-network
-      - traefik.http.routers.kraig-training-admin.rule=Host(`kraig.social`) && PathPrefix(`/training/admin`)
-      - traefik.http.routers.kraig-training-admin.priority=110
-      - traefik.http.services.kraig-training-admin.loadbalancer.server.port=3000
+  build:
+    context: .
+    dockerfile: apps/kraig-training-admin/Dockerfile
+  ports:
+    - "127.0.0.1:4010:3000"
+  networks:
+    - dokploy-network
+  environment:
+    - TRAINING_API_ORIGIN=https://kraig.social
 
   kraig-training-api:
     build:
