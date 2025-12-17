@@ -9,3 +9,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
     },
   });
 }
+
+// Prevent “Generated an empty chunk: health”
+export default function HealthRoute() {
+  return null;
+}
