@@ -463,6 +463,12 @@
       "projectFolder": "services/kraig-training-api",
       "reviewCategory": "production",
       "tags": ["backend", "fitness"]
+    },
+    {
+      "packageName": "@kraigwalker/github-gateway",
+      "projectFolder": "services/github-gateway",
+      "reviewCategory": "production",
+      "tags": ["backend"]
     }
   ]
 }

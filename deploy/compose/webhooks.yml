@@ -1,0 +1,21 @@
+services:
+  github-gateway:
+    build:
+      context: ../..
+      dockerfile: services/github-gateway/Dockerfile
+    networks: [dokploy-network]
+    environment:
+      - NODE_ENV=production
+      - PORT=9090
+      - GITHUB_WEBHOOK_SECRET=${GITHUB_WEBHOOK_SECRET}
+      - GITHUB_EVENT=push
+      - DOKPLOY_ORIGIN=http://127.0.0.1:3000
+      - DOKPLOY_API_KEY=${DOKPLOY_API_KEY}
+      - DOKPLOY_COMPOSE_ID=${DOKPLOY_COMPOSE_ID}
+    ports:
+      - "127.0.0.1:9090:9090"
+    restart: unless-stopped
+
+networks:
+  dokploy-network:
+    external: true
