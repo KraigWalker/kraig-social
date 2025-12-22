@@ -1,0 +1,12 @@
+.git
+**/.git
+**/.DS_Store
+**/.react-router
+**/.rush
+**/node_modules
+**/build
+**/dist
+**/coverage
+**/rush-logs
+**/README.md
+common/temp
