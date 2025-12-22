@@ -13,8 +13,8 @@ COPY rush.json ./
 COPY common/scripts/ common/scripts/
 
 # Prime Rush download (cached as long as Rush config/scripts unchanged)
-RUN --mount=type=cache,target=/repo/common/temp/install-run \
-    --mount=type=cache,target=/root/.npm \
+RUN --mount=type=cache,id=rush-install-run,target=/repo/common/temp/install-run \
+    --mount=type=cache,id=npm-cache,target=/root/.npm \
     node common/scripts/install-run-rush.js setup
 
 COPY common/config/rush/ common/config/rush/
@@ -28,9 +28,10 @@ COPY services/kraig-training-api/package.json services/kraig-training-api/packag
 COPY services/github-gateway/package.json services/github-gateway/package.json
 
 # Install + build with Rush (uses repo-pinned Rush + pnpm)
-RUN --mount=type=cache,target=/repo/common/temp/pnpm-store \
-    --mount=type=cache,target=/root/.rush \
-    --mount=type=cache,target=/root/.npm \
+RUN --mount=type=cache,id=pnpm-store,target=/repo/common/temp/pnpm-store \
+    --mount=type=cache,id=rush-install-run,target=/repo/common/temp/install-run \
+    --mount=type=cache,id=rush-home,target=/root/.rush \
+    --mount=type=cache,id=npm-cache,target=/root/.npm \
     node common/scripts/install-run-rush.js install --subspace default
 
 # Copy the rest of the monorepo after install to keep cache hits high
