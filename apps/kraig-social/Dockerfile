@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1.5
 # ---- build stage ----
 FROM node:24.11.1-bookworm-slim AS build
 WORKDIR /repo
@@ -11,11 +12,10 @@ RUN apt-get update \
 COPY rush.json ./
 COPY common/config/rush/ common/config/rush/
 COPY common/scripts/ common/scripts/
-COPY apps/kraig-social/package.json apps/kraig-social/package.json
-COPY apps/kraig-training/package.json apps/kraig-training/package.json
-COPY apps/kraig-training-admin/package.json apps/kraig-training-admin/package.json
-COPY services/kraig-training-api/package.json services/kraig-training-api/package.json
-COPY services/github-gateway/package.json services/github-gateway/package.json
+
+# Copy package.json files based on rush.json to avoid manual maintenance
+RUN --mount=type=bind,source=.,target=/src,ro \
+    node -e "const fs=require('fs');const path=require('path');const rush=require('/src/rush.json');for(const p of rush.projects){const src=path.join('/src',p.projectFolder,'package.json');const dest=path.join('/repo',p.projectFolder,'package.json');fs.mkdirSync(path.dirname(dest),{recursive:true});fs.copyFileSync(src,dest);}"
 
 # Install + build with Rush (uses repo-pinned Rush + pnpm)
 RUN node common/scripts/install-run-rush.js install -t @kraigwalker/kraig-social
