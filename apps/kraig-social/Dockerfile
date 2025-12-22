@@ -37,7 +37,9 @@ RUN --mount=type=cache,id=pnpm-store,target=/repo/common/temp/pnpm-store \
 # Copy the rest of the monorepo after install to keep cache hits high
 COPY . .
 # Build (same as `rush build`).
-RUN node common/scripts/install-run-rush.js build --to @kraigwalker/kraig-social
+RUN --mount=type=cache,id=rush-install-run,target=/repo/common/temp/install-run \
+    --mount=type=cache,id=npm-cache,target=/root/.npm \
+    node common/scripts/install-run-rush.js build --to @kraigwalker/kraig-social
 
 # ---- runtime stage ----
 FROM nginx:alpine AS runtime
