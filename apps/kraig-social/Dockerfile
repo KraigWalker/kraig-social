@@ -7,11 +7,17 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends git ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy the whole monorepo (simple + reliable first; can optimize later)
-COPY . .
+# Copy Rush config + package manifests first for better layer caching
+COPY rush.json ./
+COPY common/config/rush/ common/config/rush/
+COPY common/scripts/ common/scripts/
+COPY apps/kraig-social/package.json apps/kraig-social/package.json
 
 # Install + build with Rush (uses repo-pinned Rush + pnpm)
-RUN node common/scripts/install-run-rush.js install
+RUN node common/scripts/install-run-rush.js install -t @kraigwalker/kraig-social
+
+# Copy the rest of the monorepo after install to keep cache hits high
+COPY . .
 # Build (same as `rush build`).
 RUN node common/scripts/install-run-rush.js build -t @kraigwalker/kraig-social
 
