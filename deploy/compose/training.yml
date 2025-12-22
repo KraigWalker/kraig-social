@@ -2,7 +2,8 @@ services:
   kraig-training:
     build:
       context: ../..
-      dockerfile: apps/kraig-training/Dockerfile
+      dockerfile: deploy/docker/training.Dockerfile
+      target: kraig-training
     networks:
       - dokploy-network
     environment:
@@ -17,7 +18,8 @@ services:
   kraig-training-admin:
     build:
       context: ../..
-      dockerfile: apps/kraig-training-admin/Dockerfile
+      dockerfile: deploy/docker/training.Dockerfile
+      target: kraig-training-admin
     ports:
       - "127.0.0.1:4010:3000"
     networks:
@@ -29,7 +31,8 @@ services:
   kraig-training-api:
     build:
       context: ../..
-      dockerfile: services/kraig-training-api/Dockerfile
+      dockerfile: deploy/docker/training.Dockerfile
+      target: kraig-training-api
     networks:
       - dokploy-network
     environment:
