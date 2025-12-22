@@ -467,6 +467,7 @@
     {
       "packageName": "@kraigwalker/github-gateway",
       "projectFolder": "services/github-gateway",
+      "subspaceName": "infra",
       "reviewCategory": "production",
       "tags": ["backend"]
     }

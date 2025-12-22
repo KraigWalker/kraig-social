@@ -11,6 +11,7 @@ RUN apt-get update \
 # Copy Rush config + package manifests first for better layer caching
 COPY rush.json ./
 COPY common/config/rush/ common/config/rush/
+COPY common/config/subspaces/ common/config/subspaces/
 COPY common/scripts/ common/scripts/
 
 # Copy package.json files based on rush.json to avoid manual maintenance
