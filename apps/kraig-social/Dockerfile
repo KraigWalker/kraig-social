@@ -15,7 +15,7 @@ COPY common/scripts/ common/scripts/
 
 # Copy package.json files based on rush.json to avoid manual maintenance
 RUN --mount=type=bind,source=.,target=/src,ro \
-    node -e "const fs=require('fs');const path=require('path');const rush=require('/src/rush.json');for(const p of rush.projects){const src=path.join('/src',p.projectFolder,'package.json');const dest=path.join('/repo',p.projectFolder,'package.json');fs.mkdirSync(path.dirname(dest),{recursive:true});fs.copyFileSync(src,dest);}"
+    node -e "const fs=require('fs');const path=require('path');const raw=fs.readFileSync('/src/rush.json','utf8');const json=raw.replace(/\\/\\*[\\s\\S]*?\\*\\//g,'').replace(/^\\s*\\/\\/.*$/gm,'');const rush=JSON.parse(json);for(const p of rush.projects){const src=path.join('/src',p.projectFolder,'package.json');const dest=path.join('/repo',p.projectFolder,'package.json');fs.mkdirSync(path.dirname(dest),{recursive:true});fs.copyFileSync(src,dest);}"
 
 # Install + build with Rush (uses repo-pinned Rush + pnpm)
 RUN node common/scripts/install-run-rush.js install -t @kraigwalker/kraig-social
