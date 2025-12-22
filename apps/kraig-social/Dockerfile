@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1.7
 # ---- build stage ----
 FROM node:24.11.1-bookworm-slim AS build
 WORKDIR /repo
@@ -12,7 +13,9 @@ COPY rush.json ./
 COPY common/scripts/ common/scripts/
 
 # Prime Rush download (cached as long as Rush config/scripts unchanged)
-RUN node common/scripts/install-run-rush.js setup
+RUN --mount=type=cache,target=/repo/common/temp/install-run \
+    --mount=type=cache,target=/root/.npm \
+    node common/scripts/install-run-rush.js setup
 
 COPY common/config/rush/ common/config/rush/
 COPY common/config/subspaces/ common/config/subspaces/
@@ -25,7 +28,10 @@ COPY services/kraig-training-api/package.json services/kraig-training-api/packag
 COPY services/github-gateway/package.json services/github-gateway/package.json
 
 # Install + build with Rush (uses repo-pinned Rush + pnpm)
-RUN node common/scripts/install-run-rush.js install --subspace default
+RUN --mount=type=cache,target=/repo/common/temp/pnpm-store \
+    --mount=type=cache,target=/root/.rush \
+    --mount=type=cache,target=/root/.npm \
+    node common/scripts/install-run-rush.js install --subspace default
 
 # Copy the rest of the monorepo after install to keep cache hits high
 COPY . .
