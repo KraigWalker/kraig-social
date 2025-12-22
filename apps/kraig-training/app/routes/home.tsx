@@ -4,7 +4,7 @@ import { Welcome } from "../welcome/welcome";
 export function meta({}: Route.MetaArgs) {
   return [
     { title: "Kraig Walker: Training Calendar" },
-    { name: "description", content: "" },
+    { name: "description", content: "description" },
   ];
 }
 
