@@ -14,7 +14,7 @@ COPY common/config/subspaces/ common/config/subspaces/
 COPY common/scripts/ common/scripts/
 
 # Prime Rush download (cached as long as Rush config/scripts unchanged)
-RUN node common/scripts/install-run-rush.js --version
+RUN node common/scripts/install-run-rush.js list
 
 # Copy package.json files for projects
 COPY apps/kraig-social/package.json apps/kraig-social/package.json
