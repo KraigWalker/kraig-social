@@ -13,7 +13,7 @@ COPY common/config/rush/ common/config/rush/
 COPY common/config/subspaces/ common/config/subspaces/
 COPY common/scripts/ common/scripts/
 
-# Copy package.json files for projects in the default subspace
+# Copy package.json files for projects
 COPY apps/kraig-social/package.json apps/kraig-social/package.json
 COPY apps/kraig-training/package.json apps/kraig-training/package.json
 COPY apps/kraig-training-admin/package.json apps/kraig-training-admin/package.json
