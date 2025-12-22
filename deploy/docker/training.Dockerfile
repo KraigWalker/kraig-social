@@ -46,6 +46,22 @@ RUN --mount=type=cache,id=rush-install-run,target=/repo/common/temp/install-run 
       --to @kraigwalker/kraig-training-admin \
       --to @kraigwalker/kraig-training-api
 
+# Prepare minimal deploy folders for each service
+RUN --mount=type=cache,id=rush-install-run,target=/repo/common/temp/install-run \
+    --mount=type=cache,id=npm-cache,target=/root/.npm \
+    node common/scripts/install-run-rush.js deploy --scenario training \
+      --project @kraigwalker/kraig-training \
+      --target-folder /repo/common/deploy/kraig-training \
+      --overwrite \
+    && node common/scripts/install-run-rush.js deploy --scenario training \
+      --project @kraigwalker/kraig-training-admin \
+      --target-folder /repo/common/deploy/kraig-training-admin \
+      --overwrite \
+    && node common/scripts/install-run-rush.js deploy --scenario training \
+      --project @kraigwalker/kraig-training-api \
+      --target-folder /repo/common/deploy/kraig-training-api \
+      --overwrite
+
 # ---- runtime stage (kraig-training) ----
 FROM node:24.11.1-bookworm-slim AS kraig-training
 WORKDIR /repo/apps/kraig-training
@@ -53,9 +69,8 @@ ENV NODE_ENV=production
 ENV HOST=0.0.0.0
 ENV PORT=3000
 
-# Copy Rush's shared install + the project (including its node_modules shims/.bin)
-COPY --from=build-all /repo/common/temp /repo/common/temp
-COPY --from=build-all /repo/apps/kraig-training /repo/apps/kraig-training
+# Copy the deployed bundle for this app
+COPY --from=build-all /repo/common/deploy/kraig-training/ /repo/
 
 EXPOSE 3000
 
@@ -68,9 +83,8 @@ ENV NODE_ENV=production
 ENV HOST=0.0.0.0
 ENV PORT=3000
 
-# Copy Rush's shared install + the project (including its node_modules shims/.bin)
-COPY --from=build-all /repo/common/temp /repo/common/temp
-COPY --from=build-all /repo/apps/kraig-training-admin /repo/apps/kraig-training-admin
+# Copy the deployed bundle for this app
+COPY --from=build-all /repo/common/deploy/kraig-training-admin/ /repo/
 
 EXPOSE 3000
 
@@ -84,9 +98,8 @@ ENV NODE_ENV=production
 ENV HOST=0.0.0.0
 ENV PORT=8787
 
-# Keep Rush layout intact for pnpm shims
-COPY --from=build-all /repo/common/temp /repo/common/temp
-COPY --from=build-all /repo/services/kraig-training-api /repo/services/kraig-training-api
+# Copy the deployed bundle for this service
+COPY --from=build-all /repo/common/deploy/kraig-training-api/ /repo/
 
 EXPOSE 8787
 

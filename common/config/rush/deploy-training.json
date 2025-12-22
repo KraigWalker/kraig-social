@@ -1,0 +1,9 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/rush/v5/deploy-scenario.schema.json",
+  "deploymentProjectNames": [
+    "@kraigwalker/kraig-training",
+    "@kraigwalker/kraig-training-admin",
+    "@kraigwalker/kraig-training-api"
+  ],
+  "includeNpmIgnoreFiles": true
+}
