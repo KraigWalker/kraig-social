@@ -42,6 +42,7 @@ COPY . .
 RUN --mount=type=cache,id=rush-install-run,target=/repo/common/temp/install-run \
     --mount=type=cache,id=npm-cache,target=/root/.npm \
     --mount=type=cache,id=rush-build-cache,target=/repo/common/temp/build-cache \
+    env RUSH_BUILD_CACHE_ENABLED=1 RUSH_BUILD_CACHE_WRITE_ALLOWED=1 \
     node common/scripts/install-run-rush.js build \
       --to @kraigwalker/kraig-training \
       --to @kraigwalker/kraig-training-admin \
@@ -73,7 +74,7 @@ ENV HOST=0.0.0.0
 ENV PORT=3000
 
 # Copy the deployed bundle for this app
-COPY --from=build-all /repo/common/deploy/kraig-training/ /repo/
+COPY --link --from=build-all /repo/common/deploy/kraig-training/ /repo/
 
 EXPOSE 3000
 
@@ -87,7 +88,7 @@ ENV HOST=0.0.0.0
 ENV PORT=3000
 
 # Copy the deployed bundle for this app
-COPY --from=build-all /repo/common/deploy/kraig-training-admin/ /repo/
+COPY --link --from=build-all /repo/common/deploy/kraig-training-admin/ /repo/
 
 EXPOSE 3000
 
@@ -102,7 +103,7 @@ ENV HOST=0.0.0.0
 ENV PORT=8787
 
 # Copy the deployed bundle for this service
-COPY --from=build-all /repo/common/deploy/kraig-training-api/ /repo/
+COPY --link --from=build-all /repo/common/deploy/kraig-training-api/ /repo/
 
 EXPOSE 8787
 
