@@ -20,12 +20,12 @@ COPY apps/kraig-training-admin/package.json apps/kraig-training-admin/package.js
 COPY services/kraig-training-api/package.json services/kraig-training-api/package.json
 
 # Install + build with Rush (uses repo-pinned Rush + pnpm)
-RUN node common/scripts/install-run-rush.js install --to default:@kraigwalker/kraig-social
+RUN node common/scripts/install-run-rush.js install --subspace default
 
 # Copy the rest of the monorepo after install to keep cache hits high
 COPY . .
 # Build (same as `rush build`).
-RUN node common/scripts/install-run-rush.js build -t @kraigwalker/kraig-social
+RUN node common/scripts/install-run-rush.js build --to @kraigwalker/kraig-social
 
 # ---- runtime stage ----
 FROM nginx:alpine AS runtime
