@@ -41,6 +41,7 @@ COPY . .
 
 RUN --mount=type=cache,id=rush-install-run,target=/repo/common/temp/install-run \
     --mount=type=cache,id=npm-cache,target=/root/.npm \
+    --mount=type=cache,id=rush-build-cache,target=/repo/common/temp/build-cache \
     node common/scripts/install-run-rush.js build \
       --to @kraigwalker/kraig-training \
       --to @kraigwalker/kraig-training-admin \
@@ -49,18 +50,20 @@ RUN --mount=type=cache,id=rush-install-run,target=/repo/common/temp/install-run 
 # Prepare minimal deploy folders for each service
 RUN --mount=type=cache,id=rush-install-run,target=/repo/common/temp/install-run \
     --mount=type=cache,id=npm-cache,target=/root/.npm \
-    node common/scripts/install-run-rush.js deploy --scenario training \
-      --project @kraigwalker/kraig-training \
-      --target-folder /repo/common/deploy/kraig-training \
-      --overwrite \
-    && node common/scripts/install-run-rush.js deploy --scenario training \
-      --project @kraigwalker/kraig-training-admin \
-      --target-folder /repo/common/deploy/kraig-training-admin \
-      --overwrite \
-    && node common/scripts/install-run-rush.js deploy --scenario training \
-      --project @kraigwalker/kraig-training-api \
-      --target-folder /repo/common/deploy/kraig-training-api \
-      --overwrite
+    sh -c "set -e; \
+      node common/scripts/install-run-rush.js deploy --scenario training \
+        --project @kraigwalker/kraig-training \
+        --target-folder /repo/common/deploy/kraig-training \
+        --overwrite & pid1=$!; \
+      node common/scripts/install-run-rush.js deploy --scenario training \
+        --project @kraigwalker/kraig-training-admin \
+        --target-folder /repo/common/deploy/kraig-training-admin \
+        --overwrite & pid2=$!; \
+      node common/scripts/install-run-rush.js deploy --scenario training \
+        --project @kraigwalker/kraig-training-api \
+        --target-folder /repo/common/deploy/kraig-training-api \
+        --overwrite & pid3=$!; \
+      wait $pid1; wait $pid2; wait $pid3"
 
 # ---- runtime stage (kraig-training) ----
 FROM node:24.11.1-bookworm-slim AS kraig-training
