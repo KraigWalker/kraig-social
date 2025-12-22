@@ -21,7 +21,7 @@ COPY services/kraig-training-api/package.json services/kraig-training-api/packag
 COPY services/github-gateway/package.json services/github-gateway/package.json
 
 # Prime Rush download (cached as long as Rush config/scripts unchanged)
-RUN node common/scripts/install-run-rush.js --version
+RUN node common/scripts/install-run-rush.js list
 
 # Install + build with Rush (uses repo-pinned Rush + pnpm)
 RUN node common/scripts/install-run-rush.js install --subspace default
