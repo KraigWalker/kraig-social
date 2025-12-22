@@ -13,15 +13,15 @@ COPY common/config/rush/ common/config/rush/
 COPY common/config/subspaces/ common/config/subspaces/
 COPY common/scripts/ common/scripts/
 
-# Prime Rush download (cached as long as Rush config/scripts unchanged)
-RUN node common/scripts/install-run-rush.js list
-
 # Copy package.json files for projects
 COPY apps/kraig-social/package.json apps/kraig-social/package.json
 COPY apps/kraig-training/package.json apps/kraig-training/package.json
 COPY apps/kraig-training-admin/package.json apps/kraig-training-admin/package.json
 COPY services/kraig-training-api/package.json services/kraig-training-api/package.json
 COPY services/github-gateway/package.json services/github-gateway/package.json
+
+# Prime Rush download (cached as long as Rush config/scripts unchanged)
+RUN node common/scripts/install-run-rush.js --version
 
 # Install + build with Rush (uses repo-pinned Rush + pnpm)
 RUN node common/scripts/install-run-rush.js install --subspace default
