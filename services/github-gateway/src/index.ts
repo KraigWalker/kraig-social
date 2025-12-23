@@ -38,9 +38,17 @@ function verifyGitHubSignature(
   return timingSafeEqual(signatureHeader, `sha256=${expected}`);
 }
 
-// Parse ALL bodies as raw Buffer so we can verify signature reliably
-app.addContentTypeParser("*", { parseAs: "buffer" }, (_req, body, done) =>
-  done(null, body),
+// Parse bodies as raw Buffer so we can verify signature reliably.
+const rawBodyParser = (
+  _req: unknown,
+  body: Buffer,
+  done: (err: Error | null, body?: Buffer) => void,
+) => done(null, body);
+
+app.addContentTypeParser(
+  "application/json",
+  { parseAs: "buffer" },
+  rawBodyParser,
 );
 
 app.get("/health", async (_req, reply) => {
@@ -55,7 +63,13 @@ app.post("/*", async (req, reply) => {
   }
 
   const signature = req.headers["x-hub-signature-256"];
-  const rawBody = req.body as Buffer;
+
+  if (!Buffer.isBuffer(req.body)) {
+    req.log.warn({ type: typeof req.body }, "Expected raw Buffer body");
+    return reply.code(400).send({ message: "Expected raw request body" });
+  }
+
+  const rawBody = req.body;
 
   if (!verifyGitHubSignature(rawBody, signature)) {
     req.log.warn("Invalid GitHub signature");
