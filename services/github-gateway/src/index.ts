@@ -47,7 +47,7 @@ app.get("/health", async (_req, reply) => {
   return reply.code(200).type("text/plain").send("ok");
 });
 
-app.post("*", async (req, reply) => {
+app.post("/*", async (req, reply) => {
   const event = req.headers["x-github-event"];
   if (GITHUB_EVENT && event !== GITHUB_EVENT) {
     req.log.info({ event }, "Ignoring non-matching GitHub event");
