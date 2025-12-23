@@ -1,6 +1,7 @@
 {
   "name": "@kraigwalker/github-gateway",
   "version": "0.0.0",
+  "description": "proxy for github webhooks to dokploy",
   "private": true,
   "type": "module",
   "scripts": {
