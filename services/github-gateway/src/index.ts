@@ -81,17 +81,25 @@ app.post("/*", async (req, reply) => {
     return reply.code(500).send({ message: "Relay not configured" });
   }
 
-  const res = await fetch(
-    `${DOKPLOY_ORIGIN.replace(/\/$/, "")}/api/compose.deploy`,
-    {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        "x-api-key": DOKPLOY_API_KEY,
+  let res: Response;
+  try {
+    res = await fetch(
+      `${DOKPLOY_ORIGIN.replace(/\/$/, "")}/api/compose.deploy`,
+      {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          "x-api-key": DOKPLOY_API_KEY,
+        },
+        body: JSON.stringify({ composeId: DOKPLOY_COMPOSE_ID }),
       },
-      body: JSON.stringify({ composeId: DOKPLOY_COMPOSE_ID }),
-    },
-  );
+    );
+  } catch (err) {
+    req.log.error({ err }, "Dokploy request failed");
+    return reply
+      .code(502)
+      .send({ message: "Dokploy request failed" });
+  }
 
   if (!res.ok) {
     const text = await res.text().catch(() => "");
