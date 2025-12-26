@@ -3,6 +3,7 @@ import cors from "@fastify/cors";
 import helmet from "@fastify/helmet";
 import sensible from "@fastify/sensible";
 import { closeDb, pool } from "./db.js";
+import { authHandler } from "./auth.js";
 
 const server = Fastify({
   logger:
@@ -27,6 +28,33 @@ server.get("/health", async () => ({ ok: true }));
 server.get("/health/db", async () => {
   await pool.query("select 1");
   return { ok: true };
+});
+
+const authMethods = [
+  "GET",
+  "POST",
+  "PUT",
+  "PATCH",
+  "DELETE",
+  "OPTIONS",
+] as const;
+
+server.route({
+  method: authMethods,
+  url: "/api/auth",
+  handler: async (req, reply) => {
+    await authHandler(req.raw, reply.raw);
+    reply.hijack();
+  },
+});
+
+server.route({
+  method: authMethods,
+  url: "/api/auth/*",
+  handler: async (req, reply) => {
+    await authHandler(req.raw, reply.raw);
+    reply.hijack();
+  },
 });
 
 // Placeholder: Strava webhook verification + events

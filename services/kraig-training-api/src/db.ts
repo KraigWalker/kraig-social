@@ -1,5 +1,6 @@
 import pg from "pg";
 import { drizzle } from "drizzle-orm/node-postgres";
+import { schema } from "./schema.js";
 
 const { Pool } = pg;
 
@@ -18,7 +19,7 @@ export const pool = new Pool({
   connectionTimeoutMillis: 5_000,
 });
 
-export const db = drizzle(pool);
+export const db = drizzle(pool, { schema });
 
 export async function closeDb() {
   await pool.end();
