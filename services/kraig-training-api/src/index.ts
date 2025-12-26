@@ -2,6 +2,7 @@ import Fastify from "fastify";
 import cors from "@fastify/cors";
 import helmet from "@fastify/helmet";
 import sensible from "@fastify/sensible";
+import { closeDb, pool } from "./db.js";
 
 const server = Fastify({
   logger:
@@ -23,6 +24,10 @@ await server.register(cors, {
 await server.register(sensible);
 
 server.get("/health", async () => ({ ok: true }));
+server.get("/health/db", async () => {
+  await pool.query("select 1");
+  return { ok: true };
+});
 
 // Placeholder: Strava webhook verification + events
 server.get("/integrations/strava/webhook", async (req, reply) => {
@@ -52,6 +57,10 @@ server.get("/integrations/strava/oauth/callback", async (req) => {
   // exchange code -> token; store refresh token; kick off initial sync, etc.
   server.log.info({ query: req.query }, "Strava OAuth callback");
   return { ok: true };
+});
+
+server.addHook("onClose", async () => {
+  await closeDb();
 });
 
 const port = Number(process.env.PORT ?? 8787);
