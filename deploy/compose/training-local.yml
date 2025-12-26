@@ -1,0 +1,54 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      - POSTGRES_USER=kraig
+      - POSTGRES_PASSWORD=kraig
+      - POSTGRES_DB=kraig_training
+    ports:
+      - "5432:5432"
+    volumes:
+      - training-postgres:/var/lib/postgresql/data
+
+  kraig-training-api:
+    build:
+      context: ../..
+      dockerfile: deploy/docker/training.Dockerfile
+      target: kraig-training-api
+    environment:
+      - NODE_ENV=development
+      - HOST=0.0.0.0
+      - PORT=8787
+      - DATABASE_URL=postgres://kraig:kraig@postgres:5432/kraig_training
+    depends_on:
+      - postgres
+    ports:
+      - "8787:8787"
+
+  kraig-training:
+    build:
+      context: ../..
+      dockerfile: deploy/docker/training.Dockerfile
+      target: kraig-training
+    environment:
+      - TRAINING_API_BASE_URL=http://kraig-training-api:8787
+    depends_on:
+      - kraig-training-api
+    ports:
+      - "3000:3000"
+
+  kraig-training-admin:
+    build:
+      context: ../..
+      dockerfile: deploy/docker/training.Dockerfile
+      target: kraig-training-admin
+    environment:
+      - TRAINING_API_ORIGIN=http://localhost:8787
+      - TRAINING_API_BASE_URL=http://kraig-training-api:8787
+    depends_on:
+      - kraig-training-api
+    ports:
+      - "3001:3000"
+
+volumes:
+  training-postgres:
