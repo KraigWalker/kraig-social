@@ -42,6 +42,7 @@ services:
       - APP_NAME=${APP_NAME:-Kraig Training}
       - BETTER_AUTH_URL=${BETTER_AUTH_URL}
       - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
+    labels:
       - traefik.enable=true
       - traefik.docker.network=dokploy-network
       - traefik.http.routers.kraig-training-api.rule=Host(`kraig.social`) && PathPrefix(`/training/api`)
