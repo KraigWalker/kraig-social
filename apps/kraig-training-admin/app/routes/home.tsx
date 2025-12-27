@@ -10,28 +10,54 @@ export function meta({}: Route.MetaArgs) {
 type LoaderData = {
   hasAdminUser: boolean;
   userCount: number;
+  error?: string;
 };
 
 export async function loader(): Promise<LoaderData> {
   const apiBase = process.env.TRAINING_API_BASE_URL;
 
   if (!apiBase) {
-    throw new Response("missing TRAINING_API_BASE_URL", { status: 503 });
+    return {
+      hasAdminUser: false,
+      userCount: 0,
+      error: "TRAINING_API_BASE_URL is not set for the admin app.",
+    };
   }
 
-  const res = await fetch(`${apiBase.replace(/\/$/, "")}/admin/bootstrap`, {
-    headers: { Accept: "application/json" },
-  });
+  try {
+    const res = await fetch(`${apiBase.replace(/\/$/, "")}/admin/bootstrap`, {
+      headers: { Accept: "application/json" },
+    });
 
-  if (!res.ok) {
-    throw new Response("failed to reach training api", { status: 502 });
+    if (!res.ok) {
+      return {
+        hasAdminUser: false,
+        userCount: 0,
+        error: `Training API returned ${res.status}.`,
+      };
+    }
+
+    const data = (await res.json()) as LoaderData;
+    if (typeof data?.hasAdminUser !== "boolean") {
+      return {
+        hasAdminUser: false,
+        userCount: 0,
+        error: "Training API response was invalid.",
+      };
+    }
+
+    return data;
+  } catch {
+    return {
+      hasAdminUser: false,
+      userCount: 0,
+      error: "Training API is unreachable from the admin app.",
+    };
   }
-
-  return (await res.json()) as LoaderData;
 }
 
 export default function Home({ loaderData }: Route.ComponentProps) {
-  const { hasAdminUser, userCount } = loaderData;
+  const { hasAdminUser, userCount, error } = loaderData;
 
   return (
     <main className="min-h-screen bg-slate-950 text-slate-100">
@@ -58,6 +84,14 @@ export default function Home({ loaderData }: Route.ComponentProps) {
           </div>
 
           <div className="mt-6 border-t border-slate-800 pt-6 text-sm leading-relaxed text-slate-300">
+            {error ? (
+              <div className="mb-6 rounded-xl border border-amber-500/40 bg-amber-500/10 p-4 text-amber-200">
+                <p className="text-sm font-semibold">
+                  Admin status unavailable
+                </p>
+                <p className="mt-2 text-sm text-amber-100/90">{error}</p>
+              </div>
+            ) : null}
             {hasAdminUser ? (
               <div className="space-y-4">
                 <p>
