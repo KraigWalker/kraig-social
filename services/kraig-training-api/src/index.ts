@@ -8,7 +8,9 @@ import { getAuthSession } from "./auth-session.js";
 import {
   consumeStravaState,
   createStravaAuthUrl,
+  deleteStravaAccountForUser,
   exchangeStravaToken,
+  getStravaAccountForUser,
   getStravaWebhookVerifyToken,
   upsertStravaAccountForUser,
 } from "./strava.js";
@@ -81,6 +83,38 @@ server.get("/integrations/strava/oauth/start", async (req, reply) => {
     server.log.error({ err: error }, "Strava OAuth start failed");
     return reply.internalServerError("Strava OAuth start failed");
   }
+});
+
+server.get("/integrations/strava/status", async (req, reply) => {
+  const session = await getAuthSession(req);
+  const userId = session?.user?.id;
+  if (!userId) {
+    return reply.unauthorized("Authentication required");
+  }
+
+  const account = await getStravaAccountForUser(userId);
+  if (!account) {
+    return { connected: false };
+  }
+
+  return {
+    connected: true,
+    athleteId: account.athleteId,
+    expiresAt: account.expiresAt.toISOString(),
+    scope: account.scope,
+    lastSyncAt: account.lastSyncAt?.toISOString() ?? null,
+  };
+});
+
+server.delete("/integrations/strava/connection", async (req, reply) => {
+  const session = await getAuthSession(req);
+  const userId = session?.user?.id;
+  if (!userId) {
+    return reply.unauthorized("Authentication required");
+  }
+
+  await deleteStravaAccountForUser(userId);
+  return { ok: true };
 });
 
 // Strava webhook verification + events

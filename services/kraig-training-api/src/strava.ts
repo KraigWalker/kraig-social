@@ -126,6 +126,19 @@ export async function upsertStravaAccountForUser(
     });
 }
 
+export async function getStravaAccountForUser(userId: string) {
+  const [row] = await db
+    .select()
+    .from(stravaAccount)
+    .where(eq(stravaAccount.userId, userId))
+    .limit(1);
+  return row ?? null;
+}
+
+export async function deleteStravaAccountForUser(userId: string) {
+  await db.delete(stravaAccount).where(eq(stravaAccount.userId, userId));
+}
+
 export async function consumeStravaState(
   userId: string,
   state: string,
