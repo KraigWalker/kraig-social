@@ -19,6 +19,18 @@ function assertValidUrl(candidate: string) {
   new URL(candidate);
 }
 
+function buildDatabaseUrlDiagnostics(value: string) {
+  return {
+    length: value.length,
+    hasScheme: /^(postgres|postgresql):\/\//i.test(value),
+    hasAtSymbol: value.includes("@"),
+    hasHost: /@[^/]+/.test(value),
+    hasDbName: /\/[^/?#]+/.test(value),
+    looksEncoded: /%2F|%3A|%40/i.test(value),
+    hasTemplateVar: value.includes("${"),
+  };
+}
+
 try {
   assertValidUrl(databaseUrl);
 } catch (error) {
@@ -28,13 +40,19 @@ try {
       assertValidUrl(decoded);
       databaseUrl = decoded;
     } catch (decodeError) {
+      const diagnostics = buildDatabaseUrlDiagnostics(databaseUrl);
       throw new Error(
-        "DATABASE_URL must be a valid postgres URL (remove quotes, avoid encoding the whole URL, URL-encode only the password)",
+        `DATABASE_URL must be a valid postgres URL (remove quotes, avoid encoding the whole URL, URL-encode only the password). Diagnostics: ${JSON.stringify(
+          diagnostics,
+        )}`,
       );
     }
   } else {
+    const diagnostics = buildDatabaseUrlDiagnostics(databaseUrl);
     throw new Error(
-      "DATABASE_URL must be a valid postgres URL (remove quotes, avoid encoding the whole URL, URL-encode only the password)",
+      `DATABASE_URL must be a valid postgres URL (remove quotes, avoid encoding the whole URL, URL-encode only the password). Diagnostics: ${JSON.stringify(
+        diagnostics,
+      )}`,
     );
   }
 }
