@@ -4,6 +4,14 @@ import helmet from "@fastify/helmet";
 import sensible from "@fastify/sensible";
 import { closeDb, pool } from "./db.js";
 import { authHandler } from "./auth.js";
+import { getAuthSession } from "./auth-session.js";
+import {
+  consumeStravaState,
+  createStravaAuthUrl,
+  exchangeStravaToken,
+  getStravaWebhookVerifyToken,
+  upsertStravaAccountForUser,
+} from "./strava.js";
 
 const server = Fastify({
   logger:
@@ -57,21 +65,47 @@ server.route({
   },
 });
 
-// Placeholder: Strava webhook verification + events
+server.get("/integrations/strava/oauth/start", async (req, reply) => {
+  const session = await getAuthSession(req);
+  const userId = session?.user?.id;
+  if (!userId) {
+    return reply.unauthorized("Authentication required");
+  }
+
+  const query = req.query as Partial<{ scope: string }>;
+
+  try {
+    const url = await createStravaAuthUrl(userId, query.scope);
+    return { url };
+  } catch (error) {
+    server.log.error({ err: error }, "Strava OAuth start failed");
+    return reply.internalServerError("Strava OAuth start failed");
+  }
+});
+
+// Strava webhook verification + events
 server.get("/integrations/strava/webhook", async (req, reply) => {
   // Strava expects a hub.challenge echo during subscription creation.
-  // We'll wire this properly once you create the Strava app + subscription.
   const query = req.query as Partial<{
     "hub.mode": string;
     "hub.challenge": string;
     "hub.verify_token": string;
   }>;
 
-  if (query["hub.challenge"]) {
-    return { "hub.challenge": query["hub.challenge"] };
+  if (!query["hub.challenge"]) {
+    return reply.badRequest("Missing hub.challenge");
   }
 
-  return reply.badRequest("Missing hub.challenge");
+  const verifyToken = getStravaWebhookVerifyToken();
+  if (!verifyToken) {
+    return reply.internalServerError("Missing STRAVA_WEBHOOK_VERIFY_TOKEN");
+  }
+
+  if (query["hub.verify_token"] !== verifyToken) {
+    return reply.forbidden("Invalid verify token");
+  }
+
+  return { "hub.challenge": query["hub.challenge"] };
 });
 
 server.post("/integrations/strava/webhook", async (req) => {
@@ -80,11 +114,41 @@ server.post("/integrations/strava/webhook", async (req) => {
   return { ok: true };
 });
 
-// Placeholder: OAuth callback endpoints
-server.get("/integrations/strava/oauth/callback", async (req) => {
-  // exchange code -> token; store refresh token; kick off initial sync, etc.
-  server.log.info({ query: req.query }, "Strava OAuth callback");
-  return { ok: true };
+server.get("/integrations/strava/oauth/callback", async (req, reply) => {
+  const session = await getAuthSession(req);
+  const userId = session?.user?.id;
+  if (!userId) {
+    return reply.unauthorized("Authentication required");
+  }
+
+  const query = req.query as Partial<{
+    code: string;
+    state: string;
+    scope: string;
+    error: string;
+  }>;
+
+  if (query.error) {
+    return reply.badRequest(`Strava authorization failed: ${query.error}`);
+  }
+
+  if (!query.code || !query.state) {
+    return reply.badRequest("Missing Strava code or state");
+  }
+
+  const stateOk = await consumeStravaState(userId, query.state);
+  if (!stateOk) {
+    return reply.badRequest("Invalid or expired Strava state");
+  }
+
+  try {
+    const tokenData = await exchangeStravaToken(query.code);
+    await upsertStravaAccountForUser(userId, tokenData);
+    return { ok: true };
+  } catch (error) {
+    server.log.error({ err: error }, "Strava OAuth callback failed");
+    return reply.internalServerError("Strava OAuth callback failed");
+  }
 });
 
 server.addHook("onClose", async () => {

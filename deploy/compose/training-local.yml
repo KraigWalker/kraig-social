@@ -23,6 +23,10 @@ services:
       - APP_NAME=Kraig Training
       - BETTER_AUTH_URL=http://localhost:8787
       - BETTER_AUTH_SECRET=dev-local-auth-secret
+      - STRAVA_CLIENT_ID=replace-me
+      - STRAVA_CLIENT_SECRET=replace-me
+      - STRAVA_REDIRECT_URI=http://localhost:8787/integrations/strava/oauth/callback
+      - STRAVA_WEBHOOK_VERIFY_TOKEN=dev-strava-verify
     depends_on:
       - postgres
     ports:
