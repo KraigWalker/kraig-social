@@ -60,11 +60,12 @@ server.get("/admin/bootstrap", async (_req, reply) => {
       : "Training API database query failed.";
 
     server.log.error({ err: error }, "Admin bootstrap query failed");
-    return reply.serviceUnavailable().send({
+    reply.code(503);
+    return {
       hasAdminUser: false,
       userCount: 0,
       error: message,
-    });
+    };
   }
 });
 
