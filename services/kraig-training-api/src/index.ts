@@ -40,6 +40,19 @@ server.get("/health/db", async () => {
   return { ok: true };
 });
 
+server.get("/admin/bootstrap", async () => {
+  const result = await pool.query(
+    'select count(*)::int as count from "user"',
+  );
+  const userCount = Number(result.rows[0]?.count ?? 0);
+
+  // Until role support is wired, treat any existing user as the admin.
+  return {
+    hasAdminUser: userCount > 0,
+    userCount,
+  };
+});
+
 const authMethods: HTTPMethods[] = [
   "GET",
   "POST",
