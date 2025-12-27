@@ -1,4 +1,4 @@
-import Fastify from "fastify";
+import Fastify, { type HTTPMethods } from "fastify";
 import cors from "@fastify/cors";
 import helmet from "@fastify/helmet";
 import sensible from "@fastify/sensible";
@@ -38,14 +38,14 @@ server.get("/health/db", async () => {
   return { ok: true };
 });
 
-const authMethods = [
+const authMethods: HTTPMethods[] = [
   "GET",
   "POST",
   "PUT",
   "PATCH",
   "DELETE",
   "OPTIONS",
-] as const;
+];
 
 server.route({
   method: authMethods,
