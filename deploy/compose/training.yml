@@ -38,13 +38,12 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=8787
-    # We don't expose the API via Traefik for now; it's only accessible via the frontends.
-    #labels:
-    #  - traefik.enable=true
-    #  - traefik.docker.network=dokploy-network
-    #  - traefik.http.routers.kraig-training-api.rule=Host(`kraig.social`) && PathPrefix(`/training/api`)
-    #  - traefik.http.routers.kraig-training-api.priority=120
-    #  - traefik.http.services.kraig-training-api.loadbalancer.server.port=8787
+      #labels:
+      - traefik.enable=true
+      - traefik.docker.network=dokploy-network
+      - traefik.http.routers.kraig-training-api.rule=Host(`kraig.social`) && PathPrefix(`/training/api`)
+      - traefik.http.routers.kraig-training-api.priority=120
+      - traefik.http.services.kraig-training-api.loadbalancer.server.port=8787
 
 networks:
   dokploy-network:
