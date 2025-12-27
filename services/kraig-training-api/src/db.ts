@@ -9,14 +9,34 @@ if (!databaseUrlRaw) {
   throw new Error("DATABASE_URL is required");
 }
 
-const databaseUrl = databaseUrlRaw.replace(/^['"]|['"]$/g, "");
-try {
+let databaseUrl = databaseUrlRaw.replace(/^['"]|['"]$/g, "");
+if (databaseUrl.startsWith("DATABASE_URL=")) {
+  databaseUrl = databaseUrl.slice("DATABASE_URL=".length);
+}
+
+function assertValidUrl(candidate: string) {
   // Validate early so health checks fail with a clear error if the URL is invalid.
-  new URL(databaseUrl);
+  new URL(candidate);
+}
+
+try {
+  assertValidUrl(databaseUrl);
 } catch (error) {
-  throw new Error(
-    "DATABASE_URL must be a valid postgres URL (remove quotes, URL-encode special characters)",
-  );
+  if (/postgres%3A|postgresql%3A/i.test(databaseUrl)) {
+    try {
+      const decoded = decodeURIComponent(databaseUrl);
+      assertValidUrl(decoded);
+      databaseUrl = decoded;
+    } catch (decodeError) {
+      throw new Error(
+        "DATABASE_URL must be a valid postgres URL (remove quotes, avoid encoding the whole URL, URL-encode only the password)",
+      );
+    }
+  } else {
+    throw new Error(
+      "DATABASE_URL must be a valid postgres URL (remove quotes, avoid encoding the whole URL, URL-encode only the password)",
+    );
+  }
 }
 
 const poolSizeRaw = Number(process.env.DATABASE_POOL_SIZE ?? 5);
