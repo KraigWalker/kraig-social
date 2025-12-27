@@ -7,7 +7,7 @@ services:
       - dokploy-network
     labels:
       - traefik.enable=true
-      - traefik.http.routers.kraig-social.rule=Host(`kraig.social`)
+      - traefik.http.routers.kraig-social.rule=Host(`kraig.social`) && PathPrefix(`/`) && !PathPrefix(`/training`)
       - traefik.http.routers.kraig-social.priority=1
       - traefik.http.services.kraig-social.loadbalancer.server.port=80
       - traefik.docker.network=dokploy-network
