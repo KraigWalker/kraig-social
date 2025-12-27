@@ -40,17 +40,32 @@ server.get("/health/db", async () => {
   return { ok: true };
 });
 
-server.get("/admin/bootstrap", async () => {
-  const result = await pool.query(
-    'select count(*)::int as count from "user"',
-  );
-  const userCount = Number(result.rows[0]?.count ?? 0);
+server.get("/admin/bootstrap", async (_req, reply) => {
+  try {
+    const result = await pool.query(
+      'select count(*)::int as count from "user"',
+    );
+    const userCount = Number(result.rows[0]?.count ?? 0);
 
-  // Until role support is wired, treat any existing user as the admin.
-  return {
-    hasAdminUser: userCount > 0,
-    userCount,
-  };
+    // Until role support is wired, treat any existing user as the admin.
+    return {
+      hasAdminUser: userCount > 0,
+      userCount,
+    };
+  } catch (error) {
+    const err = error as { code?: string };
+    const missingTable = err?.code === "42P01";
+    const message = missingTable
+      ? "Database schema missing. Run training API migrations."
+      : "Training API database query failed.";
+
+    server.log.error({ err: error }, "Admin bootstrap query failed");
+    return reply.serviceUnavailable().send({
+      hasAdminUser: false,
+      userCount: 0,
+      error: message,
+    });
+  }
 });
 
 const authMethods: HTTPMethods[] = [

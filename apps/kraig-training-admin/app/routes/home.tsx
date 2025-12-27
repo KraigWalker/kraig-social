@@ -30,10 +30,20 @@ export async function loader(): Promise<LoaderData> {
     });
 
     if (!res.ok) {
+      let message = `Training API returned ${res.status}.`;
+      try {
+        const data = (await res.json()) as { error?: string };
+        if (typeof data?.error === "string") {
+          message = data.error;
+        }
+      } catch {
+        // Ignore JSON parsing errors for non-JSON responses.
+      }
+
       return {
         hasAdminUser: false,
         userCount: 0,
-        error: `Training API returned ${res.status}.`,
+        error: message,
       };
     }
 
