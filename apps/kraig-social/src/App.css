@@ -59,8 +59,9 @@
 }
 
 .brand-mark {
-  width: 64px;
-  height: 64px;
+  width: clamp(60px, 8vw, 88px);
+  aspect-ratio: 1 / 1;
+  flex-shrink: 0;
   background: var(--ink);
   color: var(--paper);
   border-radius: 14px;
