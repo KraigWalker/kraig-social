@@ -5,10 +5,29 @@ services:
       - POSTGRES_USER=kraig
       - POSTGRES_PASSWORD=kraig
       - POSTGRES_DB=kraig_training
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U kraig -d kraig_training"]
+      interval: 5s
+      timeout: 5s
+      retries: 6
     ports:
       - "5432:5432"
     volumes:
       - training-postgres:/var/lib/postgresql/data
+
+  kraig-training-api-migrate:
+    build:
+      context: ../..
+      dockerfile: deploy/docker/training.Dockerfile
+      target: kraig-training-api
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgres://kraig:kraig@postgres:5432/kraig_training
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: ["node", "dist/migrate.js"]
+    restart: "no"
 
   kraig-training-api:
     build:
@@ -28,7 +47,10 @@ services:
       - STRAVA_REDIRECT_URI=http://localhost:8787/integrations/strava/oauth/callback
       - STRAVA_WEBHOOK_VERIFY_TOKEN=dev-strava-verify
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
+      kraig-training-api-migrate:
+        condition: service_completed_successfully
     ports:
       - "8787:8787"
 

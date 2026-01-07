@@ -94,6 +94,29 @@ node common/scripts/install-run-rushx.js db:studio
 
 Note: `DATABASE_URL` must be set for the CLI commands.
 
+### Production migrations on Dokploy
+
+Migrations are baked into the deploy Compose file:
+
+- `deploy/compose/training.yml` adds a one-shot `kraig-training-api-migrate`
+  service (`node dist/migrate.js`) and the API waits for it to complete.
+- `deploy/compose/training-local.yml` does the same and waits for Postgres to
+  be healthy before applying migrations.
+
+To re-run migrations manually (for example after updating the schema):
+
+```bash
+docker compose -f deploy/compose/training.yml run --rm kraig-training-api-migrate
+# or locally:
+docker compose -f deploy/compose/training-local.yml run --rm kraig-training-api-migrate
+```
+
+You can also exec into the running API container and run:
+
+```bash
+node dist/migrate.js
+```
+
 ## Project structure
 
 - `src/index.ts` - Fastify server + routes

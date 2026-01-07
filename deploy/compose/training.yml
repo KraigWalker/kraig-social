@@ -28,6 +28,18 @@ services:
       - TRAINING_API_ORIGIN=https://kraig.social
       - TRAINING_API_BASE_URL=http://kraig-training-api:8787
 
+  kraig-training-api-migrate:
+    build:
+      context: ../..
+      dockerfile: deploy/docker/training.Dockerfile
+      target: kraig-training-api
+    networks:
+      - dokploy-network
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+    command: ["node", "dist/migrate.js"]
+    restart: "no"
+
   kraig-training-api:
     build:
       context: ../..
@@ -42,6 +54,9 @@ services:
       - APP_NAME=${APP_NAME:-Kraig Training}
       - BETTER_AUTH_URL=${BETTER_AUTH_URL}
       - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
+    depends_on:
+      kraig-training-api-migrate:
+        condition: service_completed_successfully
     labels:
       - traefik.enable=true
       - traefik.docker.network=dokploy-network
