@@ -70,12 +70,34 @@ function App() {
               <section id="articles" className="panel lead-story" aria-labelledby="front-page-heading">
                 <span className="panel-label">Front page</span>
                 <p className="section-kicker">Feature</p>
-                <h2 id="front-page-heading">Design training that feels like practice, not theory.</h2>
+                <h2 id="front-page-heading">Inline replacement in production with module federation gateways.</h2>
                 <p className="lede">
-                  Notes from building a learning path that behaves like a workbook: guided reps, margin scribbles,
-                  and moments to ship what you just learned.
+                  Exploring how to swap critical UI slices live — routing through a gateway that safely loads federated
+                  builds, runs checks, and falls back without a deploy window. Includes patterns for version pinning,
+                  observability hooks, and progressive rollouts so teams can trial new modules without breaking the
+                  homepage.
                 </p>
-                <p className="meta">Updated this week · 6 minute read</p>
+                <p className="lede lede-small">
+                  The gateway sits between the shell and the remote, verifying signatures, ensuring the manifest is
+                  compatible, and only then hydrating the inline replacement.
+                </p>
+                <p className="lede lede-small">
+                  I walk through a production-safe swap: sticky routing to hold users on the old module, a canary slice
+                  that shifts traffic by cohort, and a rollback path that does not require a redeploy.
+                </p>
+                <p className="lede lede-small">
+                  There&apos;s also a practical look at cache headers, client invalidation, and how to keep edge nodes in
+                  sync when the federated bundle changes.
+                </p>
+                <p className="lede lede-small">
+                  Metrics matter. The write-up covers error budgets, structured logs from the gateway, and how to detect
+                  a degraded remote before the UI goes blank.
+                </p>
+                <p className="lede lede-small">
+                  Finally, I outline a checklist for shipping: schema guards, smoke tests, and a reversal protocol that
+                  gives the on-call team confidence during the cutover.
+                </p>
+                <p className="meta">Updated this week · 7 minute read</p>
                 <a className="story-link" href="#articles">
                   Read the article draft
                 </a>
