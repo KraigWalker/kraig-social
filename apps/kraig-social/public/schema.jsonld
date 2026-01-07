@@ -1,0 +1,38 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://kraig.social#website",
+      "url": "https://kraig.social",
+      "name": "Kraig Walker | Articles, code experiments, and training",
+      "description": "Off-white, workbook-inspired home for articles, code experiments, live training updates, and social status notes.",
+      "inLanguage": "en",
+      "publisher": {
+        "@id": "https://kraig.social#person"
+      }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://kraig.social#person",
+      "name": "Kraig Walker",
+      "url": "https://kraig.social",
+      "description": "Designer and builder sharing articles, code experiments, and live training updates.",
+      "sameAs": []
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://kraig.social#webpage",
+      "url": "https://kraig.social",
+      "name": "Kraig Walker — Home",
+      "description": "Front page featuring a feature article snippet, training updates, and Bluesky status.",
+      "isPartOf": {
+        "@id": "https://kraig.social#website"
+      },
+      "about": {
+        "@id": "https://kraig.social#person"
+      },
+      "inLanguage": "en"
+    }
+  ]
+}
