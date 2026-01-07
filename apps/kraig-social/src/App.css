@@ -30,7 +30,9 @@
 }
 
 .notebook-frame {
-  width: min(1200px, 100%);
+  container-type: inline-size;
+  container-name: notebook;
+  width: clamp(320px, 90vw, 1400px);
   background: var(--paper);
   border: 4px solid var(--ink);
   border-radius: 22px;
@@ -341,7 +343,7 @@
   outline-offset: 4px;
 }
 
-@media (max-width: 960px) {
+@container notebook (max-width: 960px) {
   .content-grid {
     grid-template-columns: 1fr;
   }
@@ -351,12 +353,8 @@
   }
 }
 
-@media (min-width: 1400px) {
+@container notebook (min-width: 1200px) {
   .content-grid {
     grid-template-columns: 2.5fr 1.2fr;
-  }
-
-  .notebook-frame {
-    width: min(1400px, 100%);
   }
 }
