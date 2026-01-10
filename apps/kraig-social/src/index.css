@@ -1,4 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&family=PT+Serif:wght@700&display=swap');
+@font-face {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('/fonts/dm-sans-latin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'PT Serif';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/pt-serif-latin-700.woff2') format('woff2');
+}
 
 :root {
   font-family: 'DM Sans', 'PT Serif', 'Segoe UI', sans-serif;
