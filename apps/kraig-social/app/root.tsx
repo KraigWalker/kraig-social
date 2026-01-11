@@ -12,8 +12,10 @@ import type { Route } from "./+types/root";
 
 export const links: LinksFunction = () => [
   {
-    rel: "stylesheet",
+    rel: "preload stylesheet",
     media: "screen",
+    as: "style",
+    type: "text/css",
     href: appStylesHref,
     crossOrigin: "anonymous",
   },
