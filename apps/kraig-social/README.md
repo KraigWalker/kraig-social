@@ -30,7 +30,6 @@ Serve the SSR app (Express + React Router adapter):
 npm run start
 ```
 
-## Nginx
+## Headers
 
-The reverse proxy config lives at `apps/kraig-social/nginx.conf`. It proxies to the Node app on port 3000 and applies
-security/CORS headers for static assets.
+The Express server applies HTML-only security headers and CORS headers for static assets.
