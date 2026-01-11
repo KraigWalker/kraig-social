@@ -24,7 +24,7 @@ Create a production build:
 npm run build
 ```
 
-Serve the SSR app:
+Serve the SSR app (Express + React Router adapter):
 
 ```bash
 npm run start

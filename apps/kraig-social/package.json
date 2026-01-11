@@ -7,12 +7,13 @@
     "build": "react-router build",
     "dev": "react-router dev",
     "lint": "eslint .",
-    "start": "react-router-serve ./build/server/index.js",
+    "start": "node server/index.js",
     "typecheck": "react-router typegen && tsc"
   },
   "dependencies": {
+    "@react-router/express": "7.11.0",
     "@react-router/node": "7.11.0",
-    "@react-router/serve": "7.11.0",
+    "express": "4.22.1",
     "isbot": "5.1.32",
     "react": "19.2.1",
     "react-dom": "19.2.1",

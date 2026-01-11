@@ -54,4 +54,4 @@ COPY --from=build /repo/apps/kraig-social /repo/apps/kraig-social
 
 EXPOSE 3000
 
-CMD ["./node_modules/.bin/react-router-serve", "build/server/index.js"]
+CMD ["node", "server/index.js"]
