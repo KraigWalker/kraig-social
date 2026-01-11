@@ -22,7 +22,7 @@ app.use(
 );
 app.use(express.static(buildDir, { maxAge: "1h" }));
 
-app.all("*", createRequestHandler({ build }));
+app.use(createRequestHandler({ build }));
 
 const host = process.env.HOST ?? "0.0.0.0";
 const port = Number.parseInt(process.env.PORT ?? "3000", 10);
