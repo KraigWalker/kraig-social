@@ -1,33 +1,63 @@
-import './App.css'
+import type { Route } from "./+types/home";
 
 const trainingUpdates = [
   {
-    title: 'Cohort lab: building habits',
-    detail: 'Sprint through a live debugging session with guided practice prompts and take-home drills.',
+    title: "Cohort lab: building habits",
+    detail:
+      "Sprint through a live debugging session with guided practice prompts and take-home drills.",
   },
   {
-    title: 'Office hours & AMA',
-    detail: 'Personalized prep for shipping day — bring blockers, get unblocked, stay on pace.',
+    title: "Office hours & AMA",
+    detail:
+      "Personalized prep for shipping day — bring blockers, get unblocked, stay on pace.",
   },
   {
-    title: 'Trainer notes',
-    detail: 'Rewriting modules to feel like a workbook, not a slide deck. Expect checklists and margin notes.',
+    title: "Trainer notes",
+    detail:
+      "Rewriting modules to feel like a workbook, not a slide deck. Expect checklists and margin notes.",
   },
-]
+];
 
 const blueskyMoments = [
-  { time: '2h ago', text: 'Shaping a lo-fi UI that feels like a favorite notebook. Leaving room for scribbles.' },
-  { time: '5h ago', text: 'Training rewrite: more reps, fewer slides. Every concept gets a practical drill.' },
-  { time: 'Yesterday', text: 'Testing a “front page” layout for the site — bold header, quick reads, no clutter.' },
-]
+  {
+    time: "2h ago",
+    text: "Shaping a lo-fi UI that feels like a favorite notebook. Leaving room for scribbles.",
+  },
+  {
+    time: "5h ago",
+    text: "Training rewrite: more reps, fewer slides. Every concept gets a practical drill.",
+  },
+  {
+    time: "Yesterday",
+    text: "Testing a “front page” layout for the site — bold header, quick reads, no clutter.",
+  },
+];
 
 const codeIdeas = [
-  { title: 'AI workshop kit', note: 'Reusable facilitation cards, timers, and scoring blocks for live cohorts.' },
-  { title: 'Social home revamp', note: 'Notebook-inspired shell with quick links to articles, code, and training.' },
-  { title: 'Playbook snippets', note: 'Tiny experiments in ergonomics — keyboard-first flows and high-contrast states.' },
-]
+  {
+    title: "AI workshop kit",
+    note: "Reusable facilitation cards, timers, and scoring blocks for live cohorts.",
+  },
+  {
+    title: "Social home revamp",
+    note: "Notebook-inspired shell with quick links to articles, code, and training.",
+  },
+  {
+    title: "Playbook snippets",
+    note: "Tiny experiments in ergonomics — keyboard-first flows and high-contrast states.",
+  },
+];
 
-function App() {
+export const meta: Route.MetaFunction = () => [
+  { title: "Kraig Walker | Articles, code, and training" },
+  {
+    name: "description",
+    content:
+      "Kraig Walker's notebook-inspired home for articles, code experiments, training updates, and Bluesky status notes.",
+  },
+];
+
+export default function Home() {
   return (
     <>
       <a className="skip-link" href="#main-content">
@@ -70,7 +100,9 @@ function App() {
               <section id="articles" className="panel lead-story" aria-labelledby="front-page-heading">
                 <span className="panel-label">Front page</span>
                 <p className="section-kicker">Feature</p>
-                <h2 id="front-page-heading">Inline replacement in production with module federation gateways.</h2>
+                <h2 id="front-page-heading">
+                  Inline replacement in production with module federation gateways.
+                </h2>
                 <p className="lede">
                   Exploring how to swap critical UI slices live — routing through a gateway that safely loads federated
                   builds, runs checks, and falls back without a deploy window. Includes patterns for version pinning,
@@ -191,7 +223,5 @@ function App() {
         </div>
       </div>
     </>
-  )
+  );
 }
-
-export default App

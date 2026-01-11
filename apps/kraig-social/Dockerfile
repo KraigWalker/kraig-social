@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.7
-# ---- build stage ----
+# ---- build stage (Rush + pnpm) ----
 FROM node:24.11.1-bookworm-slim AS build
 WORKDIR /repo
 
@@ -27,7 +27,7 @@ COPY apps/kraig-training-admin/package.json apps/kraig-training-admin/package.js
 COPY services/kraig-training-api/package.json services/kraig-training-api/package.json
 COPY services/github-gateway/package.json services/github-gateway/package.json
 
-# Install + build with Rush (uses repo-pinned Rush + pnpm)
+# Install dependencies via repo-pinned Rush + pnpm
 RUN --mount=type=cache,id=pnpm-store,target=/repo/common/temp/pnpm-store \
     --mount=type=cache,id=rush-install-run,target=/repo/common/temp/install-run \
     --mount=type=cache,id=rush-home,target=/root/.rush \
@@ -36,14 +36,22 @@ RUN --mount=type=cache,id=pnpm-store,target=/repo/common/temp/pnpm-store \
 
 # Copy the rest of the monorepo after install to keep cache hits high
 COPY . .
-# Build (same as `rush build`).
+# Build just this project (and its deps)
 RUN --mount=type=cache,id=rush-install-run,target=/repo/common/temp/install-run \
     --mount=type=cache,id=npm-cache,target=/root/.npm \
-    node common/scripts/install-run-rush.js build --to @kraigwalker/kraig-social
+    node common/scripts/install-run-rush.js build -t @kraigwalker/kraig-social
 
-# ---- runtime stage ----
-FROM nginx:alpine AS runtime
-COPY apps/kraig-social/nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=build /repo/apps/kraig-social/dist /usr/share/nginx/html
+# ---- runtime stage (SSR) ----
+FROM node:24.11.1-bookworm-slim AS runtime
+WORKDIR /repo/apps/kraig-social
+ENV NODE_ENV=production
+ENV HOST=0.0.0.0
+ENV PORT=3000
 
-EXPOSE 80
+# Copy Rush's shared install + the project (including its node_modules shims/.bin)
+COPY --from=build /repo/common/temp /repo/common/temp
+COPY --from=build /repo/apps/kraig-social /repo/apps/kraig-social
+
+EXPOSE 3000
+
+CMD ["./node_modules/.bin/react-router-serve", "build/server/index.js"]
