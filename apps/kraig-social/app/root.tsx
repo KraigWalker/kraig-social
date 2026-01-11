@@ -11,7 +11,12 @@ import appStylesHref from "./app.css?url";
 import type { Route } from "./+types/root";
 
 export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: appStylesHref, crossOrigin: "anonymous" },
+  {
+    rel: "stylesheet",
+    media: "screen",
+    href: appStylesHref,
+    crossOrigin: "anonymous",
+  },
   { rel: "icon", type: "image/svg+xml", href: "/vite.svg" },
   {
     rel: "preload",
