@@ -66,7 +66,7 @@ KeyRelease:
 ## Data Model Spec (self-hosted + Cloudflare cache)
 
 Assumptions:
-- Postgres for metadata and version registry
+- PostgreSQL for metadata and version registry (Drizzle ORM)
 - Self-hosted S3-compatible object store (MinIO) for assets and payloads
 - Cloudflare in front for caching; assets/manifests emit cache tags derived from post and version
 
