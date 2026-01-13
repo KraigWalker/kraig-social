@@ -4,6 +4,8 @@ This is the living plan for **kraig.social**.
 
 It’s intentionally lightweight: it documents _direction_, not a strict backlog. The site can evolve through small, meaningful increments.
 
+Look at the PLAN.md file in the root directory for project progress, and to find the latest tasks to be completed.
+
 ---
 
 ## North Star
