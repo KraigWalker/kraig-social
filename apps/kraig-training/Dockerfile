@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.7
 # ---- build stage (Rush + pnpm) ----
-FROM node:24.11.1-bookworm-slim AS build
+FROM node:24.13.0-bookworm-slim AS build
 WORKDIR /repo
 
 RUN apt-get update \
@@ -43,7 +43,7 @@ RUN --mount=type=cache,id=rush-install-run,target=/repo/common/temp/install-run 
 
 
 # ---- runtime stage (SSR) ----
-FROM node:24.11.1-bookworm-slim AS runtime
+FROM node:24.13.0-bookworm-slim AS runtime
 WORKDIR /repo/apps/kraig-training
 ENV NODE_ENV=production
 ENV HOST=0.0.0.0
