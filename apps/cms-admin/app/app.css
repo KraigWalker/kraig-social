@@ -1,0 +1,85 @@
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/dm-sans-latin.woff2") format("woff2");
+}
+
+:root {
+  color-scheme: dark;
+  --bg: #0b0f1a;
+  --surface: rgba(15, 23, 42, 0.65);
+  --surface-muted: rgba(15, 23, 42, 0.45);
+  --surface-strong: rgba(2, 6, 23, 0.75);
+  --input-bg: rgba(2, 6, 23, 0.55);
+  --border: rgba(148, 163, 184, 0.2);
+  --border-strong: rgba(148, 163, 184, 0.35);
+  --text: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-faint: #64748b;
+  --accent: #34d399;
+  --accent-soft: rgba(52, 211, 153, 0.2);
+  --warning: #f59e0b;
+  --warning-bg: rgba(245, 158, 11, 0.15);
+  --danger: #fb7185;
+  --danger-bg: rgba(244, 63, 94, 0.15);
+  --shadow: 0 30px 60px rgba(2, 6, 23, 0.55);
+  --radius-lg: 18px;
+  --radius-md: 14px;
+  --radius-sm: 10px;
+  --page-max-width: 72rem;
+  --page-narrow-width: 48rem;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: "DM Sans", "Segoe UI", "Roboto", "Helvetica Neue", Arial,
+    sans-serif;
+  line-height: 1.6;
+  color: var(--text);
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(circle at top right, rgba(56, 189, 248, 0.12), transparent 45%),
+    radial-gradient(circle at 20% 10%, rgba(16, 185, 129, 0.12), transparent 45%);
+  background-attachment: fixed;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+input,
+select,
+textarea {
+  background-color: transparent;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+::selection {
+  background: rgba(16, 185, 129, 0.35);
+  color: var(--text);
+}

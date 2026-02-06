@@ -459,10 +459,22 @@
       "tags": ["frontend-team", "fitness"]
     },
     {
+      "packageName": "@kraigwalker/cms-admin",
+      "projectFolder": "apps/cms-admin",
+      "reviewCategory": "production",
+      "tags": ["frontend-team"]
+    },
+    {
       "packageName": "@kraigwalker/kraig-training-api",
       "projectFolder": "services/kraig-training-api",
       "reviewCategory": "production",
       "tags": ["backend", "fitness"]
+    },
+    {
+      "packageName": "@kraigwalker/cms-api",
+      "projectFolder": "services/cms-api",
+      "reviewCategory": "production",
+      "tags": ["backend"]
     },
     {
       "packageName": "@kraigwalker/github-gateway",
