@@ -1,87 +1,79 @@
-# Welcome to React Router!
+# Kraig Training
 
-A modern, production-ready template for building full-stack React applications using React Router.
+Training web app for `kraig.social`, built with React Router SSR.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+## What this app does
 
-## Features
+- Serves the training UI at the `/training` base path.
+- Uses server-side rendering.
+- Includes a server-side health loader that checks the training API.
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+## Local development
 
-## Getting Started
+### Prerequisites
 
-### Installation
+- Node.js 24.x
+- Rush monorepo tooling
+- Training API running locally if you want health/API-backed behavior
 
-Install the dependencies:
+### 1. Install dependencies (one-time per clone)
 
-```bash
-npm install
-```
-
-### Development
-
-Start the development server with HMR:
+From the monorepo root:
 
 ```bash
-npm run dev
+rush install --subspace default
 ```
 
-Your application will be available at `http://localhost:5173`.
+### 2. Configure environment
 
-## Building for Production
+Required for API-backed features:
 
-Create a production build:
+- `TRAINING_API_BASE_URL` example: `http://localhost:8787`
+
+### 3. Start the app in dev mode
+
+From the app folder:
 
 ```bash
-npm run build
+cd apps/kraig-training
+TRAINING_API_BASE_URL=http://localhost:8787 rushx dev
 ```
 
-## Deployment
+Open `http://localhost:5173/training`.
 
-### Docker Deployment
+## Local production-like run
 
-To build and run using Docker:
+From the app folder:
 
 ```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
+cd apps/kraig-training
+rushx build
+TRAINING_API_BASE_URL=http://localhost:8787 HOST=0.0.0.0 PORT=3000 rushx start
 ```
 
-The containerized application can be deployed to any platform that supports Docker, including:
+Open `http://localhost:3000/training`.
 
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
+## Runtime environment variables
 
-### DIY Deployment
+- `TRAINING_API_BASE_URL` required for API checks and server-side health route
+- `HOST` optional, default `0.0.0.0`
+- `PORT` optional, default `3000`
 
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
+## Staging and production requirements
 
-Make sure to deploy the output of `npm run build`
+### Compute/runtime
 
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
+- Node.js 24.x runtime.
+- Build artifacts are required before start (`rushx build`).
+- Start command is `rushx start` (`react-router-serve ./build/server/index.js`).
 
-## Styling
+### Path/base URL requirements
 
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
+- This app is configured with `basename: "/training"` in `react-router.config.ts`.
+- Your reverse proxy must preserve the `/training` prefix when forwarding traffic.
+  If `/training` is stripped before requests reach the app, routing will break.
 
----
+### Upstream dependency requirements
 
-Built with ❤️ using React Router.
+- `TRAINING_API_BASE_URL` must point to a reachable training API instance from the app process.
+- In this repo's production compose (`deploy/compose/training.yml`), it uses the internal URL `http://kraig-training-api:8787`.

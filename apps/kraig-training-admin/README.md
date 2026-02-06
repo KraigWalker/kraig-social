@@ -1,87 +1,77 @@
-# Welcome to React Router!
+# Kraig Training Admin
 
-A modern, production-ready template for building full-stack React applications using React Router.
+Admin web app for the training stack, built with React Router SSR.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+## What this app does
 
-## Features
+- Shows bootstrap/admin readiness status for training.
+- Queries the training API server-side at `/admin/bootstrap`.
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+## Local development
 
-## Getting Started
+### Prerequisites
 
-### Installation
+- Node.js 24.x
+- Rush monorepo tooling
+- Training API running locally
 
-Install the dependencies:
+### 1. Install dependencies (one-time per clone)
 
-```bash
-npm install
-```
-
-### Development
-
-Start the development server with HMR:
+From the monorepo root:
 
 ```bash
-npm run dev
+rush install --subspace default
 ```
 
-Your application will be available at `http://localhost:5173`.
+### 2. Configure environment
 
-## Building for Production
+Required:
 
-Create a production build:
+- `TRAINING_API_BASE_URL` example: `http://localhost:8787`
+
+### 3. Start the app in dev mode
+
+From the app folder:
 
 ```bash
-npm run build
+cd apps/kraig-training-admin
+TRAINING_API_BASE_URL=http://localhost:8787 rushx dev
 ```
 
-## Deployment
+Open `http://localhost:5173`.
 
-### Docker Deployment
+## Local production-like run
 
-To build and run using Docker:
+From the app folder:
 
 ```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
+cd apps/kraig-training-admin
+rushx build
+TRAINING_API_BASE_URL=http://localhost:8787 HOST=0.0.0.0 PORT=3000 rushx start
 ```
 
-The containerized application can be deployed to any platform that supports Docker, including:
+Open `http://localhost:3000`.
 
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
+## Runtime environment variables
 
-### DIY Deployment
+- `TRAINING_API_BASE_URL` required
+- `HOST` optional, default `0.0.0.0`
+- `PORT` optional, default `3000`
 
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
+## Staging and production requirements
 
-Make sure to deploy the output of `npm run build`
+### Compute/runtime
 
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
+- Node.js 24.x runtime.
+- Build first (`rushx build`) and then run (`rushx start`).
 
-## Styling
+### Upstream dependency requirements
 
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
+- `TRAINING_API_BASE_URL` must be reachable from the app process.
+- The admin page depends on `GET {TRAINING_API_BASE_URL}/admin/bootstrap`.
+- If this endpoint is unavailable or returns non-2xx, the UI will show an admin status error state.
 
----
+### Deployment notes in this repo
 
-Built with ❤️ using React Router.
+- `deploy/compose/training.yml` defines this app as `kraig-training-admin`.
+- In local compose (`deploy/compose/training-local.yml`), it is mapped to `http://localhost:3001`.
