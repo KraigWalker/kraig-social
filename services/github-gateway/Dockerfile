@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.7
-FROM node:24.11.1-bookworm-slim AS build
+FROM node:24.13.1-bookworm-slim AS build
 WORKDIR /repo
 
 RUN apt-get update \
@@ -38,7 +38,7 @@ RUN --mount=type=cache,id=rush-install-run,target=/repo/common/temp/install-run 
     --mount=type=cache,id=npm-cache,target=/root/.npm \
     node common/scripts/install-run-rush.js build -t @kraigwalker/github-gateway
 
-FROM node:24.11.1-bookworm-slim AS runtime
+FROM node:24.13.1-bookworm-slim AS runtime
 WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=9090
