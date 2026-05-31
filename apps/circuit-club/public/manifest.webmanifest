@@ -1,0 +1,25 @@
+{
+  "background_color": "#071113",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "icons": [
+    {
+      "purpose": "any maskable",
+      "sizes": "any",
+      "src": "/circuit-club/icon.svg",
+      "type": "image/svg+xml"
+    },
+    {
+      "purpose": "any maskable",
+      "sizes": "192x192",
+      "src": "/circuit-club/icon-192.svg",
+      "type": "image/svg+xml"
+    }
+  ],
+  "name": "CircuitClub",
+  "short_name": "CircuitClub",
+  "scope": "/circuit-club/",
+  "start_url": "/circuit-club/",
+  "theme_color": "#0d1b1e",
+  "description": "Privacy-first queer proximity and community moderation demonstrator."
+}

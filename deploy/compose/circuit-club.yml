@@ -1,0 +1,21 @@
+services:
+  circuit-club:
+    build:
+      context: ../..
+      dockerfile: apps/circuit-club/Dockerfile
+    environment:
+      BASE_PATH: /circuit-club
+      HOST: 0.0.0.0
+      PORT: 3000
+    networks:
+      - dokploy-network
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.circuit-club.rule=Host(`kraig.social`) && PathPrefix(`/circuit-club`)
+      - traefik.http.routers.circuit-club.priority=20
+      - traefik.http.services.circuit-club.loadbalancer.server.port=3000
+      - traefik.docker.network=dokploy-network
+
+networks:
+  dokploy-network:
+    external: true
