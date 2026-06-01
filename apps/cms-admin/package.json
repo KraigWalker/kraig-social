@@ -24,6 +24,6 @@
     "@types/react-dom": "19.2.3",
     "typescript": "6.0.3",
     "vite": "8.0.14",
-    "vite-tsconfig-paths": "6.1.1"
+    "vite-tsconfig-paths": "7.0.0-alpha.1"
   }
 }
