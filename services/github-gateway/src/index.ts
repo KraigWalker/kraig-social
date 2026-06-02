@@ -11,7 +11,7 @@ const {
   GITHUB_EVENT = "push", // optional filter; leave "push" as default
 
   // Dokploy
-  DOKPLOY_ORIGIN = "http://127.0.0.1:3000", // or http://dokploy:3000 if reachable on network
+  DOKPLOY_ORIGIN = "http://0.0.0.0:3000", // or http://dokploy:3000 if reachable on network
 } = process.env;
 
 function timingSafeEqual(a: string, b: string) {
