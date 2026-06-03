@@ -440,12 +440,12 @@
       "reviewCategory": "production",
       "tags": ["frontend-team"]
     },
-    {
+    /*{
       "packageName": "@kraigwalker/circuit-club",
       "projectFolder": "apps/circuit-club",
       "reviewCategory": "production",
       "tags": ["frontend-team", "prototype"]
-    },
+    },*/
     {
       "packageName": "@kraigwalker/kraig-training",
       "projectFolder": "apps/kraig-training",
