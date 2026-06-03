@@ -1,21 +1,21 @@
 @font-face {
-  font-family: 'DM Sans';
+  font-family: "DM Sans";
   font-style: normal;
   font-weight: 400 800;
   font-display: swap;
-  src: url('/fonts/dm-sans-latin.woff2') format('woff2');
+  src: url("/fonts/dm-sans-latin.woff2") format("woff2");
 }
 
 @font-face {
-  font-family: 'PT Serif';
+  font-family: "PT Serif";
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url('/fonts/pt-serif-latin-700.woff2') format('woff2');
+  src: url("/fonts/pt-serif-latin-700.woff2") format("woff2");
 }
 
 :root {
-  font-family: 'DM Sans', 'PT Serif', 'Segoe UI', sans-serif;
+  font-family: "DM Sans", "PT Serif", "Segoe UI", sans-serif;
   line-height: 1.5;
   font-weight: 400;
   color: #2c2017;
@@ -29,6 +29,7 @@
   --text: #3a2a1d;
   --text-strong: #22160f;
   --muted: #7a5f47;
+  --bg: #131313;
 }
 
 *,
@@ -40,7 +41,7 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background: var(--paper);
+  background: var(--bg);
   color: var(--text);
 }
 
@@ -76,8 +77,17 @@ img {
   display: flex;
   justify-content: center;
   padding: 32px 16px 48px;
-  background: radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.25), transparent 35%),
-    radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.2), transparent 32%),
+  background:
+    radial-gradient(
+      circle at 10% 20%,
+      rgba(255, 255, 255, 0.25),
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at 90% 80%,
+      rgba(255, 255, 255, 0.2),
+      transparent 32%
+    ),
     var(--paper);
 }
 
@@ -88,7 +98,9 @@ img {
   background: var(--paper);
   border: 4px solid var(--ink);
   border-radius: 22px;
-  box-shadow: -10px 12px 0 rgba(0, 0, 0, 0.09), 0 16px 40px rgba(0, 0, 0, 0.15);
+  box-shadow:
+    -10px 12px 0 rgba(0, 0, 0, 0.09),
+    0 16px 40px rgba(0, 0, 0, 0.15);
   overflow: hidden;
 }
 
@@ -164,7 +176,10 @@ img {
   color: var(--text-strong);
   font-weight: 700;
   letter-spacing: 0.02em;
-  transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease,
+    background 120ms ease;
 }
 
 .nav-list a:hover {
@@ -180,7 +195,13 @@ img {
 
 .content {
   padding: 26px 28px 34px;
-  background: repeating-linear-gradient(90deg, transparent, transparent 30px, rgba(213, 75, 61, 0.08) 31px),
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 30px,
+      rgba(213, 75, 61, 0.08) 31px
+    ),
     linear-gradient(180deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6));
 }
 
