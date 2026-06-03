@@ -470,12 +470,12 @@
       "reviewCategory": "production",
       "tags": ["backend", "fitness"]
     },
-    {
+    /*{
       "packageName": "@kraigwalker/cms-api",
       "projectFolder": "services/cms-api",
       "reviewCategory": "production",
       "tags": ["backend"]
-    },
+    },*/
     {
       "packageName": "@kraigwalker/github-gateway",
       "projectFolder": "services/github-gateway",
