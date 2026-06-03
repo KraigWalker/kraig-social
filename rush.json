@@ -458,12 +458,12 @@
       "reviewCategory": "production",
       "tags": ["frontend-team", "fitness"]
     },
-    {
+    /*{
       "packageName": "@kraigwalker/cms-admin",
       "projectFolder": "apps/cms-admin",
       "reviewCategory": "production",
       "tags": ["frontend-team"]
-    },
+    },*/
     {
       "packageName": "@kraigwalker/kraig-training-api",
       "projectFolder": "services/kraig-training-api",
