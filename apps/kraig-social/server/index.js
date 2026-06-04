@@ -28,6 +28,8 @@ const assetCorsHeaders = {
 };
 
 app.disable("x-powered-by");
+
+/** Trust that the original request was made over HTTPS */
 app.set("trust proxy", true);
 
 app.use((req, res, next) => {
@@ -44,8 +46,13 @@ app.use((req, res, next) => {
   const applyHtmlHeaders = () => {
     const currentType =
       contentType ??
-      (typeof res.getHeader === "function" ? res.getHeader("Content-Type") : undefined);
-    if (typeof currentType === "string" && currentType.toLowerCase().includes("text/html")) {
+      (typeof res.getHeader === "function"
+        ? res.getHeader("Content-Type")
+        : undefined);
+    if (
+      typeof currentType === "string" &&
+      currentType.toLowerCase().includes("text/html")
+    ) {
       for (const [key, value] of Object.entries(htmlSecurityHeaders)) {
         if (!res.hasHeader(key)) {
           res.setHeader(key, value);
