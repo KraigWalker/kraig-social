@@ -439,49 +439,6 @@
       "projectFolder": "apps/kraig-social",
       "reviewCategory": "production",
       "tags": ["frontend-team"]
-    },
-    /*{
-      "packageName": "@kraigwalker/circuit-club",
-      "projectFolder": "apps/circuit-club",
-      "reviewCategory": "production",
-      "tags": ["frontend-team", "prototype"]
-    },*/
-    {
-      "packageName": "@kraigwalker/kraig-training",
-      "projectFolder": "apps/kraig-training",
-      "reviewCategory": "production",
-      "tags": ["frontend-team", "fitness"]
-    },
-    {
-      "packageName": "@kraigwalker/kraig-training-admin",
-      "projectFolder": "apps/kraig-training-admin",
-      "reviewCategory": "production",
-      "tags": ["frontend-team", "fitness"]
-    },
-    /*{
-      "packageName": "@kraigwalker/cms-admin",
-      "projectFolder": "apps/cms-admin",
-      "reviewCategory": "production",
-      "tags": ["frontend-team"]
-    },*/
-    {
-      "packageName": "@kraigwalker/kraig-training-api",
-      "projectFolder": "services/kraig-training-api",
-      "reviewCategory": "production",
-      "tags": ["backend", "fitness"]
-    },
-    /*{
-      "packageName": "@kraigwalker/cms-api",
-      "projectFolder": "services/cms-api",
-      "reviewCategory": "production",
-      "tags": ["backend"]
-    },*/
-    {
-      "packageName": "@kraigwalker/github-gateway",
-      "projectFolder": "services/github-gateway",
-      "subspaceName": "infra",
-      "reviewCategory": "production",
-      "tags": ["backend"]
     }
   ]
 }

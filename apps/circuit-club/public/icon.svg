@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="CircuitClub">
-  <rect width="128" height="128" rx="24" fill="#071113"/>
-  <path d="M64 11 109 37v54l-45 26-45-26V37z" fill="#102326" stroke="#6fffd0" stroke-width="6"/>
-  <path d="M44 50c6-10 16-15 29-13 8 1 15 5 21 11l-11 12c-4-4-8-6-13-7-8-1-14 2-18 9-4 7-4 14 0 21s10 10 18 9c5-1 9-3 13-7l11 12c-6 6-13 10-21 11-13 2-23-3-29-13-7-13-7-32 0-45z" fill="#eaf4f1"/>
-  <circle cx="64" cy="64" r="7" fill="#ff6f61"/>
-</svg>

@@ -193,10 +193,9 @@
    *
    * PNPM documentation: https://pnpm.io/package_json#pnpmoverrides
    */
-  // "globalOverrides": {
-  // "example1": "^1.0.0",
-  // "example2": "npm:@company/example2@^1.0.0"
-  // },
+  "globalOverrides": {
+    "vite-node>vite": "8.0.16"
+  },
 
   /**
    * The `globalPeerDependencyRules` setting provides various settings for suppressing validation errors
