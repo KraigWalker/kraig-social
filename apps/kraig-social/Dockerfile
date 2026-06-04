@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.7
 # ---- build stage (Rush + pnpm) ----
-FROM node:24.11.1-bookworm-slim AS build
+FROM node:24.16.0-bookworm-slim AS build
 WORKDIR /repo
 
 # Rush sometimes needs git (and CA certs for HTTPS fetches)
@@ -42,7 +42,7 @@ RUN --mount=type=cache,id=rush-install-run,target=/repo/common/temp/install-run 
     node common/scripts/install-run-rush.js build -t @kraigwalker/kraig-social
 
 # ---- runtime stage (SSR) ----
-FROM node:24.11.1-bookworm-slim AS runtime
+FROM node:24.16.0-bookworm-slim AS runtime
 WORKDIR /repo/apps/kraig-social
 ENV NODE_ENV=production
 ENV HOST=0.0.0.0
