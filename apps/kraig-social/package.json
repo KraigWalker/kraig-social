@@ -11,6 +11,8 @@
     "typecheck": "react-router typegen && tsgo"
   },
   "dependencies": {
+    "@kraigwalker/kraig-social-service-worker": "workspace:*",
+    "@kraigwalker/kraig-social-shared-worker": "workspace:*",
     "@react-router/express": "7.16.0",
     "@react-router/node": "7.16.0",
     "express": "5.2.1",

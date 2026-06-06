@@ -1,0 +1,26 @@
+{
+  "name": "@kraigwalker/kraig-social-shared-worker",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "lint": "eslint .",
+    "typecheck": "tsgo --noEmit"
+  },
+  "exports": {
+    "./shared-worker": "./dist/shared-worker.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "@typescript/native-preview": "7.0.0-dev.20260604.1",
+    "@eslint/js": "10.0.1",
+    "eslint": "10.4.1",
+    "globals": "17.6.0",
+    "typescript-eslint": "8.60.1",
+    "vite": "8.0.16"
+  }
+}

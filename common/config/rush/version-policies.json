@@ -99,4 +99,11 @@
   // 
   //   // "includeEmailInChangeFile": true
   // }
+  {
+    "definitionName": "lockStepVersion",
+    "policyName": "kraig-social",
+    "version": "0.0.0",
+    "nextBump": "patch",
+    "mainProject": "@kraigwalker/kraig-social"
+  }
 ]

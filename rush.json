@@ -438,6 +438,21 @@
       "packageName": "@kraigwalker/kraig-social",
       "projectFolder": "apps/kraig-social",
       "reviewCategory": "production",
+      "versionPolicyName": "kraig-social",
+      "tags": ["frontend-team"]
+    },
+    {
+      "packageName": "@kraigwalker/kraig-social-shared-worker",
+      "projectFolder": "workers/shared",
+      "reviewCategory": "production",
+      "versionPolicyName": "kraig-social",
+      "tags": ["frontend-team"]
+    },
+    {
+      "packageName": "@kraigwalker/kraig-social-service-worker",
+      "projectFolder": "workers/service",
+      "reviewCategory": "production",
+      "versionPolicyName": "kraig-social",
       "tags": ["frontend-team"]
     }
   ]
