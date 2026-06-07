@@ -24,6 +24,21 @@ The policy is configured in `common/config/rush/version-policies.json` and attac
 
 The policy uses `lockStepVersion`, which means these packages should move through release versions together. Do not manually edit the `version` field in this package's `package.json` for a release. Rush owns release version changes through the version policy.
 
+## Browser update detection
+
+The Rush version policy does not control when a browser installs a new ServiceWorker.
+
+Rush versions are repository and release metadata. They help the monorepo keep `@kraigwalker/kraig-social`, `@kraigwalker/kraig-social-service-worker`, and `@kraigwalker/kraig-social-shared-worker` on the same release number, and they drive changelogs/publish workflows.
+
+Browsers detect ServiceWorker updates by fetching the registered worker script URL and comparing the script bytes with the previously installed worker. A package version bump alone does not make a browser update the worker unless the deployed `service-worker.js` response changes at the registered URL.
+
+In practice:
+
+- A changed worker source file should produce changed `dist/service-worker.js` bytes, which browsers can detect after deployment.
+- A Rush-only version bump may not change the emitted worker script. If the deployed script bytes are identical, browsers should treat it as the same worker.
+- The registered ServiceWorker URL, response headers, and deployment cache behavior matter. Do not let a CDN or reverse proxy serve stale `service-worker.js` when a worker update is intended.
+- Avoid relying on filename hashes for the registered worker script unless the app registration code is also updated. Browsers update the worker associated with the registered script URL.
+
 ## Releasing changes
 
 For normal changes to this worker:
