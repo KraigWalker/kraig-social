@@ -4,7 +4,6 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "lint": "eslint .",
     "start": "node server/index.js",
     "typecheck": "react-router typegen && tsgo"
   },
@@ -13,11 +12,8 @@
     "@typescript/native-preview": "7.0.0-dev.20260604.1"
   },
   "devDependencies": {
-    "@eslint/js": "10.0.1",
     "@types/node": "24.10.3",
-    "eslint": "10.4.1",
     "globals": "17.6.0",
-    "typescript-eslint": "8.60.1",
     "vite": "8.0.16"
   }
 }

@@ -5,7 +5,6 @@
   "type": "module",
   "scripts": {
     "build": "vite build",
-    "lint": "eslint .",
     "typecheck": "tsgo --noEmit"
   },
   "exports": {
@@ -16,11 +15,8 @@
   ],
   "dependencies": {},
   "devDependencies": {
-    "@eslint/js": "10.0.1",
     "@typescript/native-preview": "7.0.0-dev.20260604.1",
-    "eslint": "10.4.1",
     "globals": "17.6.0",
-    "typescript-eslint": "8.60.1",
     "vite": "8.0.16"
   }
 }
