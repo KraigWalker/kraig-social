@@ -9,6 +9,6 @@ export default {
   trailingComma: 'es5',
   insertFinalNewline: true,
   embeddedLanguageFormatting: 'auto',
-  ignorePatterns: ['dist/**', '*.min.js'],
+  ignorePatterns: ['*.min.js', '**/dist/**', '**/node_modules/**', '**/build/**'],
   sortPackageJson: true,
 } satisfies OxfmtConfig;
