@@ -1,41 +1,35 @@
-import type { LinksFunction } from "react-router";
-import {
-  isRouteErrorResponse,
-  Links,
-  Meta,
-  Outlet,
-  ScrollRestoration,
-} from "react-router";
+import type { LinksFunction } from 'react-router';
+import { isRouteErrorResponse, Links, Meta, Outlet, ScrollRestoration } from 'react-router';
 
-import appStylesHref from "./app.css?url";
-import type { Route } from "./+types/root";
+import appStylesHref from './app.css?url';
+import type { Route } from './+types/root';
 
 export const links: LinksFunction = () => [
   {
-    rel: "preload stylesheet",
-    media: "screen",
-    as: "style",
-    type: "text/css",
+    rel: 'preload stylesheet',
+    media: 'screen',
+    as: 'style',
+    type: 'text/css',
     href: appStylesHref,
-    crossOrigin: "anonymous",
+    crossOrigin: 'anonymous',
   },
-  { rel: "icon", type: "image/svg+xml", href: "/vite.svg" },
+  { rel: 'icon', type: 'image/svg+xml', href: '/vite.svg' },
   {
-    rel: "preload",
-    href: "/fonts/dm-sans-latin.woff2",
-    as: "font",
-    type: "font/woff2",
-    crossOrigin: "anonymous",
+    rel: 'preload',
+    href: '/fonts/dm-sans-latin.woff2',
+    as: 'font',
+    type: 'font/woff2',
+    crossOrigin: 'anonymous',
   },
   {
-    rel: "preload",
-    href: "/fonts/pt-serif-latin-700.woff2",
-    as: "font",
-    type: "font/woff2",
-    crossOrigin: "anonymous",
+    rel: 'preload',
+    href: '/fonts/pt-serif-latin-700.woff2',
+    as: 'font',
+    type: 'font/woff2',
+    crossOrigin: 'anonymous',
   },
-  { rel: "manifest", href: "/manifest.json" },
-  { rel: "alternate", type: "application/ld+json", href: "/schema.jsonld" },
+  { rel: 'manifest', href: '/manifest.json' },
+  { rel: 'alternate', type: 'application/ld+json', href: '/schema.jsonld' },
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -60,16 +54,14 @@ export default function App() {
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-  let message = "Oops!";
-  let details = "An unexpected error occurred.";
+  let message = 'Oops!';
+  let details = 'An unexpected error occurred.';
   let stack: string | undefined;
 
   if (isRouteErrorResponse(error)) {
-    message = error.status === 404 ? "404" : "Error";
+    message = error.status === 404 ? '404' : 'Error';
     details =
-      error.status === 404
-        ? "The requested page could not be found."
-        : error.statusText || details;
+      error.status === 404 ? 'The requested page could not be found.' : error.statusText || details;
   } else if (import.meta.env.DEV && error && error instanceof Error) {
     details = error.message;
     stack = error.stack;
@@ -77,7 +69,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 
   return (
     <main className="page">
-      <section className="panel" style={{ maxWidth: 720, margin: "0 auto" }}>
+      <section className="panel" style={{ maxWidth: 720, margin: '0 auto' }}>
         <h1>{message}</h1>
         <p>{details}</p>
         {stack ? (
