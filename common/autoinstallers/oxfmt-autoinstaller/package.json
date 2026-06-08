@@ -1,0 +1,8 @@
+{
+  "name": "oxfmt-autoinstaller",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "oxfmt": "0.54.0"
+  }
+}
