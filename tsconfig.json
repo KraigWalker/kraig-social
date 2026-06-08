@@ -1,5 +1,5 @@
 {
-  "include": ["oxfmt.config.ts"],
+  "include": ["oxfmt.config.ts", "oxlint.config.ts"],
   "compilerOptions": {
     "lib": ["ES2022"],
     "target": "ES2022",
@@ -8,7 +8,8 @@
     "strict": true,
     "skipLibCheck": true,
     "paths": {
-      "oxfmt": ["./common/autoinstallers/oxfmt-autoinstaller/node_modules/oxfmt"]
+      "oxfmt": ["./common/autoinstallers/oxc-autoinstaller/node_modules/oxfmt"],
+      "oxlint": ["./common/autoinstallers/oxc-autoinstaller/node_modules/oxlint"]
     }
   }
 }
