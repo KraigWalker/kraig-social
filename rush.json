@@ -70,7 +70,7 @@
    * public npmjs.org registry. If you need to block calls to the npm registry, you can use this setting to disable
    * Rush's check.
    */
-  // "suppressRushIsPublicVersionCheck": false,
+   "suppressRushIsPublicVersionCheck": true,
 
   /**
    * Large monorepos can become intimidating for newcomers if project folder paths don't follow
