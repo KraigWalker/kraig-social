@@ -1,57 +1,56 @@
-import type { Route } from "./+types/home";
+import type { Route } from './+types/home';
 
 const trainingUpdates = [
   {
-    title: "Cohort lab: building habits",
+    title: 'Cohort lab: building habits',
     detail:
-      "Sprint through a live debugging session with guided practice prompts and take-home drills.",
+      'Sprint through a live debugging session with guided practice prompts and take-home drills.',
   },
   {
-    title: "Office hours & AMA",
-    detail:
-      "Personalized prep for shipping day — bring blockers, get unblocked, stay on pace.",
+    title: 'Office hours & AMA',
+    detail: 'Personalized prep for shipping day — bring blockers, get unblocked, stay on pace.',
   },
   {
-    title: "Trainer notes",
+    title: 'Trainer notes',
     detail:
-      "Rewriting modules to feel like a workbook, not a slide deck. Expect checklists and margin notes.",
+      'Rewriting modules to feel like a workbook, not a slide deck. Expect checklists and margin notes.',
   },
 ];
 
 const blueskyMoments = [
   {
-    time: "2h ago",
-    text: "Shaping a lo-fi UI that feels like a favorite notebook. Leaving room for scribbles.",
+    time: '2h ago',
+    text: 'Shaping a lo-fi UI that feels like a favorite notebook. Leaving room for scribbles.',
   },
   {
-    time: "5h ago",
-    text: "Training rewrite: more reps, fewer slides. Every concept gets a practical drill.",
+    time: '5h ago',
+    text: 'Training rewrite: more reps, fewer slides. Every concept gets a practical drill.',
   },
   {
-    time: "Yesterday",
-    text: "Testing a “front page” layout for the site — bold header, quick reads, no clutter.",
+    time: 'Yesterday',
+    text: 'Testing a “front page” layout for the site — bold header, quick reads, no clutter.',
   },
 ];
 
 const codeIdeas = [
   {
-    title: "AI workshop kit",
-    note: "Reusable facilitation cards, timers, and scoring blocks for live cohorts.",
+    title: 'AI workshop kit',
+    note: 'Reusable facilitation cards, timers, and scoring blocks for live cohorts.',
   },
   {
-    title: "Social home revamp",
-    note: "Notebook-inspired shell with quick links to articles, code, and training.",
+    title: 'Social home revamp',
+    note: 'Notebook-inspired shell with quick links to articles, code, and training.',
   },
   {
-    title: "Playbook snippets",
-    note: "Tiny experiments in ergonomics — keyboard-first flows and high-contrast states.",
+    title: 'Playbook snippets',
+    note: 'Tiny experiments in ergonomics — keyboard-first flows and high-contrast states.',
   },
 ];
 
 export const meta: Route.MetaFunction = () => [
-  { title: "Kraig Walker | Articles, code, and training" },
+  { title: 'Kraig Walker | Articles, code, and training' },
   {
-    name: "description",
+    name: 'description',
     content:
       "Kraig Walker's notebook-inspired home for articles, code experiments, training updates, and Bluesky status notes.",
   },
@@ -97,37 +96,42 @@ export default function Home() {
 
           <main id="main-content" className="content">
             <div className="content-grid">
-              <section id="articles" className="panel lead-story" aria-labelledby="front-page-heading">
+              <section
+                id="articles"
+                className="panel lead-story"
+                aria-labelledby="front-page-heading"
+              >
                 <span className="panel-label">Front page</span>
                 <p className="section-kicker">Feature</p>
                 <h2 id="front-page-heading">
                   Inline replacement in production with module federation gateways.
                 </h2>
                 <p className="lede">
-                  Exploring how to swap critical UI slices live — routing through a gateway that safely loads federated
-                  builds, runs checks, and falls back without a deploy window. Includes patterns for version pinning,
-                  observability hooks, and progressive rollouts so teams can trial new modules without breaking the
-                  homepage.
+                  Exploring how to swap critical UI slices live — routing through a gateway that
+                  safely loads federated builds, runs checks, and falls back without a deploy
+                  window. Includes patterns for version pinning, observability hooks, and
+                  progressive rollouts so teams can trial new modules without breaking the homepage.
                 </p>
                 <p className="lede lede-small">
-                  The gateway sits between the shell and the remote, verifying signatures, ensuring the manifest is
-                  compatible, and only then hydrating the inline replacement.
+                  The gateway sits between the shell and the remote, verifying signatures, ensuring
+                  the manifest is compatible, and only then hydrating the inline replacement.
                 </p>
                 <p className="lede lede-small">
-                  I walk through a production-safe swap: sticky routing to hold users on the old module, a canary slice
-                  that shifts traffic by cohort, and a rollback path that does not require a redeploy.
+                  I walk through a production-safe swap: sticky routing to hold users on the old
+                  module, a canary slice that shifts traffic by cohort, and a rollback path that
+                  does not require a redeploy.
                 </p>
                 <p className="lede lede-small">
-                  There&apos;s also a practical look at cache headers, client invalidation, and how to keep edge nodes in
-                  sync when the federated bundle changes.
+                  There&apos;s also a practical look at cache headers, client invalidation, and how
+                  to keep edge nodes in sync when the federated bundle changes.
                 </p>
                 <p className="lede lede-small">
-                  Metrics matter. The write-up covers error budgets, structured logs from the gateway, and how to detect
-                  a degraded remote before the UI goes blank.
+                  Metrics matter. The write-up covers error budgets, structured logs from the
+                  gateway, and how to detect a degraded remote before the UI goes blank.
                 </p>
                 <p className="lede lede-small">
-                  Finally, I outline a checklist for shipping: schema guards, smoke tests, and a reversal protocol that
-                  gives the on-call team confidence during the cutover.
+                  Finally, I outline a checklist for shipping: schema guards, smoke tests, and a
+                  reversal protocol that gives the on-call team confidence during the cutover.
                 </p>
                 <p className="meta">Updated this week · 7 minute read</p>
                 <a className="story-link" href="#articles">
@@ -176,7 +180,8 @@ export default function Home() {
                 <div>
                   <h3 id="code-heading">Building right now</h3>
                   <p className="lede lede-small">
-                    A notebook of experiments — clean ergonomics, accessible shortcuts, and playful UI tests.
+                    A notebook of experiments — clean ergonomics, accessible shortcuts, and playful
+                    UI tests.
                   </p>
                 </div>
                 <ul className="code-list">
@@ -192,8 +197,12 @@ export default function Home() {
           </main>
 
           <footer className="app-footer">
-            <p>Off-white paper, bold red lines — a digital workbook for the things I&apos;m making.</p>
-            <p className="footer-note">Accessible, responsive, and ready for desktop, mobile, or TV.</p>
+            <p>
+              Off-white paper, bold red lines — a digital workbook for the things I&apos;m making.
+            </p>
+            <p className="footer-note">
+              Accessible, responsive, and ready for desktop, mobile, or TV.
+            </p>
             <nav aria-label="Footer">
               <ul className="footer-links">
                 <li>
