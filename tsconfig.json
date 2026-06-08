@@ -1,0 +1,14 @@
+{
+  "include": ["oxfmt.config.ts"],
+  "compilerOptions": {
+    "lib": ["ES2022"],
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "skipLibCheck": true,
+    "paths": {
+      "oxfmt": ["./common/autoinstallers/oxfmt-autoinstaller/node_modules/oxfmt"]
+    }
+  }
+}
