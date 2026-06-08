@@ -14,6 +14,34 @@ importers:
 
   .: {}
 
+  ../../../apps/gateway:
+    dependencies:
+      '@typescript/native-preview':
+        specifier: 7.0.0-dev.20260604.1
+        version: 7.0.0-dev.20260604.1
+      express:
+        specifier: 5.2.1
+        version: 5.2.1
+    devDependencies:
+      '@eslint/js':
+        specifier: 10.0.1
+        version: 10.0.1(eslint@10.4.1)
+      '@types/node':
+        specifier: 24.10.3
+        version: 24.10.3
+      eslint:
+        specifier: 10.4.1
+        version: 10.4.1
+      globals:
+        specifier: 17.6.0
+        version: 17.6.0
+      typescript-eslint:
+        specifier: 8.60.1
+        version: 8.60.1(eslint@10.4.1)
+      vite:
+        specifier: 8.0.16
+        version: 8.0.16(@types/node@24.10.3)
+
   ../../../apps/kraig-social:
     dependencies:
       '@kraigwalker/kraig-social-service-worker':
@@ -80,6 +108,16 @@ importers:
       vite:
         specifier: 8.0.16
         version: 8.0.16(@types/node@24.10.3)
+
+  ../../../packages/content-sdk:
+    dependencies:
+      zod:
+        specifier: 4.4.3
+        version: 4.4.3
+    devDependencies:
+      '@typescript/native-preview':
+        specifier: 7.0.0-dev.20260604.1
+        version: 7.0.0-dev.20260604.1
 
   ../../../workers/service:
     devDependencies:

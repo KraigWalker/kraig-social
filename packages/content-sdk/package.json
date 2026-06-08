@@ -1,0 +1,10 @@
+{
+  "name": "@kraigwalker/kraig-social-content-sdk",
+  "version": "0.0.0",
+  "dependencies": {
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@typescript/native-preview": "7.0.0-dev.20260604.1"
+  }
+}

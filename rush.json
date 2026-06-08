@@ -442,6 +442,12 @@
       "tags": ["frontend-team"]
     },
     {
+      "packageName": "@kraigwalker/kraig-social-gateway",
+      "projectFolder": "apps/gateway",
+      "reviewCategory": "production",
+      "tags": []
+    },
+    {
       "packageName": "@kraigwalker/kraig-social-shared-worker",
       "projectFolder": "workers/shared",
       "reviewCategory": "production",
@@ -454,6 +460,12 @@
       "reviewCategory": "production",
       "versionPolicyName": "kraig-social",
       "tags": ["frontend-team"]
+    },
+    {
+      "packageName": "@kraigwalker/kraig-social-content-sdk",
+      "projectFolder": "packages/content-sdk",
+      "reviewCategory": "production",
+      "tags": []
     }
   ]
 }
