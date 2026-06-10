@@ -17,11 +17,7 @@
     "source=kraig-social-rush-home,target=/home/node/.rush,type=volume"
   ],
   "postCreateCommand": "node common/scripts/install-run-rush.js install --subspace default",
-  "forwardPorts": [
-    5173,
-    3000,
-    3001
-  ],
+  "forwardPorts": [5173, 3000, 3001],
   "portsAttributes": {
     "5173": {
       "label": "kraig-social dev server",
@@ -38,11 +34,7 @@
   },
   "customizations": {
     "vscode": {
-      "extensions": [
-        "dbaeumer.vscode-eslint",
-        "ms-azuretools.vscode-docker",
-        "oxc.oxc-vscode"
-      ],
+      "extensions": ["openai.chatgpt", "ms-azuretools.vscode-docker", "oxc.oxc-vscode"],
       "settings": {
         "terminal.integrated.defaultProfile.linux": "bash"
       }
