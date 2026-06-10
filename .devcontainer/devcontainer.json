@@ -61,7 +61,7 @@
             "rush-mcp-server": {
             "type": "stdio",
             "command": "npx",
-            "args": ["-y", "@rushstack/mcp-server@0.4.17", "<workspace-root>"]
+            "args": ["-y", "@rushstack/mcp-server@0.4.17", "${containerWorkspaceFolder}"]
           }
         }
       }
