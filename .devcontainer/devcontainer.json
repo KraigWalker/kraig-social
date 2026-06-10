@@ -36,7 +36,7 @@
     "vscode": {
       "extensions": ["openai.chatgpt", "ms-azuretools.vscode-docker", "oxc.oxc-vscode"],
       "settings": {
-        "terminal.integrated.defaultProfile.linux": "bash"
+        "terminal.integrated.defaultProfile.linux": "zsh"
       }
     }
   }

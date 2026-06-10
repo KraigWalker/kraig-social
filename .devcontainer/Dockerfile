@@ -1,16 +1,4 @@
-FROM node:24.16.0-bookworm
-
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-        build-essential \
-        ca-certificates \
-        git \
-        procps \
-        sudo \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN echo "node ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/node \
-    && chmod 0440 /etc/sudoers.d/node
+FROM mcr.microsoft.com/devcontainers/javascript-node:24-bookworm
 
 RUN printf '%s\n' \
     '#!/bin/sh' \
