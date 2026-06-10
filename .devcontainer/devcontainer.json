@@ -16,7 +16,7 @@
     "source=kraig-social-pnpm-store,target=/home/node/.pnpm-store,type=volume",
     "source=kraig-social-rush-home,target=/home/node/.rush,type=volume"
   ],
-  "postCreateCommand": "node common/scripts/install-run-rush.js install --subspace default",
+  "postCreateCommand": "rush install --subspace default",
   "forwardPorts": [5173, 3000, 3001],
   "portsAttributes": {
     "5173": {
