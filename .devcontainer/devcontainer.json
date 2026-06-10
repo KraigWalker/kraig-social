@@ -55,6 +55,15 @@
       "extensions": ["openai.chatgpt", "ms-azuretools.vscode-docker", "oxc.oxc-vscode"],
       "settings": {
         "terminal.integrated.defaultProfile.linux": "zsh"
+      },
+      "mcp": {
+          "servers": {
+            "rush-mcp-server": {
+            "type": "stdio",
+            "command": "npx",
+            "args": ["-y", "@rushstack/mcp-server@0.4.17", "<workspace-root>"]
+          }
+        }
       }
     }
   }
