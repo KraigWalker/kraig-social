@@ -4,7 +4,22 @@
     "dockerfile": "Dockerfile",
     "context": ".."
   },
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": "true",
+      "username": "node",
+      "upgradePackages": "true"
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "none"
+    },
+    "ghcr.io/devcontainers/features/git:1": {
+      "version": "latest",
+      "ppa": "false"
+    }
+  },
   "workspaceFolder": "/workspaces/kraig-social",
+  // Set `remoteUser` to `root` to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
   "remoteUser": "node",
   "updateRemoteUserUID": true,
   "containerEnv": {
@@ -16,7 +31,7 @@
     "source=kraig-social-pnpm-store,target=/home/node/.pnpm-store,type=volume",
     "source=kraig-social-rush-home,target=/home/node/.rush,type=volume"
   ],
-  "postCreateCommand": "rush install --subspace default",
+  "postCreateCommand": "rush install",
   "forwardPorts": [5173, 3000, 3001],
   "portsAttributes": {
     "5173": {
@@ -32,8 +47,11 @@
       "onAutoForward": "silent"
     }
   },
+  // Configure tool-specific properties.
   "customizations": {
+    // Configure properties specific to VS Code.
     "vscode": {
+      // Add the IDs of extensions you want installed when the container is created.
       "extensions": ["openai.chatgpt", "ms-azuretools.vscode-docker", "oxc.oxc-vscode"],
       "settings": {
         "terminal.integrated.defaultProfile.linux": "zsh"
