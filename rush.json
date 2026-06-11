@@ -435,6 +435,42 @@
     //   "tags": [ "tools" ]
     // }
     {
+      "packageName": "@kraigwalker/heft-toolchain",
+      "projectFolder": "tools/heft-toolchain",
+      "reviewCategory": "tools",
+      "tags": ["tools"]
+    },
+    {
+      "packageName": "@kraigwalker/heft-base-rig",
+      "projectFolder": "rigs/heft-base-rig",
+      "reviewCategory": "tools",
+      "tags": ["tools"]
+    },
+    {
+      "packageName": "@kraigwalker/heft-vite-app-rig",
+      "projectFolder": "rigs/heft-vite-app-rig",
+      "reviewCategory": "tools",
+      "tags": ["tools", "frontend-team"]
+    },
+    {
+      "packageName": "@kraigwalker/heft-vite-library-rig",
+      "projectFolder": "rigs/heft-vite-library-rig",
+      "reviewCategory": "tools",
+      "tags": ["tools", "frontend-team"]
+    },
+    {
+      "packageName": "@kraigwalker/heft-node-service-rig",
+      "projectFolder": "rigs/heft-node-service-rig",
+      "reviewCategory": "tools",
+      "tags": ["tools"]
+    },
+    {
+      "packageName": "@kraigwalker/heft-worker-rig",
+      "projectFolder": "rigs/heft-worker-rig",
+      "reviewCategory": "tools",
+      "tags": ["tools", "frontend-team"]
+    },
+    {
       "packageName": "@kraigwalker/kraig-social",
       "projectFolder": "apps/kraig-social",
       "reviewCategory": "production",

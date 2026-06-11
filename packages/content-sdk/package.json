@@ -1,10 +1,36 @@
 {
   "name": "@kraigwalker/kraig-social-content-sdk",
   "version": "0.0.0",
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "heft run --only build -- --clean",
+    "fix": "heft run --only fix",
+    "format": "heft run --only format",
+    "lint": "heft run --only lint",
+    "typecheck": "heft run --only typecheck",
+    "_phase:build": "heft run --only build -- --clean",
+    "_phase:fix": "heft run --only fix",
+    "_phase:format": "heft run --only format",
+    "_phase:lint": "heft run --only lint",
+    "_phase:typecheck": "heft run --only typecheck"
+  },
   "dependencies": {
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@typescript/native-preview": "7.0.0-dev.20260604.1"
+    "@kraigwalker/heft-toolchain": "workspace:*",
+    "@kraigwalker/heft-vite-library-rig": "workspace:*",
+    "@rushstack/heft": "1.2.17",
+    "@typescript/native-preview": "7.0.0-dev.20260604.1",
+    "vite": "8.0.16"
   }
 }

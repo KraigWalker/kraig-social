@@ -1,0 +1,26 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/rush/v5/rush-project.schema.json",
+  "operationSettings": [
+    {
+      "operationName": "_phase:build",
+      "outputFolderNames": ["lib"],
+      "weight": 2
+    },
+    {
+      "operationName": "_phase:typecheck",
+      "weight": 2
+    },
+    {
+      "operationName": "_phase:lint",
+      "weight": 1
+    },
+    {
+      "operationName": "_phase:format",
+      "weight": 1
+    },
+    {
+      "operationName": "_phase:fix",
+      "weight": 1
+    }
+  ]
+}

@@ -1,28 +1,39 @@
 {
   "name": "@kraigwalker/kraig-social",
-  "private": true,
   "version": "0.0.0",
+  "private": true,
   "type": "module",
   "scripts": {
-    "build": "react-router build",
-    "dev": "react-router dev",
+    "build": "heft run --only build -- --clean",
+    "dev": "node node_modules/@kraigwalker/heft-toolchain/scripts/react-router-dev.cjs",
+    "fix": "heft run --only fix",
+    "format": "heft run --only format",
+    "lint": "heft run --only lint",
     "start": "node server/index.js",
-    "typecheck": "react-router typegen && tsgo"
+    "typecheck": "heft run --only typecheck",
+    "_phase:build": "heft run --only build -- --clean",
+    "_phase:fix": "heft run --only fix",
+    "_phase:format": "heft run --only format",
+    "_phase:lint": "heft run --only lint",
+    "_phase:typecheck": "heft run --only typecheck"
   },
   "dependencies": {
     "@kraigwalker/kraig-social-service-worker": "workspace:*",
     "@kraigwalker/kraig-social-shared-worker": "workspace:*",
     "@react-router/express": "7.16.0",
     "@react-router/node": "7.16.0",
+    "@typescript/native-preview": "7.0.0-dev.20260604.1",
     "express": "5.2.1",
     "isbot": "5.1.40",
     "react": "19.2.7",
     "react-dom": "19.2.7",
-    "react-router": "7.16.0",
-    "@typescript/native-preview": "7.0.0-dev.20260604.1"
+    "react-router": "7.16.0"
   },
   "devDependencies": {
+    "@kraigwalker/heft-toolchain": "workspace:*",
+    "@kraigwalker/heft-vite-app-rig": "workspace:*",
     "@react-router/dev": "7.16.0",
+    "@rushstack/heft": "1.2.17",
     "@types/node": "24.10.3",
     "@types/react": "19.2.16",
     "@types/react-dom": "19.2.3",

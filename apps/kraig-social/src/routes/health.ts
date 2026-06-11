@@ -1,7 +1,7 @@
 export async function loader() {
-  return new Response("ok", {
+  return new Response('ok', {
     status: 200,
-    headers: { "Content-Type": "text/plain", "Cache-Control": "no-store" },
+    headers: { 'Content-Type': 'text/plain', 'Cache-Control': 'no-store' },
   });
 }
 

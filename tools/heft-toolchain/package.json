@@ -1,7 +1,9 @@
 {
-  "name": "oxc-autoinstaller",
-  "version": "1.0.0",
+  "name": "@kraigwalker/heft-toolchain",
+  "version": "0.0.0",
   "private": true,
+  "type": "commonjs",
+  "scripts": {},
   "dependencies": {
     "oxfmt": "0.54.0",
     "oxlint": "1.69.0",

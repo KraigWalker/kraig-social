@@ -1,0 +1,69 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/heft/v0/heft.schema.json",
+  "phasesByName": {
+    "lint": {
+      "phaseDescription": "Lint the project with OXC.",
+      "tasksByName": {
+        "oxlint": {
+          "taskPlugin": {
+            "pluginPackage": "@rushstack/heft",
+            "pluginName": "run-script-plugin",
+            "options": {
+              "scriptPath": "node_modules/@kraigwalker/heft-toolchain/scripts/heft-task.cjs",
+              "scriptOptions": {
+                "tool": "oxlint"
+              }
+            }
+          }
+        }
+      }
+    },
+    "format": {
+      "phaseDescription": "Check project formatting with Oxfmt.",
+      "tasksByName": {
+        "oxfmt": {
+          "taskPlugin": {
+            "pluginPackage": "@rushstack/heft",
+            "pluginName": "run-script-plugin",
+            "options": {
+              "scriptPath": "node_modules/@kraigwalker/heft-toolchain/scripts/heft-task.cjs",
+              "scriptOptions": {
+                "tool": "oxfmt-check"
+              }
+            }
+          }
+        }
+      }
+    },
+    "fix": {
+      "phaseDescription": "Apply OXC fixes and formatting.",
+      "tasksByName": {
+        "oxlint": {
+          "taskPlugin": {
+            "pluginPackage": "@rushstack/heft",
+            "pluginName": "run-script-plugin",
+            "options": {
+              "scriptPath": "node_modules/@kraigwalker/heft-toolchain/scripts/heft-task.cjs",
+              "scriptOptions": {
+                "tool": "oxlint-fix"
+              }
+            }
+          }
+        },
+        "oxfmt": {
+          "taskDependencies": ["oxlint"],
+          "taskPlugin": {
+            "pluginPackage": "@rushstack/heft",
+            "pluginName": "run-script-plugin",
+            "options": {
+              "scriptPath": "node_modules/@kraigwalker/heft-toolchain/scripts/heft-task.cjs",
+              "scriptOptions": {
+                "tool": "oxfmt-write"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

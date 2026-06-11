@@ -1,20 +1,31 @@
 {
   "name": "@kraigwalker/kraig-social-service-worker",
-  "private": true,
   "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "build": "vite build",
-    "typecheck": "tsgo --noEmit"
-  },
-  "exports": {
-    "./service-worker": "./dist/service-worker.js"
-  },
+  "private": true,
   "files": [
     "dist"
   ],
+  "type": "module",
+  "exports": {
+    "./service-worker": "./dist/service-worker.js"
+  },
+  "scripts": {
+    "build": "heft run --only build -- --clean",
+    "fix": "heft run --only fix",
+    "format": "heft run --only format",
+    "lint": "heft run --only lint",
+    "typecheck": "heft run --only typecheck",
+    "_phase:build": "heft run --only build -- --clean",
+    "_phase:fix": "heft run --only fix",
+    "_phase:format": "heft run --only format",
+    "_phase:lint": "heft run --only lint",
+    "_phase:typecheck": "heft run --only typecheck"
+  },
   "dependencies": {},
   "devDependencies": {
+    "@kraigwalker/heft-toolchain": "workspace:*",
+    "@kraigwalker/heft-worker-rig": "workspace:*",
+    "@rushstack/heft": "1.2.17",
     "@typescript/native-preview": "7.0.0-dev.20260604.1",
     "globals": "17.6.0",
     "vite": "8.0.16"

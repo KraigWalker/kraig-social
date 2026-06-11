@@ -1,0 +1,15 @@
+{
+  "name": "@kraigwalker/heft-vite-app-rig",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "@kraigwalker/heft-base-rig": "workspace:*",
+    "@react-router/dev": "7.16.0",
+    "vite": "8.0.16"
+  },
+  "exports": {
+    "./react-router-config": "./profiles/default/react-router.config.mjs",
+    "./profiles/default/tsconfig.json": "./profiles/default/tsconfig.json",
+    "./profiles/default/vite.config.mjs": "./profiles/default/vite.config.mjs"
+  }
+}

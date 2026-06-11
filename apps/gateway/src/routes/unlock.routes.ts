@@ -1,6 +1,6 @@
 import express from 'express';
 import { z } from 'zod';
-//import { unlockRelease } from '.'
+import { unlockRelease } from '../services/unlock-service.js';
 
 export const unlockRouter = express.Router();
 
@@ -36,4 +36,6 @@ unlockRouter.post('/:releaseId', async (req, res) => {
   if (!result.ok && result.reason === 'rate_limited') {
     return res.status(429).json(result);
   }
+
+  return res.json(result);
 });

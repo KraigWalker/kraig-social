@@ -1,16 +1,16 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const contentConfigSchema = z.object({
   id: z.string(),
   title: z.string(),
-  kind: z.enum(["article", "page", "demo", "module"]),
+  kind: z.enum(['article', 'page', 'demo', 'module']),
   route: z.string(),
 
   release: z.object({
     releaseId: z.string(),
     releaseAt: z.string().datetime().optional(),
     expiresAt: z.string().datetime().optional(),
-    ring: z.enum(["dev", "friends", "public"]).default("public"),
+    ring: z.enum(['dev', 'friends', 'public']).default('public'),
   }),
 
   delivery: z.object({
@@ -27,7 +27,7 @@ export const contentConfigSchema = z.object({
       css: z.array(z.string()).default([]),
       weight: z.number().min(0).max(100).optional(),
       rules: z.array(z.string()).default([]),
-    }),
+    })
   ),
 });
 

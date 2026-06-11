@@ -1,43 +1,43 @@
-import express from "express";
-import { createRequestHandler } from "@react-router/express";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
+import express from 'express';
+import { createRequestHandler } from '@react-router/express';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-import * as build from "../build/server/index.js";
+import * as build from '../build/server/index.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const buildDir = path.resolve(__dirname, "../build/client");
+const buildDir = path.resolve(__dirname, '../build/client');
 
 const app = express();
 const htmlSecurityHeaders = {
-  "Content-Security-Policy":
+  'Content-Security-Policy':
     "default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; img-src 'self' data:; object-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; connect-src 'self'; require-trusted-types-for 'script'",
-  "X-Frame-Options": "DENY",
-  "Referrer-Policy": "no-referrer",
-  "Permissions-Policy":
-    "accelerometer=(), autoplay=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), usb=()",
-  "Cross-Origin-Opener-Policy": "same-origin",
-  "Cross-Origin-Embedder-Policy": 'require-corp; report-to="default"',
-  "Cross-Origin-Resource-Policy": "same-site",
+  'X-Frame-Options': 'DENY',
+  'Referrer-Policy': 'no-referrer',
+  'Permissions-Policy':
+    'accelerometer=(), autoplay=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), usb=()',
+  'Cross-Origin-Opener-Policy': 'same-origin',
+  'Cross-Origin-Embedder-Policy': 'require-corp; report-to="default"',
+  'Cross-Origin-Resource-Policy': 'same-site',
 };
 const assetCorsHeaders = {
-  "Access-Control-Allow-Origin": "https://kraig.social",
-  "Access-Control-Allow-Methods": "GET, OPTIONS",
-  "Access-Control-Allow-Headers":
-    "DNT,User-Agent,If-Modified-Since,Cache-Control,Content-Type,Range",
+  'Access-Control-Allow-Origin': 'https://kraig.social',
+  'Access-Control-Allow-Methods': 'GET, OPTIONS',
+  'Access-Control-Allow-Headers':
+    'DNT,User-Agent,If-Modified-Since,Cache-Control,Content-Type,Range',
 };
 
-app.disable("x-powered-by");
+app.disable('x-powered-by');
 
 /** Trust that the original request was made over HTTPS */
-app.set("trust proxy", true);
+app.set('trust proxy', true);
 
 app.use((req, res, next) => {
   let contentType;
   const originalSetHeader = res.setHeader.bind(res);
 
   res.setHeader = (name, value) => {
-    if (typeof name === "string" && name.toLowerCase() === "content-type") {
+    if (typeof name === 'string' && name.toLowerCase() === 'content-type') {
       contentType = Array.isArray(value) ? value[0] : value;
     }
     return originalSetHeader(name, value);
@@ -46,13 +46,8 @@ app.use((req, res, next) => {
   const applyHtmlHeaders = () => {
     const currentType =
       contentType ??
-      (typeof res.getHeader === "function"
-        ? res.getHeader("Content-Type")
-        : undefined);
-    if (
-      typeof currentType === "string" &&
-      currentType.toLowerCase().includes("text/html")
-    ) {
+      (typeof res.getHeader === 'function' ? res.getHeader('Content-Type') : undefined);
+    if (typeof currentType === 'string' && currentType.toLowerCase().includes('text/html')) {
       for (const [key, value] of Object.entries(htmlSecurityHeaders)) {
         if (!res.hasHeader(key)) {
           res.setHeader(key, value);
@@ -78,7 +73,7 @@ app.use((req, res, next) => {
 
 app.use((req, res, next) => {
   const isAssetPath =
-    req.path.startsWith("/assets/") ||
+    req.path.startsWith('/assets/') ||
     /\.(?:js|css|png|jpg|jpeg|gif|svg|webp|ico|woff2?)$/i.test(req.path);
 
   if (isAssetPath) {
@@ -88,11 +83,11 @@ app.use((req, res, next) => {
       }
     }
 
-    const vary = res.getHeader("Vary");
+    const vary = res.getHeader('Vary');
     if (!vary) {
-      res.setHeader("Vary", "Origin");
-    } else if (typeof vary === "string" && !vary.includes("Origin")) {
-      res.setHeader("Vary", `${vary}, Origin`);
+      res.setHeader('Vary', 'Origin');
+    } else if (typeof vary === 'string' && !vary.includes('Origin')) {
+      res.setHeader('Vary', `${vary}, Origin`);
     }
   }
 
@@ -100,18 +95,18 @@ app.use((req, res, next) => {
 });
 
 app.use(
-  "/assets",
-  express.static(path.join(buildDir, "assets"), {
+  '/assets',
+  express.static(path.join(buildDir, 'assets'), {
     immutable: true,
-    maxAge: "1y",
-  }),
+    maxAge: '1y',
+  })
 );
-app.use(express.static(buildDir, { maxAge: "1h" }));
+app.use(express.static(buildDir, { maxAge: '1h' }));
 
 app.use(createRequestHandler({ build }));
 
-const host = process.env.HOST ?? "0.0.0.0";
-const port = Number.parseInt(process.env.PORT ?? "3000", 10);
+const host = process.env.HOST ?? '0.0.0.0';
+const port = Number.parseInt(process.env.PORT ?? '3000', 10);
 
 app.listen(port, host, () => {
   console.log(`kraig-social server listening on http://${host}:${port}`);

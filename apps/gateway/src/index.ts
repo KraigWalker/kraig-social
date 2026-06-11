@@ -1,6 +1,6 @@
 import express from 'express';
-import { mfRouter } from './routes/mf.routes';
-import { decisionRouter } from './routes/decision.routes';
+import { mfRouter } from './routes/mf.routes.js';
+import { decisionRouter } from './routes/decision.routes.js';
 //import { unlockRouter } from "./routes/unlock.routes";
 
 const app = express();

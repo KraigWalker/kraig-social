@@ -1,0 +1,41 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/heft/v0/heft.schema.json",
+  "extends": "@kraigwalker/heft-base-rig/profiles/default/config/heft.json",
+  "phasesByName": {
+    "build": {
+      "phaseDescription": "Build a worker bundle with Vite.",
+      "cleanFiles": [{ "sourcePath": "dist" }],
+      "tasksByName": {
+        "vite": {
+          "taskPlugin": {
+            "pluginPackage": "@rushstack/heft",
+            "pluginName": "run-script-plugin",
+            "options": {
+              "scriptPath": "node_modules/@kraigwalker/heft-toolchain/scripts/heft-task.cjs",
+              "scriptOptions": {
+                "tool": "vite-build"
+              }
+            }
+          }
+        }
+      }
+    },
+    "typecheck": {
+      "phaseDescription": "Typecheck a worker package with tsgo.",
+      "tasksByName": {
+        "tsgo": {
+          "taskPlugin": {
+            "pluginPackage": "@rushstack/heft",
+            "pluginName": "run-script-plugin",
+            "options": {
+              "scriptPath": "node_modules/@kraigwalker/heft-toolchain/scripts/heft-task.cjs",
+              "scriptOptions": {
+                "tool": "tsgo-check"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

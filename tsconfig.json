@@ -8,8 +8,8 @@
     "strict": true,
     "skipLibCheck": true,
     "paths": {
-      "oxfmt": ["./common/autoinstallers/oxc-autoinstaller/node_modules/oxfmt"],
-      "oxlint": ["./common/autoinstallers/oxc-autoinstaller/node_modules/oxlint"]
+      "oxfmt": ["./tools/heft-toolchain/node_modules/oxfmt"],
+      "oxlint": ["./tools/heft-toolchain/node_modules/oxlint"]
     }
   }
 }

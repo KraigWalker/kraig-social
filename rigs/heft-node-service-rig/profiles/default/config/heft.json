@@ -1,0 +1,41 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/heft/v0/heft.schema.json",
+  "extends": "@kraigwalker/heft-base-rig/profiles/default/config/heft.json",
+  "phasesByName": {
+    "build": {
+      "phaseDescription": "Build a Node.js service with tsgo.",
+      "cleanFiles": [{ "sourcePath": "lib" }],
+      "tasksByName": {
+        "tsgo": {
+          "taskPlugin": {
+            "pluginPackage": "@rushstack/heft",
+            "pluginName": "run-script-plugin",
+            "options": {
+              "scriptPath": "node_modules/@kraigwalker/heft-toolchain/scripts/heft-task.cjs",
+              "scriptOptions": {
+                "tool": "tsgo-build"
+              }
+            }
+          }
+        }
+      }
+    },
+    "typecheck": {
+      "phaseDescription": "Typecheck a Node.js service with tsgo.",
+      "tasksByName": {
+        "tsgo": {
+          "taskPlugin": {
+            "pluginPackage": "@rushstack/heft",
+            "pluginName": "run-script-plugin",
+            "options": {
+              "scriptPath": "node_modules/@kraigwalker/heft-toolchain/scripts/heft-task.cjs",
+              "scriptOptions": {
+                "tool": "tsgo-check"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
