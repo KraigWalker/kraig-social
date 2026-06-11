@@ -1,5 +1,5 @@
 {
-  "extends": "@kraigwalker/heft-vite-app-rig/profiles/default/tsconfig.base.json",
+  "extends": "@kraigwalker/heft-vite-app-rig/profiles/default/tsconfig.json",
   "include": ["**/*", "**/.server/**/*", "**/.client/**/*", ".react-router/types/**/*"],
   "compilerOptions": {
     "rootDirs": [".", "./.react-router/types"],
