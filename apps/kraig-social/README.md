@@ -1,71 +1,91 @@
-# Kraig Social
+# Kraig Social Web App
 
-Main public web app for `kraig.social`, built with React Router SSR.
+React Router SSR application for the public `kraig.social` experience and the localhost delivery
+lab demo.
 
-## What this app does
+## What This App Does
 
-- Renders the main site with server-side rendering.
-- Serves static assets from the build output.
-- Runs on an Express server (`apps/kraig-social/server/index.js`) in production.
+- Renders the public site with server-side React Router routes.
+- Demonstrates gateway-directed module delivery on `/lab`.
+- Provides a local CMS-like dashboard on `/admin/content`.
+- Renders public article routes and timed encrypted drop routes.
+- Generates `/sitemap.xml` from public manifest entries.
+- Registers `/service-worker.js` so encrypted bundles can be preloaded and unlocked locally.
+- Runs production-like traffic through `server/index.js`.
 
-## Local development
+## Important Routes
 
-### Prerequisites
+- `/` high-concept public entry point for the delivery platform.
+- `/lab` ring/A-B decision cockpit and federated module preview.
+- `/articles/:slug` public SSR article route.
+- `/drops/:slug` timed encrypted content drop route.
+- `/admin/content` local-only content authoring and manifest preview surface.
+- `/sitemap.xml` sitemap generated from indexable, published manifest content.
+- `/health` simple health endpoint.
 
-- Node.js 24.x
-- Rush monorepo tooling (use the repo-pinned Rush commands)
+## Local Demo
 
-### 1. Install dependencies (one-time per clone)
-
-From the monorepo root:
+From the repository root, install dependencies once:
 
 ```bash
-rush install --subspace default
+node common/scripts/install-run-rush.js update --subspace default
 ```
 
-### 2. Start the app in dev mode
+Build the gateway and app:
 
-From the app folder:
+```bash
+node common/scripts/install-run-rush.js build --to @kraigwalker/kraig-social --to @kraigwalker/kraig-social-gateway
+```
+
+Start the gateway in one terminal:
+
+```bash
+cd apps/gateway
+node lib/index.js
+```
+
+Start this app in another terminal:
 
 ```bash
 cd apps/kraig-social
+GATEWAY_ORIGIN=http://localhost:3001 HOST=0.0.0.0 PORT=3000 node server/index.js
+```
+
+Open `http://localhost:3000/lab`.
+
+## Development Commands
+
+Run commands from this folder:
+
+```bash
 rushx dev
-```
-
-Open `http://localhost:5173`.
-
-## Local production-like run
-
-From the app folder:
-
-```bash
-cd apps/kraig-social
 rushx build
-HOST=0.0.0.0 PORT=3000 rushx start
+rushx test
+rushx typecheck
+rushx lint
 ```
 
-Open `http://localhost:3000`.
+`rushx test` delegates to the Heft rig test phase, which runs Vitest from the shared toolchain.
+Do not add project-local `vite` or `vitest` dependencies just to run tests.
 
-## Runtime environment variables
+## Runtime Environment
 
-- `HOST` optional, default `0.0.0.0`
-- `PORT` optional, default `3000`
+- `HOST` optional, default `0.0.0.0`.
+- `PORT` optional, default `3000`.
+- `GATEWAY_ORIGIN` optional, default `http://localhost:3001`.
 
-## Staging and production requirements
+The production-like server applies HTML security headers. The localhost demo currently allows
+inline scripts/styles because React Router hydration and the demo remote module need them. Tighten
+this before production hosting.
 
-### Compute/runtime
+## Maintainer Notes
 
-- Node.js 24.x runtime.
-- Build artifacts must be generated before start (`rushx build`).
-- Startup command is `rushx start` (runs `node server/index.js`).
-
-### Networking and routing
-
-- Reverse proxy should route public traffic for `kraig.social` root paths to this app.
-- In this repo, `deploy/compose/kraig-social.yml` routes host `kraig.social` to port `3000` and excludes `/training`.
-
-### Security headers and CORS behavior
-
-- The Express server injects strict HTML security headers on HTML responses.
-- Asset CORS headers are currently hard-coded to allow `https://kraig.social` only.
-  For a staging domain, update `assetCorsHeaders` in `apps/kraig-social/server/index.js`.
+- Keep durable public content SSR-friendly. Client-only federation should enhance, not replace,
+  indexable routes.
+- Locked or scheduled content should not be included in the sitemap until the manifest marks it
+  published and indexable.
+- `/service-worker.js` is a committed public demo worker. The package worker source lives in
+  `workers/service`; keep behavior aligned when changing the encrypted preload protocol.
+- `/sw.1.js` is served as a compatibility alias for old local registrations.
+- Testing Library dependencies belong here because route tests import them directly. Vite and
+  Vitest belong to the Heft rigs/toolchain.

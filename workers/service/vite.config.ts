@@ -1,6 +1,4 @@
-import { defineConfig } from 'vite';
-
-export default defineConfig({
+export default {
   build: {
     emptyOutDir: true,
     modulePreload: { polyfill: false },
@@ -15,4 +13,4 @@ export default defineConfig({
     sourcemap: true,
     target: 'es2022',
   },
-});
+};

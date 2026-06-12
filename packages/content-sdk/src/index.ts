@@ -1,1 +1,1 @@
-export * from './defineContent';
+export * from './defineContent.js';

@@ -1,18 +1,11 @@
 import express from 'express';
-import { z } from 'zod';
+import { unlockRequestSchema } from '@kraigwalker/kraig-social-content-sdk';
 import { unlockRelease } from '../services/unlock-service.js';
 
 export const unlockRouter = express.Router();
 
-const unlockSchema = z.object({
-  contentId: z.string(),
-  variantId: z.string(),
-  clientId: z.string(),
-  code: z.string().optional(),
-});
-
 unlockRouter.post('/:releaseId', async (req, res) => {
-  const parsed = unlockSchema.safeParse(req.body);
+  const parsed = unlockRequestSchema.safeParse(req.body);
 
   if (!parsed.success) {
     return res.status(400).json({ ok: false, error: 'invalid_request' });
@@ -29,12 +22,20 @@ unlockRouter.post('/:releaseId', async (req, res) => {
     return res.status(425).json(result);
   }
 
-  if (!result.ok && result.reason == 'invalid_code') {
+  if (!result.ok && result.reason === 'invalid_code') {
     return res.status(403).json(result);
   }
 
   if (!result.ok && result.reason === 'rate_limited') {
     return res.status(429).json(result);
+  }
+
+  if (!result.ok && result.reason === 'revoked') {
+    return res.status(410).json(result);
+  }
+
+  if (!result.ok && result.reason === 'not_found') {
+    return res.status(404).json(result);
   }
 
   return res.json(result);

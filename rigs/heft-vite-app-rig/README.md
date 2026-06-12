@@ -7,9 +7,12 @@ it includes the shared OXC lint, format, and fix phases.
 
 - `heft run --only build -- --clean` deletes `dist` and runs `react-router build`.
 - `heft run --only typecheck` runs `react-router typegen`, then `tsgo --noEmit`.
+- `heft run --only test` runs `vitest run` through the shared toolchain.
 - `heft run --only lint`, `format`, and `fix` come from the base rig.
 - The rig owns the default Vite config, React Router app config, and shared TypeScript
   compiler options.
+- The rig/toolchain own Vite and Vitest binaries. App projects should not add direct `vite` or
+  `vitest` dependencies just to build or test.
 - The app keeps ownership of routes, application source, static assets, and project-root-relative
   TypeScript include/path settings.
 - `tsgo` concurrency is controlled by `@kraigwalker/heft-toolchain`:
@@ -77,6 +80,7 @@ Use these package scripts:
     "fix": "heft run --only fix",
     "format": "heft run --only format",
     "lint": "heft run --only lint",
+    "test": "heft run --only test",
     "typecheck": "heft run --only typecheck",
     "_phase:build": "heft run --only build -- --clean",
     "_phase:fix": "heft run --only fix",
@@ -86,6 +90,9 @@ Use these package scripts:
   }
 }
 ```
+
+If the app imports test-only libraries, such as `@testing-library/react`, those dependencies belong
+to the app. Tooling binaries such as Vite and Vitest stay in the rig/toolchain.
 
 ## Rush Integration
 

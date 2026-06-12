@@ -7,7 +7,10 @@ the shared OXC lint, format, and fix phases.
 
 - `heft run --only build -- --clean` deletes `lib` and runs `tsgo`.
 - `heft run --only typecheck` runs `tsgo --noEmit`.
+- `heft run --only test` runs `vitest run` through the shared toolchain.
 - `heft run --only lint`, `format`, and `fix` come from the base rig.
+- The rig/toolchain own Vitest. Service projects should not add direct `vitest` dependencies just
+  to run unit tests.
 - `tsgo` concurrency is controlled by `@kraigwalker/heft-toolchain`:
   - default local mode: `--checkers ${KRAIG_TSGO_CHECKERS:-4}`
   - `KRAIG_LOW_MEMORY=1` or `CI=true`: `--singleThreaded`
@@ -72,6 +75,7 @@ Use these package scripts:
     "fix": "heft run --only fix",
     "format": "heft run --only format",
     "lint": "heft run --only lint",
+    "test": "heft run --only test",
     "typecheck": "heft run --only typecheck",
     "_phase:build": "heft run --only build -- --clean",
     "_phase:fix": "heft run --only fix",
@@ -98,4 +102,3 @@ Use `lib` as the build cache output and integer operation weights:
   ]
 }
 ```
-

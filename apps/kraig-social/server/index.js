@@ -9,9 +9,10 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const buildDir = path.resolve(__dirname, '../build/client');
 
 const app = express();
+const gatewayOrigin = process.env.GATEWAY_ORIGIN ?? 'http://localhost:3001';
 const htmlSecurityHeaders = {
   'Content-Security-Policy':
-    "default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; img-src 'self' data:; object-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; connect-src 'self'; require-trusted-types-for 'script'",
+    `default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; img-src 'self' data:; object-src 'none'; script-src 'self' 'unsafe-inline' ${gatewayOrigin}; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self' ${gatewayOrigin}; worker-src 'self'`,
   'X-Frame-Options': 'DENY',
   'Referrer-Policy': 'no-referrer',
   'Permissions-Policy':
@@ -101,6 +102,10 @@ app.use(
     maxAge: '1y',
   })
 );
+app.get('/sw.1.js', (_req, res) => {
+  res.setHeader('Cache-Control', 'no-cache');
+  res.sendFile(path.join(buildDir, 'service-worker.js'));
+});
 app.use(express.static(buildDir, { maxAge: '1h' }));
 
 app.use(createRequestHandler({ build }));

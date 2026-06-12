@@ -7,9 +7,10 @@ phases that every buildable project can inherit.
 
 - `heft run --only lint` runs `oxlint .`.
 - `heft run --only format` runs `oxfmt --check .`.
+- `heft run --only test` runs `vitest run`.
 - `heft run --only fix` runs `oxlint . --fix` and then `oxfmt .`.
 - All tasks delegate through `@kraigwalker/heft-toolchain`, so OXC dependency versions and
-binary lookup stay centralized.
+  Vitest binary lookup stay centralized.
 
 ## Usage
 
@@ -43,6 +44,7 @@ Use these package scripts:
     "fix": "heft run --only fix",
     "format": "heft run --only format",
     "lint": "heft run --only lint",
+    "test": "heft run --only test",
     "_phase:fix": "heft run --only fix",
     "_phase:format": "heft run --only format",
     "_phase:lint": "heft run --only lint"
@@ -53,7 +55,9 @@ Use these package scripts:
 ## Rush Integration
 
 Add `config/rush-project.json` operation settings for `_phase:lint`, `_phase:format`, and
-`_phase:fix`. Use integer weights; lightweight quality phases should normally use `1`.
+`_phase:fix`. The current Rush command set does not define a repository-wide test phase; project
+maintainers can run `rushx test` directly. Use integer weights; lightweight quality phases should
+normally use `1`.
 
 ```json
 {
@@ -65,4 +69,3 @@ Add `config/rush-project.json` operation settings for `_phase:lint`, `_phase:for
   ]
 }
 ```
-

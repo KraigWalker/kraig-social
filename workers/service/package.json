@@ -27,7 +27,6 @@
     "@kraigwalker/heft-worker-rig": "workspace:*",
     "@rushstack/heft": "1.2.17",
     "@typescript/native-preview": "7.0.0-dev.20260604.1",
-    "globals": "17.6.0",
-    "vite": "8.0.16"
+    "globals": "17.6.0"
   }
 }

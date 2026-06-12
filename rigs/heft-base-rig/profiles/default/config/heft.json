@@ -35,6 +35,23 @@
         }
       }
     },
+    "test": {
+      "phaseDescription": "Run project tests with Vitest.",
+      "tasksByName": {
+        "vitest": {
+          "taskPlugin": {
+            "pluginPackage": "@rushstack/heft",
+            "pluginName": "run-script-plugin",
+            "options": {
+              "scriptPath": "node_modules/@kraigwalker/heft-toolchain/scripts/heft-task.cjs",
+              "scriptOptions": {
+                "tool": "vitest"
+              }
+            }
+          }
+        }
+      }
+    },
     "fix": {
       "phaseDescription": "Apply OXC fixes and formatting.",
       "tasksByName": {

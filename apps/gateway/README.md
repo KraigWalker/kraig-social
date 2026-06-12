@@ -1,23 +1,99 @@
-## 2. Core terminology
+# Kraig Social Gateway
 
-Use these terms consistently in code.
+Local delivery control plane for Kraig Social. The gateway chooses federated modules, evaluates
+release decisions, serves manifests, releases timed unlock keys, emits developer signals, and
+backs the local CMS-like demo.
 
-```ts
-type ContentId = string; // "posts/running-2026"
-type ModuleId = string; // "demo/parkrun-map"
-type ReleaseId = string; // "2026-07-pride-drop"
-type VariantId = string; // "control" | "variant-a" | "vip"
-type RingId = string; // "dev" | "friends" | "public"
-type AssetId = string; // content-addressed asset hash or logical id
-type ClientId = string; // anonymous stable client id
+## Responsibilities
+
+- Serve the module federation registry and demo remote module entries.
+- Resolve LaunchDarkly-style decisions for rings, A/B variants, overrides, and developer signals.
+- Expose a Server-Sent Events stream for real-ish production hot module reload demos.
+- Generate and serve a merged delivery manifest.
+- Create local encrypted content bundles for the admin demo.
+- Enforce timed unlocks and return AES-GCM key material after `unlockAt`.
+- Write local JSONL audit events for decisions and unlocks.
+
+## Main Endpoints
+
+- `GET /healthz`
+- `GET /mf/registry.json`
+- `GET /mf/remotes/:moduleId/:version/remoteEntry.js`
+- `GET /mf/content/*`
+- `POST /api/decision/resolve`
+- `GET /api/content/manifest`
+- `POST /api/unlock/:releaseId`
+- `GET /api/signals`
+- `POST /api/signals`
+- `GET /api/signals/stream`
+- `GET /api/admin/content`
+- `POST /api/admin/content`
+- `POST /api/admin/content/expire`
+
+## Local Run
+
+From the repository root:
+
+```bash
+node common/scripts/install-run-rush.js build --to @kraigwalker/kraig-social-gateway
+cd apps/gateway
+node lib/index.js
 ```
 
-A **content item** is your author-facing unit: article, page, demo, interactive module.
+The gateway listens on `http://localhost:3001` by default.
 
-A **module** is the executable JS/CSS/static bundle emitted by the build.
+## Development Commands
 
-A **release** is a published package of one or more content items/modules.
+Run commands from this folder:
 
-A **variant** is a concrete implementation that can be selected by rules.
+```bash
+rushx build
+rushx test
+rushx typecheck
+rushx lint
+```
 
-A **drop** is a release with preload/unlock/expiry semantics.
+`rushx test` runs through the shared Heft `test` phase. Vitest is provided by
+`@kraigwalker/heft-toolchain`; do not add project-local `vitest` or `vite` dependencies for this
+service.
+
+## Local Data
+
+The gateway creates local demo state on demand:
+
+- `.kraig-social-data/admin-content.json`
+- `.kraig-social-data/keys.json`
+- `.kraig-social-data/audit.jsonl`
+- `dist/mf/content/payloads/*`
+
+These files are intentionally local runtime artifacts and are ignored by git. `keys.json` contains
+demo key material and must never be treated as production secret storage.
+
+## Core Terms
+
+```ts
+type ContentId = string;
+type ModuleId = string;
+type ReleaseId = string;
+type VariantId = string;
+type RingId = 'dev' | 'friends' | 'public';
+type ClientId = string;
+```
+
+- A content item is the author-facing unit: article, page, demo, or module.
+- A module is executable JavaScript served through the gateway registry.
+- A release is a published package of content or modules.
+- A variant is a concrete implementation selected by decision rules.
+- A drop is a release with preload, unlock, and expiry semantics.
+
+## Maintainer Notes
+
+- `src/services/local-data.ts` is deliberately fixture-backed for localhost. Replace it with a DB
+  and object store before production hosting.
+- `src/services/decision-engine.ts` should remain deterministic for a given `clientId`, ring, and
+  ruleset.
+- Unlock responses are `Cache-Control: no-store`; keep key material out of logs.
+- Browser-delivered keys enforce timing and product experience, not perfect secrecy from a
+  determined client after unlock.
+- New gateway routes should use shared contracts from `@kraigwalker/kraig-social-content-sdk`
+  whenever the browser app or workers consume their payloads.

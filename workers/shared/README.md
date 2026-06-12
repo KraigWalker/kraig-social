@@ -1,70 +1,45 @@
 # Kraig Social Shared Worker
 
-Standalone SharedWorker bundle for `@kraigwalker/kraig-social`.
+Standalone SharedWorker bundle for cross-tab coordination experiments in Kraig Social.
 
-This package is maintained as its own Rush project so the SharedWorker can have an independent source tree, build output, typecheck, and dependency graph while still being released with the main `kraig-social` app.
+## Current Behavior
 
-## Scripts
+The worker accepts `connect` events, starts each connected port, and echoes incoming messages back
+with a `kraig-social:shared-worker:message` envelope. This keeps the app wiring testable while the
+delivery platform evolves.
 
-- `rushx build` emits `dist/shared-worker.js`.
-- `rushx typecheck` validates the worker TypeScript project.
-- `rushx lint` runs ESLint for the worker source.
+## Intended Use
 
-The scaffold currently echoes messages back through each connected port so the app can verify wiring before a richer worker protocol is added.
+Future iterations can use this worker for:
 
-## Monorepo release policy
+- sharing gateway decision state across tabs
+- coalescing manifest polling
+- coordinating content unlock attempts
+- broadcasting developer-signal status to multiple open windows
 
-This package belongs to the Rush version policy named `kraig-social`.
+Keep the protocol explicit and versioned before the worker becomes stateful.
 
-The policy is configured in `common/config/rush/version-policies.json` and attached in `rush.json` to:
+## Development Commands
 
-- `@kraigwalker/kraig-social`
-- `@kraigwalker/kraig-social-service-worker`
-- `@kraigwalker/kraig-social-shared-worker`
-
-The policy uses `lockStepVersion`, which means these packages should move through release versions together. Do not manually edit the `version` field in this package's `package.json` for a release. Rush owns release version changes through the version policy.
-
-## Releasing changes
-
-For normal changes to this worker:
-
-1. Make the source change in `workers/shared`.
-2. Run validation from the repo root:
+Run commands from this folder:
 
 ```bash
-rush build --to @kraigwalker/kraig-social
+rushx build
+rushx typecheck
+rushx lint
 ```
 
-3. If the change affects runtime behavior, add a Rush change file:
+This project uses `@kraigwalker/heft-worker-rig`. Vite is provided by the rig/toolchain, not by
+this package.
 
-```bash
-rush change
-```
+## Maintainer Notes
 
-4. When prompted, choose the affected worker package and the appropriate change type. Because this project is part of the `kraig-social` lock-step policy, the resulting release version is coordinated with the app and the service worker.
+- Avoid storing secret material in the SharedWorker. Timed unlock keys belong in the ServiceWorker
+  flow and should stay short-lived.
+- Add tests before introducing persistent state or cross-tab consensus behavior.
+- Keep generated `dist/` output out of source control unless repo policy changes.
 
-For release preparation:
+## Release Policy
 
-1. Confirm `common/config/rush/version-policies.json` has the intended `nextBump` for the `kraig-social` policy.
-2. Run the repo's normal Rush versioning step from the release branch:
-
-```bash
-rush version
-```
-
-3. Review the generated version and changelog changes before committing them.
-4. Run the release build:
-
-```bash
-rush build --to @kraigwalker/kraig-social
-```
-
-The web app depends on this package using `workspace:*`, so Rush builds this worker before the app when building to `@kraigwalker/kraig-social`.
-
-## Release checklist
-
-- Do not publish or version this worker separately from the `kraig-social` policy.
-- Do not manually edit package versions for release bumps.
-- Keep generated `dist/` output out of source control unless the repo policy changes.
-- Commit any Rush-generated lockfile or repo-state updates from `rush update`.
-- Include a change file for runtime behavior changes so release notes explain why the worker version changed.
+This package participates in the `kraig-social` Rush lock-step version policy with the app and
+service worker. Do not manually edit the package version for releases.

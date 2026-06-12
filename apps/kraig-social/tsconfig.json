@@ -1,6 +1,12 @@
 {
   "extends": "@kraigwalker/heft-vite-app-rig/profiles/default/tsconfig.json",
-  "include": ["**/*", "**/.server/**/*", "**/.client/**/*", ".react-router/types/**/*"],
+  "include": [
+    "**/*",
+    "**/.server/**/*",
+    "**/.client/**/*",
+    ".react-router/types/**/*",
+    "../../rigs/heft-vite-app-rig/profiles/default/vite-env.d.ts"
+  ],
   "compilerOptions": {
     "rootDirs": [".", "./.react-router/types"],
     "paths": {

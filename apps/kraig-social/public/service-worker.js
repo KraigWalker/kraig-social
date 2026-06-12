@@ -1,35 +1,8 @@
-const serviceWorker = self as unknown as ServiceWorkerGlobalScope;
-
 const ENCRYPTED_CACHE = 'kraig-social-encrypted-bundles-v1';
 const DECRYPTED_CACHE = 'kraig-social-decrypted-content-v1';
 const MODULE_CACHE = 'kraig-social-mf-assets-v1';
 
-interface ManifestEntryMessage {
-  type: 'CONTENT_MANIFEST';
-  gatewayOrigin: string;
-  entries: Array<{
-    contentId: string;
-    releaseId: string;
-    variantId: string;
-    action: string;
-    route: string;
-    encrypted?: {
-      algorithm: 'AES-GCM';
-      iv: string;
-      ciphertextUrl: string;
-    };
-    encryptedPayloadUrl?: string;
-  }>;
-}
-
-interface UnlockKeyMessage {
-  type: 'MF_UNLOCK_KEY';
-  gatewayOrigin: string;
-  key: string;
-  entry: ManifestEntryMessage['entries'][number];
-}
-
-function fromBase64Url(value: string): Uint8Array {
+function fromBase64Url(value) {
   const normalized = value.replaceAll('-', '+').replaceAll('_', '/');
   const padded = normalized.padEnd(Math.ceil(normalized.length / 4) * 4, '=');
   return new Uint8Array(
@@ -39,7 +12,7 @@ function fromBase64Url(value: string): Uint8Array {
   );
 }
 
-function encryptedUrl(entry: ManifestEntryMessage['entries'][number], gatewayOrigin: string): string | undefined {
+function encryptedUrl(entry, gatewayOrigin) {
   const path = entry.encrypted?.ciphertextUrl ?? entry.encryptedPayloadUrl;
   if (!path) {
     return undefined;
@@ -47,35 +20,32 @@ function encryptedUrl(entry: ManifestEntryMessage['entries'][number], gatewayOri
   return path.startsWith('http') ? path : `${gatewayOrigin}${path}`;
 }
 
-function decryptedUrl(entry: ManifestEntryMessage['entries'][number]): string {
+function decryptedUrl(entry) {
   return `/__kraig/decrypted/${encodeURIComponent(entry.releaseId)}/${encodeURIComponent(entry.variantId)}`;
 }
 
-serviceWorker.addEventListener('install', () => {
-  serviceWorker.skipWaiting();
+self.addEventListener('install', () => {
+  self.skipWaiting();
 });
 
-serviceWorker.addEventListener('activate', (event) => {
-  event.waitUntil(serviceWorker.clients.claim());
+self.addEventListener('activate', (event) => {
+  event.waitUntil(self.clients.claim());
 });
 
-async function handleRuntimeModuleRequest(request: Request): Promise<Response> {
+async function handleRuntimeModuleRequest(request) {
   const cache = await caches.open(MODULE_CACHE);
   const cached = await cache.match(request);
-
   if (cached) {
     return cached;
   }
-
   const response = await fetch(request);
   if (response.ok) {
     await cache.put(request, response.clone());
   }
-
   return response;
 }
 
-async function preloadContentManifest(message: ManifestEntryMessage): Promise<void> {
+async function preloadContentManifest(message) {
   const encryptedCache = await caches.open(ENCRYPTED_CACHE);
   const decryptedCache = await caches.open(DECRYPTED_CACHE);
 
@@ -91,12 +61,7 @@ async function preloadContentManifest(message: ManifestEntryMessage): Promise<vo
       }
 
       const url = encryptedUrl(entry, message.gatewayOrigin);
-      if (!url) {
-        return;
-      }
-
-      const cached = await encryptedCache.match(url);
-      if (cached) {
+      if (!url || (await encryptedCache.match(url))) {
         return;
       }
 
@@ -108,7 +73,7 @@ async function preloadContentManifest(message: ManifestEntryMessage): Promise<vo
   );
 }
 
-async function storeUnlockKey(message: UnlockKeyMessage): Promise<void> {
+async function storeUnlockKey(message) {
   if (!message.entry.encrypted) {
     return;
   }
@@ -121,14 +86,14 @@ async function storeUnlockKey(message: UnlockKeyMessage): Promise<void> {
   const encryptedCache = await caches.open(ENCRYPTED_CACHE);
   const encryptedResponse = (await encryptedCache.match(url)) ?? (await fetch(url));
   const encryptedBytes = await encryptedResponse.arrayBuffer();
-  const cryptoKey = await serviceWorker.crypto.subtle.importKey(
+  const cryptoKey = await self.crypto.subtle.importKey(
     'raw',
     fromBase64Url(message.key),
     'AES-GCM',
     false,
     ['decrypt']
   );
-  const clearBytes = await serviceWorker.crypto.subtle.decrypt(
+  const clearBytes = await self.crypto.subtle.decrypt(
     { name: 'AES-GCM', iv: fromBase64Url(message.entry.encrypted.iv) },
     cryptoKey,
     encryptedBytes
@@ -146,7 +111,7 @@ async function storeUnlockKey(message: UnlockKeyMessage): Promise<void> {
   );
 }
 
-serviceWorker.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
 
   if (url.pathname.startsWith('/mf/runtime/')) {
@@ -168,8 +133,8 @@ serviceWorker.addEventListener('fetch', (event) => {
   }
 });
 
-serviceWorker.addEventListener('message', (event) => {
-  const message = event.data as ManifestEntryMessage | UnlockKeyMessage | undefined;
+self.addEventListener('message', (event) => {
+  const message = event.data;
 
   if (message?.type === 'CONTENT_MANIFEST') {
     event.waitUntil(preloadContentManifest(message));

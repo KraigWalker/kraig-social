@@ -112,7 +112,11 @@ async function runTool(tool, options, config) {
       break;
 
     case 'vite-build':
-      await spawnAsync('vite', ['build']);
+      await spawnAsync('vite', ['build'], { preferToolchain: true });
+      break;
+
+    case 'vitest':
+      await spawnAsync('vitest', ['run'], { preferToolchain: true });
       break;
 
     case 'tsgo-build':

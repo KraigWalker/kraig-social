@@ -8,7 +8,10 @@ Heft rig for Vite-built libraries and future per-component UI packages. It exten
 - `heft run --only build -- --clean` deletes `dist`, emits declarations with `tsgo`, then runs
   `vite build`.
 - `heft run --only typecheck` runs `tsgo --noEmit`.
+- `heft run --only test` runs `vitest run` through the shared toolchain.
 - `heft run --only lint`, `format`, and `fix` come from the base rig.
+- The rig/toolchain own Vite and Vitest binaries. Library projects should not add direct `vite` or
+  `vitest` dependencies just to build or test.
 - The library owns its `vite.config.ts`, including library entry, formats, file names, externals,
   and sourcemap policy.
 - `tsgo` concurrency is controlled by `@kraigwalker/heft-toolchain`:
@@ -27,9 +30,7 @@ Heft rig for Vite-built libraries and future per-component UI packages. It exten
 Example Vite config:
 
 ```ts
-import { defineConfig } from 'vite';
-
-export default defineConfig({
+export default {
   build: {
     emptyOutDir: false,
     lib: {
@@ -41,7 +42,7 @@ export default defineConfig({
     sourcemap: true,
     target: 'es2022',
   },
-});
+};
 ```
 
 ## Usage
@@ -53,8 +54,7 @@ Add dev dependencies:
   "devDependencies": {
     "@kraigwalker/heft-toolchain": "workspace:*",
     "@kraigwalker/heft-vite-library-rig": "workspace:*",
-    "@rushstack/heft": "1.2.17",
-    "vite": "8.0.16"
+    "@rushstack/heft": "1.2.17"
   }
 }
 ```
@@ -77,6 +77,7 @@ Use these package scripts:
     "fix": "heft run --only fix",
     "format": "heft run --only format",
     "lint": "heft run --only lint",
+    "test": "heft run --only test",
     "typecheck": "heft run --only typecheck",
     "_phase:build": "heft run --only build -- --clean",
     "_phase:fix": "heft run --only fix",
@@ -104,4 +105,3 @@ build and typecheck; larger libraries can use `2`.
   ]
 }
 ```
-
