@@ -321,5 +321,8 @@
     //   "do-something": "echo Also not a good practice"
     // },
     // "pnpm": { "futurePnpmFeature": true }
+  },
+  "globalAllowBuilds": {
+    "esbuild": true
   }
 }
