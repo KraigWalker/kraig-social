@@ -54,7 +54,26 @@
       // Add the IDs of extensions you want installed when the container is created.
       "extensions": ["openai.chatgpt", "ms-azuretools.vscode-docker", "oxc.oxc-vscode"],
       "settings": {
-        "terminal.integrated.defaultProfile.linux": "zsh"
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "editor.defaultFormatter": "oxc.oxc-vscode",
+        "editor.formatOnSave": true,
+        "oxc.fmt.configPath": "oxfmt.config.ts",
+        "oxc.path.oxfmt": "common/autoinstallers/oxc-autoinstaller/node_modules/.bin/oxfmt",
+        "oxc.path.oxlint": "common/autoinstallers/oxc-autoinstaller/node_modules/.bin/oxlint",
+        "oxc.path.tsgolint": "common/autoinstallers/oxc-autoinstaller/node_modules/.bin/tsgolint",
+        "oxc.useExecPath": false,
+        "[javascript]": {
+          "editor.defaultFormatter": "oxc.oxc-vscode"
+        },
+        "[javascriptreact]": {
+          "editor.defaultFormatter": "oxc.oxc-vscode"
+        },
+        "[typescript]": {
+          "editor.defaultFormatter": "oxc.oxc-vscode"
+        },
+        "[typescriptreact]": {
+          "editor.defaultFormatter": "oxc.oxc-vscode"
+        }
       },
       "mcp": {
           "servers": {
