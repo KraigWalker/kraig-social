@@ -1,0 +1,30 @@
+{
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "editor.formatOnSave": true,
+  "oxc.fmt.configPath": "oxfmt.config.ts",
+  "oxc.path.oxfmt": "common/autoinstallers/oxc-autoinstaller/node_modules/.bin/oxfmt",
+  "oxc.path.oxlint": "common/autoinstallers/oxc-autoinstaller/node_modules/.bin/oxlint",
+  "oxc.path.tsgolint": "common/autoinstallers/oxc-autoinstaller/node_modules/.bin/tsgolint",
+  "oxc.useExecPath": false,
+  "files.associations": {
+    "rush.json": "jsonc",
+    "**/rush.json": "jsonc",
+    "**/rigs/**/tsconfig.json": "plaintext"
+  },
+  // UI Setting:
+  // TypeScript (Native Preview) > Use Tsgo
+  "js/ts.experimental.useTsgo": true,
+  "workbench.browser.openLocalhostLinks": false,
+  "[javascript]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  }
+}

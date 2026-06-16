@@ -95,11 +95,6 @@ jspm_packages/
 .idea/
 *.iml
 
-# Visual Studio Code
-.vscode/
-!.vscode/tasks.json
-!.vscode/launch.json
-
 # Rush temporary files
 common/deploy/
 common/temp/
