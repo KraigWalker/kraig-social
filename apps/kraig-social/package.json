@@ -21,25 +21,25 @@
   "dependencies": {
     "@kraigwalker/kraig-social-service-worker": "workspace:*",
     "@kraigwalker/kraig-social-shared-worker": "workspace:*",
-    "@react-router/express": "7.16.0",
-    "@react-router/node": "7.16.0",
+    "@react-router/express": "7.18.0",
+    "@react-router/node": "7.18.0",
     "@typescript/native-preview": "7.0.0-dev.20260604.1",
     "express": "5.2.1",
-    "isbot": "5.1.40",
+    "isbot": "5.1.43",
     "react": "19.2.7",
     "react-dom": "19.2.7",
-    "react-router": "7.16.0"
+    "react-router": "7.18.0"
   },
   "devDependencies": {
     "@kraigwalker/heft-toolchain": "workspace:*",
     "@kraigwalker/heft-vite-app-rig": "workspace:*",
-    "@react-router/dev": "7.16.0",
+    "@react-router/dev": "7.18.0",
     "@testing-library/dom": "10.4.1",
     "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "16.3.2",
-    "@rushstack/heft": "1.2.17",
+    "@rushstack/heft": "1.2.19",
     "@types/node": "24.10.3",
-    "@types/react": "19.2.16",
+    "@types/react": "19.2.17",
     "@types/react-dom": "19.2.3",
     "globals": "17.6.0"
   }
