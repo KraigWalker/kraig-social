@@ -1,12 +1,13 @@
 # Dev Container Image
 
-This Rush project owns the build-time definition for the repository's
+This Rush project owns the complete reusable definition for the repository's
 development container. GitHub Actions builds `devcontainer.json`, applies its
-Dev Container Features, and publishes the result to GitHub Container Registry.
+Dev Container Features, embeds supported runtime settings as image metadata,
+and publishes the result to GitHub Container Registry.
 
-The developer-facing configuration in `.devcontainer/devcontainer.json`
-references the resulting pre-built image and owns workspace-specific settings
-such as mounts, ports, editor extensions, and the post-create command.
+The developer-facing configuration in `.devcontainer/devcontainer.json` only
+references the resulting pre-built image. Dev Container clients merge the
+image metadata into that local configuration when creating the container.
 
 Build locally:
 

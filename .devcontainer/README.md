@@ -10,9 +10,10 @@ ghcr.io/kraigwalker/kraig-social-devcontainer:latest
 ```
 
 The build definition lives in the Rush project at
-`tools/devcontainer-image`. The local configuration only references the
-published image, which keeps container startup fast and prevents local feature
-installation and image compilation.
+`tools/devcontainer-image`, including its Dockerfile, setup script, Features,
+cache mounts, ports, lifecycle command, and editor customizations. The local
+configuration only references the published image, which keeps the
+monorepo-specific entry point minimal and container startup fast.
 
 ## Start
 
