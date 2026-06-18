@@ -12,10 +12,9 @@
   "mounts": [
     "source=kraig-social-npm-cache,target=/home/node/.npm,type=volume",
     "source=kraig-social-pnpm-store,target=/home/node/.pnpm-store,type=volume",
-    "source=kraig-social-rush-home,target=/home/node/.rush,type=volume",
-    "source=kraig-social-common-temp,target=/workspaces/kraig-social/common/temp,type=volume"
+    "source=kraig-social-rush-home,target=/home/node/.rush,type=volume"
   ],
-  "postCreateCommand": "rush install",
+  "postCreateCommand": "rush install --subspace default && rush install-autoinstaller --name oxc-autoinstaller",
   "forwardPorts": [5173, 3000, 3001],
   "portsAttributes": {
     "5173": {

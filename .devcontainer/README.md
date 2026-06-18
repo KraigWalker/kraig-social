@@ -22,6 +22,7 @@ installation and image compilation.
 
 ```bash
 rush install --subspace default
+rush install-autoinstaller --name oxc-autoinstaller
 ```
 
 If the package is private, authenticate Docker before opening the repository:
@@ -57,7 +58,10 @@ This container uses Docker volumes for Rush-related caches so generated files an
 - `kraig-social-npm-cache` -> `/home/node/.npm`
 - `kraig-social-pnpm-store` -> `/home/node/.pnpm-store`
 - `kraig-social-rush-home` -> `/home/node/.rush`
-- `kraig-social-common-temp` -> `/workspaces/kraig-social/common/temp`
+
+`common/temp` intentionally stays on the workspace filesystem. Rush moves
+autoinstaller directories through its recycler there, which requires the source
+and destination to be on the same filesystem.
 
 ## Common Commands
 
