@@ -216,6 +216,10 @@ importers:
       vite:
         specifier: 8.0.16
         version: 8.0.16(@types/node@24.10.3)
+    devDependencies:
+      '@types/node':
+        specifier: '24'
+        version: 24.10.3
 
   ../../../rigs/heft-vite-library-rig:
     dependencies:
