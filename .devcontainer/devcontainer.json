@@ -29,7 +29,8 @@
   "mounts": [
     "source=kraig-social-npm-cache,target=/home/node/.npm,type=volume",
     "source=kraig-social-pnpm-store,target=/home/node/.pnpm-store,type=volume",
-    "source=kraig-social-rush-home,target=/home/node/.rush,type=volume"
+    "source=kraig-social-rush-home,target=/home/node/.rush,type=volume",
+    "source=kraig-social-common-temp,target=/workspaces/kraig-social/common/temp,type=volume"
   ],
   "postCreateCommand": "rush install",
   "forwardPorts": [5173, 3000, 3001],
@@ -63,6 +64,12 @@
         "oxc.path.oxlint": "common/autoinstallers/oxc-autoinstaller/node_modules/.bin/oxlint",
         "oxc.path.tsgolint": "common/autoinstallers/oxc-autoinstaller/node_modules/.bin/tsgolint",
         "oxc.useExecPath": false,
+        "[json]": {
+          "editor.defaultFormatter": "oxc.oxc-vscode"
+        },
+        "[jsonc]": {
+          "editor.defaultFormatter": "oxc.oxc-vscode"
+        },
         "[javascript]": {
           "editor.defaultFormatter": "oxc.oxc-vscode"
         },

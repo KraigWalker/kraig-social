@@ -12,7 +12,14 @@ This repository has a Dev Container for local development. It is separate from
 ```bash
 rush install --subspace default
 ```
+## Dev Container performance
 
+This container uses Docker volumes for Rush-related caches so generated files and package manager state are stored on fast container storage instead of directly in the mounted repo workspace:
+
+- `kraig-social-npm-cache` -> `/home/node/.npm`
+- `kraig-social-pnpm-store` -> `/home/node/.pnpm-store`
+- `kraig-social-rush-home` -> `/home/node/.rush`
+- `kraig-social-common-temp` -> `/workspaces/kraig-social/common/temp`
 ## Common Commands
 
 The Dev Container adds `rush`, `rushx`, and `rush-pnpm` wrappers to `PATH`.

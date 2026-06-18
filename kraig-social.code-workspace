@@ -1,8 +1,8 @@
 {
   "folders": [
     {
-      "path": "."
-    }
+      "path": ".",
+    },
   ],
   "settings": {
     "editor.defaultFormatter": "oxc.oxc-vscode",
@@ -13,19 +13,25 @@
     "oxc.path.tsgolint": "common/autoinstallers/oxc-autoinstaller/node_modules/.bin/tsgolint",
     "oxc.useExecPath": false,
     "files.associations": {
-      "**/rigs/**/tsconfig.json": "plaintext"
+      "**/rigs/**/tsconfig.json": "plaintext",
+    },
+    "[json]": {
+      "editor.defaultFormatter": "oxc.oxc-vscode",
+    },
+    "[jsonc]": {
+      "editor.defaultFormatter": "oxc.oxc-vscode",
     },
     "[javascript]": {
-      "editor.defaultFormatter": "oxc.oxc-vscode"
+      "editor.defaultFormatter": "oxc.oxc-vscode",
     },
     "[javascriptreact]": {
-      "editor.defaultFormatter": "oxc.oxc-vscode"
+      "editor.defaultFormatter": "oxc.oxc-vscode",
     },
     "[typescript]": {
-      "editor.defaultFormatter": "oxc.oxc-vscode"
+      "editor.defaultFormatter": "oxc.oxc-vscode",
     },
     "[typescriptreact]": {
-      "editor.defaultFormatter": "oxc.oxc-vscode"
-    }
-  }
+      "editor.defaultFormatter": "oxc.oxc-vscode",
+    },
+  },
 }

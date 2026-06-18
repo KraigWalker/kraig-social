@@ -16,6 +16,12 @@
   // TypeScript (Native Preview) > Use Tsgo
   "js/ts.experimental.useTsgo": true,
   "workbench.browser.openLocalhostLinks": false,
+  "[json]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
   "[javascript]": {
     "editor.defaultFormatter": "oxc.oxc-vscode"
   },
