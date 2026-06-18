@@ -19,8 +19,11 @@
     "_phase:typecheck": "heft run --only typecheck"
   },
   "dependencies": {
+    "@kraigwalker/kraig-social-content-sdk": "workspace:*",
     "@kraigwalker/kraig-social-service-worker": "workspace:*",
     "@kraigwalker/kraig-social-shared-worker": "workspace:*",
+    "@module-federation/runtime": "2.5.1",
+    "@module-federation/runtime-core": "2.5.1",
     "@react-router/express": "7.18.0",
     "@react-router/node": "7.18.0",
     "@typescript/native-preview": "7.0.0-dev.20260604.1",
@@ -33,6 +36,7 @@
   "devDependencies": {
     "@kraigwalker/heft-toolchain": "workspace:*",
     "@kraigwalker/heft-vite-app-rig": "workspace:*",
+    "@module-federation/vite": "1.16.8",
     "@react-router/dev": "7.18.0",
     "@testing-library/dom": "10.4.1",
     "@testing-library/jest-dom": "6.9.1",
@@ -41,6 +45,8 @@
     "@types/node": "24.10.3",
     "@types/react": "19.2.17",
     "@types/react-dom": "19.2.3",
-    "globals": "17.6.0"
+    "globals": "17.6.0",
+    "typescript": "5.9.3",
+    "vite": "8.0.16"
   }
 }

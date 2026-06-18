@@ -490,6 +490,13 @@
       "tags": []
     },
     {
+      "packageName": "@kraigwalker/kraig-social-dispatch-panel",
+      "projectFolder": "apps/dispatch-panel",
+      "reviewCategory": "production",
+      "versionPolicyName": "kraig-social",
+      "tags": ["frontend-team"]
+    },
+    {
       "packageName": "@kraigwalker/kraig-social-shared-worker",
       "projectFolder": "workers/shared",
       "reviewCategory": "production",

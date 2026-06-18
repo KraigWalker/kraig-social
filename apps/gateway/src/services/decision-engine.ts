@@ -61,13 +61,11 @@ export async function resolveDecision(request: DecisionRequest): Promise<Decisio
     variantId,
     releaseId: `dispatch-panel-${moduleEntry.version}`,
     moduleVersion: moduleEntry.version,
-    entryUrl: moduleEntry.entryUrl,
-    assets: moduleEntry.assets,
-    preloadPlan: moduleEntry.assets,
+    remote: moduleEntry,
     reason,
     ttlSeconds: ring === 'public' ? 60 : 10,
     serverNow: new Date().toISOString(),
-    hotReloadCapable: moduleEntry.hotReloadCapable,
+    hotReloadCapable: true,
   };
 
   await writeAuditLog({

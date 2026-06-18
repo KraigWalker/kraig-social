@@ -31,10 +31,12 @@ From the repository root, install dependencies once:
 node common/scripts/install-run-rush.js update --subspace default
 ```
 
-Build the gateway and app:
+Build the remote, gateway, and app:
 
 ```bash
-node common/scripts/install-run-rush.js build --to @kraigwalker/kraig-social --to @kraigwalker/kraig-social-gateway
+node common/scripts/install-run-rush.js build --to @kraigwalker/kraig-social-dispatch-panel
+node common/scripts/install-run-rush.js build --to @kraigwalker/kraig-social-gateway
+node common/scripts/install-run-rush.js build --to @kraigwalker/kraig-social
 ```
 
 Start the gateway in one terminal:
@@ -52,6 +54,10 @@ GATEWAY_ORIGIN=http://localhost:3001 HOST=0.0.0.0 PORT=3000 node server/index.js
 ```
 
 Open `http://localhost:3000/lab`.
+
+The gateway serves the remote's browser and Node SSR manifests from the independently built
+`apps/dispatch-panel/dist/releases` tree. The host registers the gateway-selected immutable remote
+at runtime and renders the same release during SSR and hydration.
 
 ## Development Commands
 
@@ -82,6 +88,8 @@ this before production hosting.
 
 - Keep durable public content SSR-friendly. Client-only federation should enhance, not replace,
   indexable routes.
+- The delivery lab intentionally uses federated SSR. Remote failures must stay inside its loading
+  and error fallback instead of failing the document response.
 - Locked or scheduled content should not be included in the sitemap until the manifest marks it
   published and indexable.
 - `/service-worker.js` is a committed public demo worker. The package worker source lives in

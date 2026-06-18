@@ -67,19 +67,16 @@ export type ContentConfig = z.infer<typeof contentConfigSchema>;
 export type ReleaseConfig = z.infer<typeof releaseConfigSchema>;
 export type VariantConfig = z.infer<typeof variantConfigSchema>;
 
-export const moduleRegistryEntrySchema = z.object({
-  moduleId: z.string(),
+export const federatedRemoteReferenceSchema = z.object({
+  name: z.string(),
   version: z.string(),
-  entryUrl: z.string(),
-  assets: z.array(z.string()).default([]),
-  integrity: z.string().optional(),
-  capabilities: z.array(z.string()).default([]),
-  compatibleShellRange: z.string(),
-  hotReloadCapable: z.boolean().default(false),
-  status: z.enum(['draft', 'active', 'expired', 'revoked']),
+  expose: z.literal('./DispatchPanel'),
+  mountExpose: z.literal('./mount'),
+  browserManifestUrl: z.string(),
+  serverManifestUrl: z.string(),
 });
 
-export type ModuleRegistryEntry = z.infer<typeof moduleRegistryEntrySchema>;
+export type FederatedRemoteReference = z.infer<typeof federatedRemoteReferenceSchema>;
 
 export const decisionRequestSchema = z.object({
   contentId: z.string().optional(),
@@ -99,9 +96,7 @@ export const decisionResponseSchema = z.object({
   variantId: z.string(),
   releaseId: z.string(),
   moduleVersion: z.string(),
-  entryUrl: z.string(),
-  assets: z.array(z.string()).default([]),
-  preloadPlan: z.array(z.string()).default([]),
+  remote: federatedRemoteReferenceSchema,
   reason: z.string(),
   ttlSeconds: z.number(),
   serverNow: z.string(),

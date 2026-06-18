@@ -281,6 +281,22 @@ h2 {
   min-height: 320px;
 }
 
+.remote-fallback {
+  min-height: 288px;
+  display: grid;
+  align-content: center;
+  gap: 10px;
+  padding: 18px;
+  border: 1px dashed rgba(255, 255, 255, 0.22);
+  border-radius: 8px;
+  background: rgba(8, 14, 24, 0.72);
+}
+
+.remote-fallback h2,
+.remote-fallback p {
+  margin: 0;
+}
+
 .status-box,
 .drop-status {
   display: grid;

@@ -1,10 +1,17 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import {
+  Component,
+  Suspense,
+  use,
+  useEffect,
+  useMemo,
+  useState,
+  type ErrorInfo,
+  type ReactNode,
+} from 'react';
+import { useLoaderData } from 'react-router';
 import type { Route } from './+types/lab';
-import { gatewayOrigin, gatewayUrl, resolveDecision, type DecisionResponse } from '../gateway';
-
-type RemoteModule = {
-  mount: (target: HTMLElement, decision: DecisionResponse) => void | (() => void);
-};
+import { gatewayOrigin, resolveDecision, type DecisionResponse } from '../gateway';
+import { loadDispatchPanel } from '../federation';
 
 export const meta: Route.MetaFunction = () => [
   { title: 'Delivery Lab | Kraig Social' },
@@ -14,6 +21,30 @@ export const meta: Route.MetaFunction = () => [
   },
   { name: 'robots', content: 'noindex' },
 ];
+
+export async function loader({ request }: Route.LoaderArgs) {
+  const url = new URL(request.url);
+  const requestedRing = url.searchParams.get('ring');
+  const ring = ['dev', 'friends', 'public'].includes(requestedRing ?? '')
+    ? requestedRing!
+    : 'dev';
+
+  try {
+    const decision = await resolveDecision({
+      clientId: url.searchParams.get('clientId') ?? 'ssr',
+      ring,
+      contentId: 'home/delivery-lab',
+      moduleId: 'dispatch-panel',
+    });
+    return { decision, ring, error: null };
+  } catch (error) {
+    return {
+      decision: null,
+      ring,
+      error: error instanceof Error ? error.message : 'Gateway decision failed',
+    };
+  }
+}
 
 function getClientId(): string {
   const key = 'kraig-social-client-id';
@@ -26,13 +57,51 @@ function getClientId(): string {
   return next;
 }
 
+function FederatedPanel({ decision }: { decision: DecisionResponse }) {
+  const DispatchPanel = use(loadDispatchPanel(decision.remote));
+  return <DispatchPanel decision={decision} />;
+}
+
+class RemoteErrorBoundary extends Component<
+  { children: ReactNode; fallback: ReactNode },
+  { failed: boolean }
+> {
+  state = { failed: false };
+
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+
+  componentDidCatch(error: Error, info: ErrorInfo) {
+    console.error('Federated dispatch panel failed to render', error, info);
+  }
+
+  render() {
+    return this.state.failed ? this.props.fallback : this.props.children;
+  }
+}
+
+function RemoteFallback({ message }: { message: string }) {
+  return (
+    <section className="remote-fallback" role="status">
+      <p className="system-label">Federated module unavailable</p>
+      <h2>The delivery controls are still online.</h2>
+      <p>{message}</p>
+    </section>
+  );
+}
+
 export default function Lab() {
-  const [ring, setRing] = useState('dev');
-  const [decision, setDecision] = useState<DecisionResponse | null>(null);
-  const [status, setStatus] = useState('Waiting for gateway decision');
+  const loaderData = useLoaderData<typeof loader>();
+  const [ring, setRing] = useState(loaderData.ring);
+  const [decision, setDecision] = useState<DecisionResponse | null>(loaderData.decision);
+  const [status, setStatus] = useState(
+    loaderData.error ??
+      (loaderData.decision
+        ? `Decision ${loaderData.decision.decisionId.slice(0, 8)} selected ${loaderData.decision.variantId}`
+        : 'Waiting for gateway decision')
+  );
   const [signals, setSignals] = useState<string[]>([]);
-  const slotRef = useRef<HTMLDivElement | null>(null);
-  const cleanupRef = useRef<(() => void) | undefined>(undefined);
 
   const clientId = useMemo(() => (typeof window === 'undefined' ? 'ssr' : getClientId()), []);
 
@@ -68,32 +137,6 @@ export default function Lab() {
   useEffect(() => {
     void refreshDecision('ring changed');
   }, [ring]);
-
-  useEffect(() => {
-    if (!decision || !slotRef.current) {
-      return;
-    }
-
-    const activeDecision = decision;
-    let cancelled = false;
-    async function loadRemote() {
-      try {
-        cleanupRef.current?.();
-        const remote = (await import(/* @vite-ignore */ gatewayUrl(activeDecision.entryUrl))) as RemoteModule;
-        if (cancelled || !slotRef.current) {
-          return;
-        }
-        cleanupRef.current = remote.mount(slotRef.current, activeDecision) ?? undefined;
-      } catch (error) {
-        setStatus(error instanceof Error ? error.message : 'Remote module load failed');
-      }
-    }
-
-    void loadRemote();
-    return () => {
-      cancelled = true;
-    };
-  }, [decision]);
 
   useEffect(() => {
     const source = new EventSource(`${gatewayOrigin}/api/signals/stream`);
@@ -156,7 +199,20 @@ export default function Lab() {
         </aside>
 
         <section className="remote-stage" aria-label="Federated module preview">
-          <div ref={slotRef} className="remote-slot" />
+          <div className="remote-slot">
+            {decision ? (
+              <RemoteErrorBoundary
+                key={decision.remote.name}
+                fallback={<RemoteFallback message="The selected release could not be loaded." />}
+              >
+                <Suspense fallback={<RemoteFallback message="Loading the selected release…" />}>
+                  <FederatedPanel decision={decision} />
+                </Suspense>
+              </RemoteErrorBoundary>
+            ) : (
+              <RemoteFallback message={loaderData.error ?? 'No release decision is available yet.'} />
+            )}
+          </div>
         </section>
       </section>
 

@@ -13,6 +13,8 @@ it includes the shared OXC lint, format, and fix phases.
   compiler options.
 - The rig/toolchain own Vite and Vitest binaries. App projects should not add direct `vite` or
   `vitest` dependencies just to build or test.
+- If an app needs additional Vite plugins, it may provide `vite.app.config.ts`; the rig merges that
+  file with the shared React Router configuration.
 - The app keeps ownership of routes, application source, static assets, and project-root-relative
   TypeScript include/path settings.
 - `tsgo` concurrency is controlled by `@kraigwalker/heft-toolchain`:

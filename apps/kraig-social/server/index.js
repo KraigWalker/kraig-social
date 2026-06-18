@@ -1,12 +1,14 @@
 import express from 'express';
 import { createRequestHandler } from '@react-router/express';
+import { createRequire } from 'node:module';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import * as build from '../build/server/index.js';
-
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const buildDir = path.resolve(__dirname, '../build/client');
+const require = createRequire(import.meta.url);
+globalThis.__KRAIG_MF_RUNTIME_PATH__ = require.resolve('@module-federation/runtime');
+const build = await import('../build/server/index.js');
 
 const app = express();
 const gatewayOrigin = process.env.GATEWAY_ORIGIN ?? 'http://localhost:3001';

@@ -194,8 +194,7 @@
    * PNPM documentation: https://pnpm.io/package_json#pnpmoverrides
    */
   "globalOverrides": {
-    "vite-node>vite": "8.0.16",
-    "typescript": "npm:@typescript/native-preview@7.0.0-dev.20260604.1"
+    "vite-node>vite": "8.0.16"
   },
 
   /**

@@ -1,0 +1,38 @@
+{
+  "name": "@kraigwalker/kraig-social-dispatch-panel",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-releases.mjs",
+    "dev": "vite --host",
+    "fix": "heft run --only fix",
+    "format": "heft run --only format",
+    "lint": "heft run --only lint",
+    "test": "heft run --only test",
+    "typecheck": "heft run --only typecheck",
+    "_phase:build": "node scripts/build-releases.mjs",
+    "_phase:fix": "heft run --only fix",
+    "_phase:format": "heft run --only format",
+    "_phase:lint": "heft run --only lint",
+    "_phase:typecheck": "heft run --only typecheck"
+  },
+  "dependencies": {
+    "react": "19.2.7",
+    "react-dom": "19.2.7"
+  },
+  "devDependencies": {
+    "@kraigwalker/heft-toolchain": "workspace:*",
+    "@kraigwalker/heft-vite-library-rig": "workspace:*",
+    "@module-federation/vite": "1.16.8",
+    "@rushstack/heft": "1.2.19",
+    "@typescript/native-preview": "7.0.0-dev.20260604.1",
+    "@types/node": "24.10.3",
+    "@types/react": "19.2.17",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "6.0.2",
+    "typescript": "5.9.3",
+    "vite": "8.0.16",
+    "vitest": "4.1.9"
+  }
+}

@@ -1,7 +1,7 @@
 import type {
   DeliveryManifest,
+  FederatedRemoteReference,
   ManifestEntry,
-  ModuleRegistryEntry,
   RingId,
 } from '@kraigwalker/kraig-social-content-sdk';
 import { createHash, randomBytes, webcrypto } from 'node:crypto';
@@ -252,41 +252,27 @@ export async function ensureLocalDemoData(): Promise<void> {
   await writeJsonFile(keysPath, [encrypted.key]);
 }
 
-export async function getModuleRegistry(): Promise<ModuleRegistryEntry[]> {
-  await ensureLocalDemoData();
-  return [
-    {
-      moduleId: 'dispatch-panel',
-      version: '1.0.0',
-      entryUrl: '/mf/remotes/dispatch-panel/1.0.0/remoteEntry.js',
-      assets: [],
-      compatibleShellRange: '>=0.0.0',
-      capabilities: ['mount', 'decision-status'],
-      hotReloadCapable: true,
-      status: 'active',
-    },
-    {
-      moduleId: 'dispatch-panel',
-      version: '1.1.0',
-      entryUrl: '/mf/remotes/dispatch-panel/1.1.0/remoteEntry.js',
-      assets: [],
-      compatibleShellRange: '>=0.0.0',
-      capabilities: ['mount', 'decision-status', 'live-signal-meter'],
-      hotReloadCapable: true,
-      status: 'active',
-    },
-  ];
+function remoteReference(version: string): FederatedRemoteReference {
+  const name = `dispatch_panel_${version.replaceAll('.', '_')}`;
+  return {
+    name,
+    version,
+    expose: './DispatchPanel',
+    mountExpose: './mount',
+    browserManifestUrl: `/mf/releases/${version}/browser/mf-manifest.json`,
+    serverManifestUrl: `/mf/releases/${version}/server/mf-manifest.json`,
+  };
 }
 
 export async function getLatestActiveModule(
   moduleId: string,
   ring: RingId
-): Promise<ModuleRegistryEntry> {
-  const registry = (await getModuleRegistry()).filter(
-    (entry) => entry.moduleId === moduleId && entry.status === 'active'
-  );
+): Promise<FederatedRemoteReference> {
+  if (moduleId !== 'dispatch-panel') {
+    throw new Error(`Unknown federated module: ${moduleId}`);
+  }
   const preferred = ring === 'public' ? '1.0.0' : '1.1.0';
-  return registry.find((entry) => entry.version === preferred) ?? registry[0]!;
+  return remoteReference(preferred);
 }
 
 export async function getDeliveryManifest(): Promise<DeliveryManifest> {
