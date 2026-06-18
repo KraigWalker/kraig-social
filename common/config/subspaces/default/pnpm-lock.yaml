@@ -168,6 +168,8 @@ importers:
         specifier: 8.1.0-beta.0
         version: 8.1.0-beta.0(@types/node@24.10.3)(esbuild@0.27.7)
 
+  ../../../tools/devcontainer-image: {}
+
   ../../../tools/heft-toolchain:
     dependencies:
       jsdom:

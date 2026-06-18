@@ -3,6 +3,17 @@
 This repository has a Dev Container for local development. It is separate from
 `apps/kraig-social/Dockerfile`, which is the production-oriented app image.
 
+The development image is pre-built by GitHub Actions and published to:
+
+```text
+ghcr.io/kraigwalker/kraig-social-devcontainer:latest
+```
+
+The build definition lives in the Rush project at
+`tools/devcontainer-image`. The local configuration only references the
+published image, which keeps container startup fast and prevents local feature
+installation and image compilation.
+
 ## Start
 
 1. Open the repository in VS Code or another Dev Containers-compatible client.
@@ -11,6 +22,32 @@ This repository has a Dev Container for local development. It is separate from
 
 ```bash
 rush install --subspace default
+```
+
+If the package is private, authenticate Docker before opening the repository:
+
+```bash
+echo "$CR_PAT" | docker login ghcr.io -u USERNAME --password-stdin
+```
+
+For anonymous pulls, set the package visibility to public after its first
+publication in GitHub Packages.
+
+## Rebuild the image
+
+The `Build dev container image` workflow runs when the image definition changes
+on `main`, and it can also be started manually. It publishes:
+
+- `latest`
+- the full Git commit SHA
+
+The workflow uses `latest` as a layer cache. To test the image definition
+locally with the Dev Container CLI:
+
+```bash
+npx --yes @devcontainers/cli build \
+  --workspace-folder . \
+  --config tools/devcontainer-image/devcontainer.json
 ```
 
 ## Dev Container performance

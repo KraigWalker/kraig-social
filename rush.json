@@ -441,6 +441,12 @@
       "tags": ["tools"]
     },
     {
+      "packageName": "@kraigwalker/devcontainer-image",
+      "projectFolder": "tools/devcontainer-image",
+      "reviewCategory": "tools",
+      "tags": ["tools"]
+    },
+    {
       "packageName": "@kraigwalker/heft-base-rig",
       "projectFolder": "rigs/heft-base-rig",
       "reviewCategory": "tools",

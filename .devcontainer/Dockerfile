@@ -1,6 +1,9 @@
 ARG VARIANT=24-bookworm
 FROM node:${VARIANT}
 
+LABEL org.opencontainers.image.source="https://github.com/KraigWalker/kraig-social" \
+      org.opencontainers.image.description="Pre-built development container for kraig-social"
+
 ARG USERNAME=node
 ARG NPM_GLOBAL=/usr/local/share/npm-global
 

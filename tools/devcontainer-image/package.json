@@ -1,0 +1,6 @@
+{
+  "name": "@kraigwalker/devcontainer-image",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Build definition for the kraig-social pre-built development container"
+}
