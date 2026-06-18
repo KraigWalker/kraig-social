@@ -148,8 +148,8 @@ importers:
         specifier: workspace:*
         version: link:../heft-base-rig
       '@react-router/dev':
-        specifier: 7.16.0
-        version: 7.16.0(@types/node@24.10.3)(react-router@7.18.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(vite@8.1.0-beta.0(@types/node@24.10.3))
+        specifier: 7.18.0
+        version: 7.18.0(@types/node@24.10.3)(react-router@7.18.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(vite@8.1.0-beta.0(@types/node@24.10.3))
       vite:
         specifier: 8.1.0-beta.0
         version: 8.1.0-beta.0(@types/node@24.10.3)
@@ -780,27 +780,6 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@react-router/dev@7.16.0':
-    resolution: {integrity: sha512-E/uNYnHbo+wepw+FudGwuN6au6y4dOfVuRRANYdCp5T+tLvGU/09s2uGzNQsxqushyae9wvWTLY0qMvvgowIyg==}
-    engines: {node: '>=20.0.0'}
-    hasBin: true
-    peerDependencies:
-      '@react-router/serve': ^7.16.0
-      '@vitejs/plugin-rsc': ~0.5.21
-      react-router: ^7.16.0
-      react-server-dom-webpack: ^19.2.3
-      vite: ^5.1.0 || ^6.0.0 || ^7.0.0 || ^8.0.0
-      wrangler: ^3.28.2 || ^4.0.0
-    peerDependenciesMeta:
-      '@react-router/serve':
-        optional: true
-      '@vitejs/plugin-rsc':
-        optional: true
-      react-server-dom-webpack:
-        optional: true
-      wrangler:
-        optional: true
-
   '@react-router/dev@7.18.0':
     resolution: {integrity: sha512-GVTFvul0xlZHZyVXyRpiJv54Xfyj4eDOAlGYrzi7kDmN7n40rsrUqX+hvU0fy/41SCDMtckht59R3iGR94703g==}
     engines: {node: '>=20.0.0'}
@@ -828,12 +807,6 @@ packages:
     peerDependencies:
       express: ^4.17.1 || ^5
       react-router: 7.18.0
-
-  '@react-router/node@7.16.0':
-    resolution: {integrity: sha512-3S54GArZETvcBHt0cFNJS5ZU66bCNVOoS44MVcGjiGjArBXvWx8xIQ5FO9n1azKGEBpDmJN7NbA+cf3oMCJv3g==}
-    engines: {node: '>=20.0.0'}
-    peerDependencies:
-      react-router: 7.16.0
 
   '@react-router/node@7.18.0':
     resolution: {integrity: sha512-pRXJahLrdVfuVbaTpWsZ89mBuGiYH3Z4y+y1UidwxmJFKk6NjMyUvkJl3FjDWdD+nSlgFPSESUZS0hF560MUUQ==}
@@ -2827,55 +2800,6 @@ snapshots:
   '@oxlint/binding-win32-x64-msvc@1.70.0':
     optional: true
 
-  '@react-router/dev@7.16.0(@types/node@24.10.3)(react-router@7.18.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(vite@8.1.0-beta.0(@types/node@24.10.3))':
-    dependencies:
-      '@babel/core': 7.29.7
-      '@babel/generator': 7.29.7
-      '@babel/parser': 7.29.7
-      '@babel/plugin-syntax-jsx': 7.29.7(@babel/core@7.29.7)
-      '@babel/preset-typescript': 7.29.7(@babel/core@7.29.7)
-      '@babel/traverse': 7.29.7
-      '@babel/types': 7.29.7
-      '@react-router/node': 7.16.0(react-router@7.18.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7))
-      '@remix-run/node-fetch-server': 0.13.3
-      arg: 5.0.2
-      babel-dead-code-elimination: 1.0.12
-      chokidar: 4.0.3
-      dedent: 1.7.2
-      es-module-lexer: 1.7.0
-      exit-hook: 2.2.1
-      isbot: 5.1.40
-      jsesc: 3.0.2
-      lodash: 4.18.1
-      p-map: 7.0.4
-      pathe: 1.1.2
-      picocolors: 1.1.1
-      pkg-types: 2.3.1
-      prettier: 3.8.4
-      react-refresh: 0.14.2
-      react-router: 7.18.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      semver: 7.8.4
-      tinyglobby: 0.2.17
-      typescript: '@typescript/native-preview@7.0.0-dev.20260604.1'
-      valibot: 1.4.1
-      vite: 8.1.0-beta.0(@types/node@24.10.3)
-      vite-node: 3.2.4(@types/node@24.10.3)
-    transitivePeerDependencies:
-      - '@types/node'
-      - '@vitejs/devtools'
-      - babel-plugin-macros
-      - esbuild
-      - jiti
-      - less
-      - sass
-      - sass-embedded
-      - stylus
-      - sugarss
-      - supports-color
-      - terser
-      - tsx
-      - yaml
-
   '@react-router/dev@7.18.0(@types/node@24.10.3)(react-router@7.18.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(vite@8.1.0-beta.0(@types/node@24.10.3))':
     dependencies:
       '@babel/core': 7.29.7
@@ -2929,12 +2853,6 @@ snapshots:
     dependencies:
       '@react-router/node': 7.18.0(react-router@7.18.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7))
       express: 5.2.1
-      react-router: 7.18.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      typescript: '@typescript/native-preview@7.0.0-dev.20260604.1'
-
-  '@react-router/node@7.16.0(react-router@7.18.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7))':
-    dependencies:
-      '@mjackson/node-fetch-server': 0.2.0
       react-router: 7.18.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       typescript: '@typescript/native-preview@7.0.0-dev.20260604.1'
 
