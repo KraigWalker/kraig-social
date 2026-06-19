@@ -11,7 +11,7 @@
     }
   ],
   "name": "Kraig Walker",
-  "scope": "https://kraig.social",
-  "start_url": "https://kraig.social",
+  "scope": "/",
+  "start_url": "/",
   "theme_color": "#d54b3d"
 }

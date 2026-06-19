@@ -1,13 +1,10 @@
-import {
-  createInstance,
-  type ModuleFederationRuntimePlugin,
-} from '@module-federation/runtime';
-import ssrEntryLoader from '@module-federation/vite/ssrEntryLoader';
-import type { ComponentType } from 'react';
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import * as ReactDomClient from 'react-dom/client';
 import * as ReactJsxRuntime from 'react/jsx-runtime';
+import { createInstance, type ModuleFederationRuntimePlugin } from '@module-federation/runtime';
+import ssrEntryLoader from '@module-federation/vite/ssrEntryLoader';
+import type { ComponentType } from 'react';
 import type {
   DecisionResponse,
   FederatedRemoteReference,
@@ -30,35 +27,40 @@ const shareConfig = {
   strictVersion: true,
   requiredVersion: '19.2.7',
 };
+
+/**
+ * Configures the shared dependencies for module federation.
+ */
 const sharedDependencies = {
-    react: {
-      version: '19.2.7',
-      lib: () => React,
-      shareConfig,
+  react: {
+    version: '19.2.7',
+    lib: () => React,
+    shareConfig,
+  },
+  'react-dom': {
+    version: '19.2.7',
+    lib: () => ReactDom,
+    shareConfig,
+  },
+  'react-dom/client': {
+    version: '19.2.7',
+    lib: () => ReactDomClient,
+    shareConfig,
+  },
+  'react/jsx-runtime': {
+    version: '19.2.7',
+    lib: () => ReactJsxRuntime,
+    shareConfig: {
+      singleton: true,
+      strictVersion: true,
+      requiredVersion: '19.2.7',
     },
-    'react-dom': {
-      version: '19.2.7',
-      lib: () => ReactDom,
-      shareConfig,
-    },
-    'react-dom/client': {
-      version: '19.2.7',
-      lib: () => ReactDomClient,
-      shareConfig,
-    },
-    'react/jsx-runtime': {
-      version: '19.2.7',
-      lib: () => ReactJsxRuntime,
-      shareConfig: {
-        singleton: true,
-        strictVersion: true,
-        requiredVersion: '19.2.7',
-      },
-    },
+  },
 };
-const serverRuntimePath = (
-  globalThis as typeof globalThis & { __KRAIG_MF_RUNTIME_PATH__?: string }
-).__KRAIG_MF_RUNTIME_PATH__;
+
+const serverRuntimePath = (globalThis as typeof globalThis & { __KRAIG_MF_RUNTIME_PATH__?: string })
+  .__KRAIG_MF_RUNTIME_PATH__;
+
 const federation = createInstance({
   name: 'kraig_social_runtime',
   remotes: [],
@@ -96,14 +98,6 @@ export function loadDispatchPanel(
       registeredRemotes.add(remote.name);
     }
 
-    if (typeof window !== 'undefined') {
-      await federation.preloadRemote([
-        {
-          nameOrAlias: remote.name,
-          exposes: [remote.expose],
-        },
-      ]);
-    }
     const loaded = (await federation.loadRemote(
       exposedModuleId(remote)
     )) as DispatchPanelModule | null;

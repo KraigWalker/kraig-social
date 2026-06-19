@@ -160,6 +160,8 @@ Do not add project-local `vite` or `vitest` dependencies just to run tests.
 - `HOST` optional, default `0.0.0.0`.
 - `PORT` optional, default `3000`.
 - `GATEWAY_ORIGIN` optional, default `http://localhost:3001`.
+- `PUBLIC_ORIGIN` optional. When set, it overrides the request-derived origin used for the web app
+  manifest's `start_url` and `scope`.
 
 The production-like server applies HTML security headers. The localhost demo currently allows
 inline scripts/styles because React Router hydration and the demo remote module need them. Tighten

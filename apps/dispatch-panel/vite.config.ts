@@ -7,7 +7,8 @@ const target = process.env.DISPATCH_PANEL_TARGET ?? 'browser';
 const federationName = `dispatch_panel_${version.replaceAll('.', '_')}`;
 const isServer = target === 'server';
 const outputDirectory = `dist/releases/${version}/${target}`;
-const publicOrigin = process.env.REMOTE_PUBLIC_ORIGIN ?? 'http://localhost:3001';
+const publicOrigin =
+  process.env.REMOTE_PUBLIC_ORIGIN ?? (isServer ? 'http://localhost:3001' : '/__gateway');
 const publicPath = `${publicOrigin}/mf/releases/${version}/${target}/`;
 
 export default defineConfig({
@@ -80,7 +81,7 @@ export default defineConfig({
     outDir: outputDirectory,
     emptyOutDir: false,
     target: 'es2022',
-    modulePreload: { polyfill: false },
+    modulePreload: false,
     sourcemap: true,
     ssr: isServer ? 'src/index.ts' : false,
     rolldownOptions: {

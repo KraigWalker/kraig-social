@@ -1,5 +1,6 @@
 import http from 'node:http';
 import https from 'node:https';
+import { readFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -11,6 +12,9 @@ const buildDir = path.resolve(__dirname, '../build/client');
 const require = createRequire(import.meta.url);
 globalThis.__KRAIG_MF_RUNTIME_PATH__ = require.resolve('@module-federation/runtime');
 const build = await import('../build/server/index.js');
+const webAppManifest = JSON.parse(
+  await readFile(path.join(buildDir, 'manifest.json'), 'utf8')
+);
 
 const app = express();
 const gatewayOrigin = process.env.GATEWAY_ORIGIN ?? 'http://localhost:3001';
@@ -49,9 +53,12 @@ app.use('/__gateway', (req, res, next) => {
       headers,
     },
     (proxyResponse) => {
-      const isFederationManifest = targetUrl.pathname.endsWith('/mf-manifest.json');
+      const isBrowserReleaseAsset =
+        targetUrl.pathname.startsWith('/mf/releases/') &&
+        targetUrl.pathname.includes('/browser/') &&
+        /\.(?:html|js|json)$/u.test(targetUrl.pathname);
 
-      if (!isFederationManifest) {
+      if (!isBrowserReleaseAsset) {
         res.status(proxyResponse.statusCode ?? 502);
         for (const [name, value] of Object.entries(proxyResponse.headers)) {
           if (value !== undefined) {
@@ -65,7 +72,7 @@ app.use('/__gateway', (req, res, next) => {
       const chunks = [];
       proxyResponse.on('data', (chunk) => chunks.push(chunk));
       proxyResponse.on('end', () => {
-        const browserGatewayOrigin = `${req.protocol}://${req.get('host')}/__gateway`;
+        const browserGatewayOrigin = '/__gateway';
         let body = Buffer.concat(chunks).toString('utf8');
         body = body
           .split('http://localhost:3001')
@@ -79,11 +86,13 @@ app.use('/__gateway', (req, res, next) => {
             value !== undefined &&
             name !== 'content-length' &&
             name !== 'content-encoding' &&
-            name !== 'etag'
+            name !== 'etag' &&
+            name !== 'cache-control'
           ) {
             res.setHeader(name, value);
           }
         }
+        res.setHeader('Cache-Control', 'no-cache');
         res.setHeader('Content-Length', Buffer.byteLength(body));
         res.send(body);
       });
@@ -166,6 +175,25 @@ app.use(
 app.get('/sw.1.js', (_req, res) => {
   res.setHeader('Cache-Control', 'no-cache');
   res.sendFile(path.join(buildDir, 'service-worker.js'));
+});
+app.get('/.well-known/appspecific/com.chrome.devtools.json', (_req, res) => {
+  res.status(204).end();
+});
+app.get('/manifest.json', (req, res) => {
+  const configuredOrigin = process.env.PUBLIC_ORIGIN?.replace(/\/+$/u, '');
+  const forwardedHost = req.get('x-forwarded-host')?.split(',')[0]?.trim();
+  const requestHost = forwardedHost || req.get('host');
+  const requestOrigin = `${req.protocol}://${requestHost}`;
+  const publicOrigin = configuredOrigin || requestOrigin;
+
+  res.setHeader('Content-Type', 'application/manifest+json; charset=utf-8');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Vary', 'Host, X-Forwarded-Host, X-Forwarded-Proto');
+  res.json({
+    ...webAppManifest,
+    scope: `${publicOrigin}/`,
+    start_url: `${publicOrigin}/`,
+  });
 });
 app.use(express.static(buildDir, { maxAge: '1h' }));
 
