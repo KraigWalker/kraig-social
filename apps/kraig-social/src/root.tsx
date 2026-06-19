@@ -1,5 +1,12 @@
 import type { LinksFunction } from 'react-router';
-import { isRouteErrorResponse, Links, Meta, Outlet, ScrollRestoration } from 'react-router';
+import {
+  isRouteErrorResponse,
+  Links,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+} from 'react-router';
 
 import appStylesHref from './app.css?url';
 import type { Route } from './+types/root';
@@ -44,6 +51,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <body>
         {children}
         <ScrollRestoration />
+        <Scripts />
       </body>
     </html>
   );

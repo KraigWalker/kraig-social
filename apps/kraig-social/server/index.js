@@ -1,8 +1,10 @@
-import express from 'express';
-import { createRequestHandler } from '@react-router/express';
+import http from 'node:http';
+import https from 'node:https';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import express from 'express';
+import { createRequestHandler } from '@react-router/express';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const buildDir = path.resolve(__dirname, '../build/client');
@@ -13,8 +15,7 @@ const build = await import('../build/server/index.js');
 const app = express();
 const gatewayOrigin = process.env.GATEWAY_ORIGIN ?? 'http://localhost:3001';
 const htmlSecurityHeaders = {
-  'Content-Security-Policy':
-    `default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; img-src 'self' data:; object-src 'none'; script-src 'self' 'unsafe-inline' ${gatewayOrigin}; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self' ${gatewayOrigin}; worker-src 'self'`,
+  'Content-Security-Policy': `default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; img-src 'self' data:; object-src 'none'; script-src 'self' 'unsafe-inline' ${gatewayOrigin}; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self' ${gatewayOrigin}; worker-src 'self'`,
   'X-Frame-Options': 'DENY',
   'Referrer-Policy': 'no-referrer',
   'Permissions-Policy':
@@ -34,6 +35,64 @@ app.disable('x-powered-by');
 
 /** Trust that the original request was made over HTTPS */
 app.set('trust proxy', true);
+
+app.use('/__gateway', (req, res, next) => {
+  const gatewayPath = req.originalUrl.slice('/__gateway'.length) || '/';
+  const targetUrl = new URL(gatewayPath, gatewayOrigin);
+  const transport = targetUrl.protocol === 'https:' ? https : http;
+  const headers = { ...req.headers, host: targetUrl.host };
+
+  const proxyRequest = transport.request(
+    targetUrl,
+    {
+      method: req.method,
+      headers,
+    },
+    (proxyResponse) => {
+      const isFederationManifest = targetUrl.pathname.endsWith('/mf-manifest.json');
+
+      if (!isFederationManifest) {
+        res.status(proxyResponse.statusCode ?? 502);
+        for (const [name, value] of Object.entries(proxyResponse.headers)) {
+          if (value !== undefined) {
+            res.setHeader(name, value);
+          }
+        }
+        proxyResponse.pipe(res);
+        return;
+      }
+
+      const chunks = [];
+      proxyResponse.on('data', (chunk) => chunks.push(chunk));
+      proxyResponse.on('end', () => {
+        const browserGatewayOrigin = `${req.protocol}://${req.get('host')}/__gateway`;
+        let body = Buffer.concat(chunks).toString('utf8');
+        body = body
+          .split('http://localhost:3001')
+          .join(browserGatewayOrigin)
+          .split(gatewayOrigin.replace(/\/$/u, ''))
+          .join(browserGatewayOrigin);
+
+        res.status(proxyResponse.statusCode ?? 502);
+        for (const [name, value] of Object.entries(proxyResponse.headers)) {
+          if (
+            value !== undefined &&
+            name !== 'content-length' &&
+            name !== 'content-encoding' &&
+            name !== 'etag'
+          ) {
+            res.setHeader(name, value);
+          }
+        }
+        res.setHeader('Content-Length', Buffer.byteLength(body));
+        res.send(body);
+      });
+    }
+  );
+
+  proxyRequest.on('error', next);
+  req.pipe(proxyRequest);
+});
 
 app.use((req, res, next) => {
   let contentType;

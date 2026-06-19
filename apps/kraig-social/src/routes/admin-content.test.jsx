@@ -62,7 +62,7 @@ describe('AdminContent route', () => {
 
     await waitFor(() => {
       expect(fetch).toHaveBeenCalledWith(
-        'http://localhost:3001/api/admin/content',
+        '/__gateway/api/admin/content',
         expect.objectContaining({ method: 'POST' })
       );
     });

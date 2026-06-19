@@ -181,8 +181,10 @@ h2 {
 }
 
 .signal-board,
+.demo-explainer,
 .control-panel,
 .remote-stage,
+.working-checklist,
 .telemetry-grid article,
 .capability-card,
 .content-band,
@@ -247,16 +249,102 @@ h2 {
 
 .lab-layout {
   display: grid;
-  grid-template-columns: 280px minmax(0, 1fr);
+  grid-template-columns: 320px minmax(0, 1fr);
   gap: 16px;
   margin: 24px 0 16px;
+}
+
+.demo-explainer {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.75fr) minmax(280px, 1.25fr);
+  gap: 18px 28px;
+  margin-top: 24px;
+  padding: 20px;
+}
+
+.demo-explainer h2,
+.demo-explainer p {
+  margin-bottom: 0;
+}
+
+.demo-explainer > p,
+.working-checklist > div > p,
+.control-group > p,
+.control-help span,
+.button-help,
+.telemetry-help {
+  color: var(--muted);
+}
+
+.demo-flow {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.demo-flow li {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  font-size: 0.85rem;
+}
+
+.demo-flow span {
+  display: grid;
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(125, 249, 255, 0.12);
+  color: var(--cyan);
+  font-weight: 800;
 }
 
 .control-panel {
   display: grid;
   align-content: start;
-  gap: 14px;
+  gap: 18px;
   padding: 16px;
+}
+
+.control-group {
+  display: grid;
+  gap: 9px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.control-group h2,
+.control-group p {
+  margin-bottom: 0;
+}
+
+.control-group > p {
+  font-size: 0.88rem;
+}
+
+.control-help {
+  display: grid;
+  gap: 2px;
+  min-height: 66px;
+  padding: 10px;
+  border-left: 3px solid var(--cyan);
+  background: rgba(125, 249, 255, 0.05);
+  font-size: 0.84rem;
+}
+
+.button-help {
+  margin-top: -5px;
+  font-size: 0.78rem;
 }
 
 .segmented-control {
@@ -275,6 +363,32 @@ h2 {
 .remote-stage {
   min-height: 360px;
   padding: 16px;
+}
+
+.stage-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.stage-heading h2 {
+  margin-bottom: 0;
+}
+
+.connection-badge {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 5px 9px;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.connection-badge.online {
+  border-color: rgba(157, 255, 179, 0.45);
+  color: var(--green);
 }
 
 .remote-slot {
@@ -304,6 +418,55 @@ h2 {
   padding: 14px;
 }
 
+.working-checklist {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.7fr) minmax(0, 1.3fr);
+  gap: 24px;
+  margin: 0 0 16px;
+  padding: 20px;
+}
+
+.working-checklist h2,
+.working-checklist p {
+  margin-bottom: 0;
+}
+
+.working-checklist ul {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.working-checklist li {
+  display: flex;
+  gap: 10px;
+  padding: 11px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.working-checklist li > span {
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.working-checklist li.complete > span {
+  color: var(--green);
+}
+
+.working-checklist li div {
+  display: grid;
+  gap: 2px;
+}
+
+.working-checklist small {
+  color: var(--muted);
+}
+
 .telemetry-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
@@ -319,6 +482,16 @@ h2 {
   max-height: 520px;
   overflow: auto;
   padding: 16px;
+}
+
+.telemetry-help {
+  margin-bottom: 14px;
+  font-size: 0.86rem;
+}
+
+.telemetry-help code,
+.control-group code {
+  color: var(--cyan);
 }
 
 .plain-list {
@@ -370,7 +543,9 @@ h2 {
 
 @media (max-width: 860px) {
   .hero-grid,
+  .demo-explainer,
   .lab-layout,
+  .working-checklist,
   .content-band,
   .telemetry-grid,
   .content-row {
@@ -378,6 +553,10 @@ h2 {
   }
 
   .capability-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .demo-flow {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -397,6 +576,11 @@ h2 {
   }
 
   .capability-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .demo-flow,
+  .working-checklist ul {
     grid-template-columns: 1fr;
   }
 

@@ -12,7 +12,7 @@ export const gatewayOrigin =
   typeof window === 'undefined'
     ? (serverEnv.process?.env?.GATEWAY_ORIGIN ?? 'http://localhost:3001')
     : ((window as Window & { __KRAIG_GATEWAY_ORIGIN__?: string }).__KRAIG_GATEWAY_ORIGIN__ ??
-      'http://localhost:3001');
+      '/__gateway');
 
 export type { DecisionResponse, DeliveryManifest, ManifestEntry };
 
